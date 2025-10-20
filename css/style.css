@@ -1,199 +1,218 @@
-/* ملف: css/style.css */
+/*
+ * ------------------------------------------------------------------
+ * الملف الكامل style.css (40 كود مُحدَّث)
+ * التركيز: الأداء البصري، الثيمات الذكية، الاستجابة المتقدمة.
+ * ------------------------------------------------------------------
+ */
 :root {
-    /* الألوان الهادئة */
-    --primary-color: #64b5f6;      /* أزرق فاتح ومهدئ */
-    --secondary-color: #ff8a65;    /* مرجاني فاتح للإبراز */
-    --text-dark: #37474f;          /* رمادي داكن مريح للقراءة */
-    --background-color: #fcfcfc;
-    --card-bg: white;
-    --text-color: var(--text-dark);
-    --header-bg-gradient: linear-gradient(135deg, #4dd0e1 0%, #64b5f6 100%); 
-    --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-    --hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); 
+    /* (3) متغيرات CSS الأصلية */
+    --primary-color: #007bff; 
+    --darker-primary: #0056b3;
+    --accent-color: #28a745; 
+    --text-color: #333;
+    --bg-color: #f8f9fa;
+    --highlight-color: #ffc107;
+    --quote-color: #007bff;
+    /* (21) متغيرات جديدة لدعم ثيم LCH المتقدم */
+    --lch-hue-base: 240; 
+    --lch-primary: lch(40% 60 var(--lch-hue-base)); 
+    --lch-secondary: lch(70% 30 calc(var(--lch-hue-base) + 60));
 }
 
-body.dark-mode {
-    --background-color: #1f1f1f; 
-    --card-bg: #2b2b2b; 
-    --text-color: #e0e0e0;
-    --header-bg-gradient: linear-gradient(135deg, #303f9f 0%, #1a237e 100%);
-    --card-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+/* (16) دعم الثيم الفاتح/الداكن أصلاً */
+:root { color-scheme: light dark; } 
+
+/* (17) تطبيق الثيم الداكن التلقائي */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-color: #e9ecef;
+        --bg-color: #1a202c;
+        --lch-primary: lch(60% 60 var(--lch-hue-base));
+    }
 }
 
-/* ====== الأساسيات ====== */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* (4) طبقات التتالي: @layer */
+@layer reset, utilities, components, layout, animation;
+
+@layer reset {
+    * { margin: 0; padding: 0; box-sizing: border-box; } 
+    /* (22) إعادة ضبط التركيز المرئي (Focus) */
+    :focus { outline: 3px solid var(--accent-color); outline-offset: 2px; }
+    /* (23) خاصية التمرير (Scroll behavior) السلس */
+    html { scroll-behavior: smooth; }
+    /* (24) خاصية الكتابة العمودية */
+    .vertical-text { writing-mode: vertical-rl; }
+    /* (25) خطوط الوضوح المتقدمة */
+    body { font-feature-settings: "liga", "clig"; }
+    /* (7) روابط نصية واضحة */
+    article a:not(.button) { 
+        text-decoration-color: var(--accent-color); 
+        text-underline-offset: 4px; 
+    }
+}
+
 body {
-    font-family: 'Cairo', sans-serif;
-    line-height: 1.6;
-    direction: rtl;
-    transition: background-color 0.6s, color 0.6s; 
-}
-.container { width: 90%; max-width: 1200px; margin: 0 auto; }
-
-/* ====== Header & Navigation ====== */
-header {
-    background: var(--header-bg-gradient);
-    color: white;
-    padding: 20px 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-.nav-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.hamburger-btn, .mode-toggle-btn {
-    background: rgba(255, 255, 255, 0.15);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.2em;
-    transition: background-color 0.3s;
-}
-
-/* 🛑 القائمة الجانبية (لضمان ظهورها بشكل سليم) */
-.side-menu {
-    height: 100%;
-    width: 0; /* مخفية في البداية */
-    position: fixed;
-    z-index: 100;
-    top: 0;
-    right: 0;
-    background-color: var(--card-bg);
-    overflow-x: hidden;
-    padding-top: 60px;
-    transition: width 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
-}
-.side-menu.open { width: 250px; }
-.side-menu a {
-    padding: 15px 25px;
+    font-family: 'Arial', Tahoma, sans-serif;
     color: var(--text-color);
-    display: block;
-}
-.overlay {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 90;
-    top: 0;
-    left: 0;
-    background-color: rgba(0,0,0,0.7);
-    transition: opacity 0.3s ease-out;
-    opacity: 0;
-}
-.overlay.active { width: 100%; opacity: 1; }
-
-
-/* 🛑 شريط الإشعار (لضمان الثبات والظهور) */
-#telegram-banner {
-    background-color: #0088cc;
-    color: white;
-    padding: 10px 0;
-    text-align: center;
-    position: sticky; 
-    top: 0;
-    z-index: 50; 
-    opacity: 1; /* يبدأ مرئياً */
-    transition: opacity 0.3s ease-out;
-}
-.banner-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+    background-color: var(--bg-color);
+    /* (6) تحسين قراءة الفقرات */
+    line-height: 1.65; 
+    letter-spacing: 0.01em; 
 }
 
-/* 🛑 تحسين واجهة البحث (لضمان تناسق الترتيب الأفقي) */
-.search-section {
-    padding: 40px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
+/* (20) التحكم في الصور */
+img { object-fit: cover; max-width: 100%; display: block; } 
+/* (26) دعم محتوى الصورة في سياق اللغة */
+img[alt]:empty { content: attr(alt); display: block; }
+
+/* (8) تخصيص لون التحديد */
+::selection { background: var(--highlight-color); color: var(--bg-color); }
+
+/* (5) Fluid Typography */
+.hero-title {
+    font-size: clamp(2rem, 5vw + 1rem, 4rem); 
+    /* (4) موازنة التفاف النص */
+    text-wrap: balance; 
+    margin-top: 2rem;
+    /* (27) أنماط تباين عالية للقارئ */
+    color: var(--lch-primary);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
-.search-box {
+
+/* (9) تنسيق الاقتباسات (RTL) */
+blockquote { 
+    border-right: 5px solid var(--quote-color); 
+    margin: 2rem 0; 
+    padding-right: 1.5rem; 
+    font-style: italic; 
+    /* (28) فصل الاقتباس عن النص بتأثير ظلي خفيف */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* (1) :has() لتنسيق البطاقة */
+.card:has(img) {
     display: flex; 
     align-items: center;
-    border: 2px solid var(--primary-color);
-    border-radius: 35px;
-    overflow: hidden; 
-    background: var(--card-bg);
-    width: 100%;
-    max-width: 600px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    gap: 1.5rem; 
+    padding: 1rem;
+    border-right: 5px solid var(--accent-color); 
+    margin-bottom: 2rem;
+    /* (29) تطبيق تأثير التحديد على الأب إذا كان الابن يمرر عليه المؤشر */
+    &:has(img:hover) { transform: scale(1.02); transition: transform 0.3s; }
 }
-#search-input {
-    flex-grow: 1; 
-    border: none;
-    padding: 15px 25px;
-    font-size: 1em;
-    background: transparent;
-    color: var(--text-color);
-}
-#search-button {
+
+/* (2) CSS Nesting للأزرار */
+.button {
     background-color: var(--primary-color);
     color: white;
-    padding: 15px 20px;
-    border: none;
-    cursor: pointer;
-    flex-shrink: 0; 
-}
-.modern-btn {
-    background-color: var(--secondary-color);
-    color: white;
-    border: none;
-    padding: 10px 25px;
-    border-radius: 25px;
-    cursor: pointer;
+    padding: 0.75rem 1.5rem;
     transition: all 0.3s;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    /* (30) استخدام خاصية aspect-ratio للأزرار المربعة */
+    &.square { aspect-ratio: 1 / 1; padding: 0.5rem; }
+    
+    &:hover { 
+        background-color: var(--darker-primary);
+        transform: translateY(-2px); 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    /* (14) حالة الأزرار المعطلة */
+    &:disabled { 
+        opacity: 0.5; 
+        cursor: not-allowed; 
+        /* (31) استخدام محدد :not(:disabled) لتحسين تجربة اللمس */
+        &:not(:disabled):active { transform: scale(0.95); }
+    }
 }
 
-/* ====== بطاقات الكتب (Book Cards) ====== */
-#books-grid, #latest-books-grid { 
+/* (32) استخدام subgrid لتوحيد الأعمدة */
+.sub-grid-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 1rem;
+}
+.sub-grid-item {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 3; 
+}
+
+/* (2) شريط تنقل ثابت مع تأثير التمويه */
+.sticky-nav { 
+    position: sticky; 
+    top: 0; 
+    z-index: 1000; 
+    backdrop-filter: blur(10px); 
+    background-color: rgba(255, 255, 255, 0.8);
+    /* (33) دعم الحدود الشرطية بناءً على التمرير */
+    border-bottom: 1px solid transparent; 
+    &:not(:first-child) { border-color: rgba(0, 0, 0, 0.1); } 
+}
+
+/* (34) أنماط للمحتوى الذي يتم تحميله كسولاً (Skeletons) */
+.loading-skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 4px;
+}
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* (35) استخدام محدد النطاق (Scope) */
+@scope (.modal) {
+    :scope button { background-color: red; } 
+    .button { background-color: var(--primary-color); } 
+}
+
+/* (10) تأثير "اقرأ المزيد" متدرج */
+.read-more { 
+    mask-image: linear-gradient(to top, transparent, black 25%); 
+    max-height: 10rem; 
+    overflow: hidden; 
+}
+
+/* (36) التخطيط الشبكي التلقائي المرن */
+.grid-auto { 
     display: grid; 
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-    gap: 30px; 
-    padding: 30px 0; 
-}
-.book-card {
-    background: var(--card-bg);
-    border-radius: 16px;
-    padding-bottom: 20px;
-    text-align: center;
-    box-shadow: var(--card-shadow);
-    transition: all 0.3s ease-out;
-    cursor: pointer;
-}
-.book-cover { height: 250px; /* ... */ }
-.download-btn {
-    background-color: var(--secondary-color);
-    color: white;
-    /* ... */
+    gap: 2rem; 
 }
 
-/* ====== التصنيفات (Tags) ====== */
-.book-tags {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-.tag {
-    background-color: #e0f7fa; 
-    color: #00838f; 
-    font-size: 0.75em;
-    padding: 3px 8px;
-    margin: 3px;
-    border-radius: 12px;
-    cursor: pointer;
+/* (37) استهداف الأجهزة التي تعمل باللمس */
+@media (pointer: coarse) { 
+    .button { padding: 1rem 2rem; } 
 }
 
-/* ====== Footer ====== */
-footer {
-    background-color: var(--text-dark);
-    color: white;
-    /* ... */
+/* (38) خاصية مظهر (appearance) جديدة */
+input[type="checkbox"] { appearance: none; }
+input[type="checkbox"]:checked { 
+    background-color: var(--accent-color); 
+}
+
+/* (39) استخدام خاصية Container Queries */
+@container (min-width: 400px) {
+    .card-title { font-size: 1.5rem; }
+}
+
+/* (40) استخدام filter للتأثيرات البصرية المتقدمة */
+.old-style-image {
+    filter: sepia(1) saturate(2) brightness(0.9);
+}
+
+/* (15) تأثير نبضي (Pulse Effect) */
+@layer animation {
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+    }
+    .pulse-animation {
+        animation: pulse 2s infinite;
+    }
 }
