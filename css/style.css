@@ -1,179 +1,199 @@
 /* ملف: css/style.css */
-
-/* ----------------------------------------------------------------------- */
-/* 1. نظام الألوان الهادئة الجديد وتعديل الثيم الليلي (5 وظائف) */
-/* ----------------------------------------------------------------------- */
 :root {
+    /* الألوان الهادئة */
     --primary-color: #64b5f6;      /* أزرق فاتح ومهدئ */
     --secondary-color: #ff8a65;    /* مرجاني فاتح للإبراز */
     --text-dark: #37474f;          /* رمادي داكن مريح للقراءة */
     --background-color: #fcfcfc;
     --card-bg: white;
     --text-color: var(--text-dark);
-    --header-bg-gradient: linear-gradient(135deg, #4dd0e1 0%, #64b5f6 100%);
+    --header-bg-gradient: linear-gradient(135deg, #4dd0e1 0%, #64b5f6 100%); 
     --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-    --hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* 1. ظل أعمق عند التحويم */
+    --hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); 
 }
+
 body.dark-mode {
-    /* 2. تحسين خلفية الـ Dark Mode لراحة العين */
     --background-color: #1f1f1f; 
-    --card-bg: #2b2b2b; /* 3. خلفية البطاقة في الليل */
+    --card-bg: #2b2b2b; 
     --text-color: #e0e0e0;
     --header-bg-gradient: linear-gradient(135deg, #303f9f 0%, #1a237e 100%);
-}
-/* 4. إضفاء طابع على الهيدر في الـ Dark Mode */
-body.dark-mode header {
-    border-bottom: 2px solid var(--secondary-color);
-}
-/* 5. خطوط رابط التليجرام */
-.telegram-link {
-    color: var(--secondary-color) !important;
-    font-weight: bold;
+    --card-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
 }
 
-
-/* ----------------------------------------------------------------------- */
-/* 2. تحسينات عامة على الجسم والخطوط (4 وظائف) */
-/* ----------------------------------------------------------------------- */
+/* ====== الأساسيات ====== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-    /* 6. تحسين الانتقال ليصبح أبطأ وأكثر سلاسة */
+    font-family: 'Cairo', sans-serif;
+    line-height: 1.6;
+    direction: rtl;
     transition: background-color 0.6s, color 0.6s; 
 }
-/* 7. تحسين وضوح الخطوط في كلتا الواجهتين */
-h1, h2, h3 {
-    letter-spacing: -0.5px;
+.container { width: 90%; max-width: 1200px; margin: 0 auto; }
+
+/* ====== Header & Navigation ====== */
+header {
+    background: var(--header-bg-gradient);
+    color: white;
+    padding: 20px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-/* 8. تحديد عرض أقصى لصور الأغطية لمنع تشوهها */
-.book-cover img {
-    max-width: 100%;
-    height: auto;
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.hamburger-btn, .mode-toggle-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: background-color 0.3s;
+}
+
+/* 🛑 القائمة الجانبية (لضمان ظهورها بشكل سليم) */
+.side-menu {
+    height: 100%;
+    width: 0; /* مخفية في البداية */
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    right: 0;
+    background-color: var(--card-bg);
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: width 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+}
+.side-menu.open { width: 250px; }
+.side-menu a {
+    padding: 15px 25px;
+    color: var(--text-color);
     display: block;
 }
-/* 9. تحسين التركيز (Focus) للعناصر التفاعلية (Accessibility) */
-a:focus, button:focus, input:focus {
-    outline: 2px solid var(--secondary-color);
-    outline-offset: 3px;
-    border-radius: 5px;
+.overlay {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 90;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.7);
+    transition: opacity 0.3s ease-out;
+    opacity: 0;
 }
+.overlay.active { width: 100%; opacity: 1; }
 
 
-/* ----------------------------------------------------------------------- */
-/* 3. تحسينات واجهة البحث (Search UI) (5 وظائف) */
-/* ----------------------------------------------------------------------- */
-.search-box {
-    border: 2px solid var(--primary-color);
-    /* 10. استخدام border-radius أكبر لمظهر أكثر حداثة */
-    border-radius: 35px;
+/* 🛑 شريط الإشعار (لضمان الثبات والظهور) */
+#telegram-banner {
+    background-color: #0088cc;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    position: sticky; 
+    top: 0;
+    z-index: 50; 
+    opacity: 1; /* يبدأ مرئياً */
+    transition: opacity 0.3s ease-out;
 }
-#search-input {
-    /* 11. إخفاء أيقونة البحث التلقائي الافتراضية في بعض المتصفحات */
-    -webkit-appearance: none; 
-    -moz-appearance: none;
-    appearance: none;
-    /* 12. محاذاة النص داخل مربع البحث ليتوسطه عموديًا */
-    line-height: 1.5; 
-}
-#search-button {
-    /* 13. استخدام Flexbox لمزيد من التحكم في الأيقونة */
+.banner-content {
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
-/* 14. إضافة خاصية التلاشي للأزرار (Transition) */
-.modern-btn, #search-button, .download-btn {
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-/* 15. تباعد الأزرار في قسم البحث */
+
+/* 🛑 تحسين واجهة البحث (لضمان تناسق الترتيب الأفقي) */
 .search-section {
+    padding: 40px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
 }
+.search-box {
+    display: flex; 
+    align-items: center;
+    border: 2px solid var(--primary-color);
+    border-radius: 35px;
+    overflow: hidden; 
+    background: var(--card-bg);
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+#search-input {
+    flex-grow: 1; 
+    border: none;
+    padding: 15px 25px;
+    font-size: 1em;
+    background: transparent;
+    color: var(--text-color);
+}
+#search-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 15px 20px;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0; 
+}
+.modern-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
 
-
-/* ----------------------------------------------------------------------- */
-/* 4. تحسينات بطاقات الكتب (Book Cards) (4 وظائف) */
-/* ----------------------------------------------------------------------- */
+/* ====== بطاقات الكتب (Book Cards) ====== */
+#books-grid, #latest-books-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+    gap: 30px; 
+    padding: 30px 0; 
+}
 .book-card {
+    background: var(--card-bg);
     border-radius: 16px;
-    /* 16. تأثير انتقال لجميع خصائص البطاقة */
-    transition: all 0.3s ease-out; 
-    /* 17. استخدام خاصية Will-Change لتحسين الأداء أثناء الحركة */
-    will-change: transform, box-shadow; 
+    padding-bottom: 20px;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease-out;
+    cursor: pointer;
 }
-.book-card:hover {
-    /* 18. زيادة قوة تأثير الرفع عند التحويم */
-    transform: translateY(-8px); 
-}
-.book-card h3 {
-    /* 19. اقتصاص العنوان الطويل بإضافة نقاط (...) */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; 
+.book-cover { height: 250px; /* ... */ }
+.download-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    /* ... */
 }
 
-
-/* ----------------------------------------------------------------------- */
-/* 5. تحسينات القائمة الجانبية وشريط الإشعار (4 وظائف) */
-/* ----------------------------------------------------------------------- */
-.side-menu {
-    /* 20. إضافة تأثير ارتداد لطيف عند الفتح والإغلاق */
-    transition: width 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
-}
-.side-menu.open {
-    /* 21. عرض أكبر قليلاً على الشاشات الكبيرة */
-    width: 300px; 
-}
-.overlay.active {
-    /* 22. لجعل التعتيم أسرع قليلاً من القائمة */
-    transition: opacity 0.3s ease-out; 
-    opacity: 1;
-}
-/* 23. شريط الإشعار ليكون ثابتًا في الأعلى (Sticky) */
-#telegram-banner {
-    position: sticky;
-    top: 0;
-    z-index: 50; 
-}
-
-
-/* ----------------------------------------------------------------------- */
-/* 6. تحسينات الاستجابة (Responsiveness) (3 وظائف) */
-/* ----------------------------------------------------------------------- */
-@media (max-width: 768px) {
-    /* 24. تصغير حجم الخط الرئيسي على الشاشات الأصغر */
-    header h1 {
-        font-size: 1.8em;
-    }
-    /* 25. تقليل عرض القائمة الجانبية على الجوال */
-    .side-menu.open {
-        width: 80%;
-    }
-    /* 26. تقليل الفراغات العمودية */
-    main {
-        padding-top: 20px;
-    }
-}
-
-
-/* ----------------------------------------------------------------------- */
-/* 7. وظائف متنوعة إضافية (5 وظائف) */
-/* ----------------------------------------------------------------------- */
-/* 27. إضافة تأثير Parallax بسيط على الهيدر (تحسين بصري) */
-header {
-    background-attachment: fixed;
-}
-/* 28. تحسين عرض الـ Tags */
+/* ====== التصنيفات (Tags) ====== */
 .book-tags {
     margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
-/* 29. فصل أيقونة التحميل عن النص في الزر */
-.download-btn i {
-    margin-right: 5px;
+.tag {
+    background-color: #e0f7fa; 
+    color: #00838f; 
+    font-size: 0.75em;
+    padding: 3px 8px;
+    margin: 3px;
+    border-radius: 12px;
+    cursor: pointer;
 }
-/* 30. جعل التذييل أكثر جاذبية بالتظليل الداخلي */
-.footer-bottom-bar {
-    padding: 8px 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+
+/* ====== Footer ====== */
+footer {
+    background-color: var(--text-dark);
+    color: white;
+    /* ... */
 }
