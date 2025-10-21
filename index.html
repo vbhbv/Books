@@ -12,25 +12,16 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://yourwebsite.com/index.html">
     
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.example.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
-    
-    <link rel="preload" href="js/app.js" as="script">
-    <link rel="stylesheet" href="css/style.css"> 
+    <link rel="stylesheet" href="css/style.css?v=20251021"> 
 
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <link rel="preload" href="js/app.js?v=20251021" as="script">
 </head>
 <body class="light-mode">
     
     <a href="#main-content" class="skip-link">تخطي التنقل إلى المحتوى الرئيسي</a>
-
-    <div id="telegram-banner" role="banner" aria-label="إشعار الانضمام إلى قناة تيليجرام">
-        <div class="container banner-content">
-            <p>انضم إلى قناة **مخزن الكتب المجانية** على تيليجرام للحصول على أحدث الكتب! 📚</p>
-            <a href="https://t.me/iiollr" target="_blank" class="banner-btn button" role="link">انضم الآن <i class="fab fa-telegram-plane"></i></a>
-            <button id="close-banner-btn" class="button square" aria-label="إغلاق إشعار تيليجرام"><i class="fas fa-times"></i></button>
-        </div>
-    </div>
 
     <header role="banner"> 
         <nav class="sticky-nav">
@@ -38,9 +29,7 @@
                 <button id="menu-toggle" class="hamburger-btn button square" aria-expanded="false" aria-controls="side-menu" aria-label="فتح القائمة الجانبية">
                     <i class="fas fa-bars"></i>
                 </button>
-
                 <h1><a href="/" class="hero-title" title="الذهاب إلى الصفحة الرئيسية">المكتبة الذكية</a></h1>
-
                 <button id="theme-toggle" class="mode-toggle-btn button square" aria-label="التبديل بين الوضع الفاتح والداكن" aria-pressed="false">
                     <i class="fas fa-moon"></i>
                 </button>
@@ -64,50 +53,31 @@
             <div class="search-box">
                 <input type="search" id="search-input" placeholder="ابحث باسم كتاب، أو مؤلف، أو تصنيف..." role="search">
                 <button id="search-button" type="submit" class="button" aria-label="بدء البحث"><i class="fas fa-search"></i></button>
-                <button id="voice-search-btn" class="button square pulse-animation" aria-label="البحث الصوتي">🎤</button>
+                <button id="voice-search-btn" class="button square pulse-animation" type="button" aria-label="البحث الصوتي">
+                    <i class="fas fa-microphone"></i> 
+                </button>
             </div>
             <button id="random-book-btn" class="modern-btn button" type="button">تصفح كتاب عشوائي</button>
         </form>
         
         <div class="container">
-            <div id="reading-progress-bar" style="position: fixed; top: 0; right: 0; height: 5px; width: 0; z-index: 1001;"></div>
-
-            <div id="loading-status" role="status" aria-label="حالة تحميل الصفحة" hidden></div>
-            
             <section id="results-container" aria-live="polite" role="region" aria-label="نتائج البحث وعرض الكتب"> 
                 <h2 id="results-status" style="margin-top: 20px;">نتائج البحث في المخزن</h2>
-                <div id="books-grid" role="list">
-                </div>
+                <div id="books-grid" role="list"></div>
             </section>
             
             <aside id="latest-books" role="complementary" aria-label="أحدث الكتب المضافة">
                 <h2 class="section-title" style="margin-top: 40px;">آخر الإضافات للمكتبة</h2>
-                <div id="latest-books-grid" class="books-grid grid-auto" role="list">
-                </div>
+                <div id="latest-books-grid" class="books-grid grid-auto" role="list"></div>
             </aside>
             
-            <details style="margin-top: 30px;" role="group">
-                <summary>لماذا مخزن الكتب المجانية؟</summary>
-                <p>نحن نستخدم أحدث تقنيات HTML5 و ARIA لضمان أفضل وصولية وأداء للمحتوى العربي.</p>
-            </details>
-        </div>
+            </div>
         
         <button id="scroll-top-btn" class="button square" aria-label="التمرير إلى أعلى الصفحة" style="position: fixed; bottom: 20px; left: 20px;">⬆️</button>
     </main>
     
-    <footer role="contentinfo">
-        <div class="container footer-content">
-            <p>
-                &copy; <span id="footer-date">2025</span> المكتبة الذكية | تم الإنشاء في: <time datetime="2024-01-01">يناير 2024</time>
-            </p>
-            <div class="social-links">
-                <a href="https://t.me/iiollr" target="_blank" aria-label="قناة تيليجرام"><i class="fab fa-telegram-plane"></i></a>
-                <a href="mailto:info@yourlibrary.com" aria-label="راسلنا عبر البريد الإلكتروني"><i class="fas fa-envelope"></i></a>
-            </div>
-            <a href="/security.pgp" rel="pgpkey" style="color: rgba(255,255,255,0.7); font-size: 0.8em; margin-top: 5px;">مفتاح الأمان PGP</a>
-        </div>
-        <div class="footer-bottom-bar">صنع بشغف لخدمة القارئ العربي.</div>
-    </footer>
+    <footer>
+        </footer>
 
     <template id="post-template">
         <div class="book-card" role="listitem"> 
@@ -121,6 +91,6 @@
         </div>
     </template>
     
-    <script src="js/app.js"></script>
+    <script src="js/app.js?v=20251021"></script>
 </body>
 </html>
