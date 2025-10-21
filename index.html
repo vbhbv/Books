@@ -6,35 +6,33 @@
     <meta name="color-scheme" content="light dark"> 
     
     <title>مكتبة أرشيف الكتب المجانية | تحفة تقنية ثقافية</title>
-    <link rel="stylesheet" href="css/style.css?v=20251024"> 
+    <link rel="stylesheet" href="css/style.css?v=20251025"> 
 
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
-    <link rel="preload" href="js/app.js?v=20251024" as="script">
+    <link rel="preload" href="js/app.js?v=20251025" as="script">
 </head>
 <body>
     
     <a href="#main-content" class="skip-link">تخطي التنقل إلى المحتوى الرئيسي</a>
 
-    <div id="telegram-banner" role="banner" aria-label="إشعار الانضمام إلى قناة تيليجرام">
+    <div id="telegram-banner" role="banner">
         <div class="container banner-content">
             <p>انضم إلى قناة **مكتبة أرشيف الكتب المجانية** على تيليجرام 🎁</p>
-            <a href="https://t.me/iiollr" target="_blank" class="banner-btn button" role="link">انضم الآن <i class="fab fa-telegram-plane"></i></a>
-            <button id="close-banner-btn" class="button square close-banner-style" aria-label="إغلاق إشعار تيليجرام">
-                <i class="fas fa-times"></i>
-            </button>
+            <a href="https://t.me/iiollr" target="_blank" class="banner-btn" role="link">انضم الآن <i class="fab fa-telegram-plane"></i></a>
+            <button id="close-banner-btn" class="close-btn" aria-label="إغلاق إشعار تيليجرام"><i class="fas fa-times"></i></button>
         </div>
     </div>
 
     <header role="banner"> 
         <nav class="sticky-nav">
             <div class="container nav-content">
-                <button id="menu-toggle" class="hamburger-btn button square" aria-expanded="false" aria-controls="side-menu" aria-label="فتح القائمة الجانبية">
+                <button id="menu-toggle" class="nav-btn hamburger-btn" aria-expanded="false" aria-controls="side-menu" aria-label="فتح القائمة الجانبية">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1><a href="/" class="hero-title" title="الذهاب إلى الصفحة الرئيسية">أرشيف الكتب المجانية</a></h1>
-                <button id="theme-toggle" class="mode-toggle-btn button square" aria-label="التبديل بين الوضع الفاتح والداكن" aria-pressed="false">
+                <h1><a href="/" class="hero-title">أرشيف الكتب المجانية</a></h1>
+                <button id="theme-toggle" class="nav-btn mode-toggle-btn" aria-label="التبديل بين الوضع الفاتح والداكن" aria-pressed="false">
                     <i class="fas fa-moon"></i>
                 </button>
             </div>
@@ -42,13 +40,13 @@
     </header>
 
     <nav id="side-menu" class="side-menu" role="dialog" aria-modal="true" aria-label="القائمة الرئيسية للموقع">
-        <button id="close-menu-btn" class="close-btn" aria-label="إغلاق القائمة الجانبية"><i class="fas fa-times"></i></button>
+        <button id="close-menu-btn" class="close-btn menu-close-btn" aria-label="إغلاق القائمة الجانبية"><i class="fas fa-times"></i></button>
         <ul>
-            <li><a href="#about-section" class="menu-link" role="link"><i class="fas fa-info-circle"></i> عن المكتبة</a></li>
-            <li><a href="#author-section" class="menu-link" role="link"><i class="fas fa-user-edit"></i> المؤلفون</a></li>
-            <li><a href="#categories-section" class="menu-link" role="link"><i class="fas fa-list-alt"></i> أقسام الكتب</a></li>
-            <li><a href="#latest-books" class="menu-link" role="link"><i class="fas fa-book-open"></i> آخر الإضافات</a></li>
-            <li><a href="https://t.me/iiollr" target="_blank" class="menu-link telegram-link" role="link"><i class="fab fa-telegram-plane"></i> تابعنا على تيليجرام</a></li>
+            <li><a href="#about-section" class="menu-link"><i class="fas fa-info-circle"></i> عن المكتبة</a></li>
+            <li><a href="#author-section" class="menu-link"><i class="fas fa-user-edit"></i> المؤلفون</a></li>
+            <li><a href="#categories-section" class="menu-link"><i class="fas fa-list-alt"></i> أقسام الكتب</a></li>
+            <li><a href="#latest-books" class="menu-link"><i class="fas fa-book-open"></i> آخر الإضافات</a></li>
+            <li><a href="https://t.me/iiollr" target="_blank" class="menu-link telegram-link"><i class="fab fa-telegram-plane"></i> تابعنا على تيليجرام</a></li>
         </ul>
     </nav>
     <div id="overlay" class="overlay"></div>
@@ -56,18 +54,18 @@
     <main id="main-content" role="main">
         <form class="search-section" role="search" aria-label="البحث في أرشيف الكتب">
             <div class="search-box">
-                <button id="voice-search-btn" class="button square pulse-animation" type="button" aria-label="البحث الصوتي">
+                <button id="voice-search-btn" class="search-btn voice-btn" type="button" aria-label="البحث الصوتي">
                     <i class="fas fa-microphone"></i> 
                 </button>
-                <input type="search" id="search-input" placeholder="اكتب عنوان الكتاب، اسم المؤلف، أو قسم (فلسفة، برمجة)..." role="search">
-                <button id="search-button" type="submit" class="button" aria-label="بدء البحث"><i class="fas fa-search"></i></button>
+                <input type="search" id="search-input" placeholder="اكتب عنوان الكتاب، اسم المؤلف، أو قسم..." role="search">
+                <button id="search-button" type="submit" class="search-btn submit-btn" aria-label="بدء البحث"><i class="fas fa-search"></i></button>
             </div>
-            <button id="random-book-btn" class="modern-btn button" type="button">كتاب عشوائي 💡</button>
+            <button id="random-book-btn" class="main-action-btn" type="button">كتاب عشوائي 💡</button>
         </form>
         
         <div class="container">
             
-            <section id="author-section" role="region" aria-label="قائمة المؤلفين البارزين"> 
+            <section id="author-section" class="main-section" role="region"> 
                 <h2 class="section-title">قائمة المؤلفين البارزين</h2>
                 <div id="authors-grid" class="authors-grid">
                     <div class="author-card"><i class="fas fa-user-circle"></i><h4>أحمد شوقي</h4><p>5 كتب</p></div>
@@ -76,37 +74,37 @@
                 </div>
             </section>
             
-            <section id="categories-section" role="region" aria-label="أقسام المكتبة الرئيسية"> 
+            <section id="categories-section" class="main-section" role="region"> 
                 <h2 class="section-title">أقسام المكتبة الرئيسية</h2>
                 <div id="categories-grid" class="categories-grid">
-                     <button class="category-btn button" data-tag="فلسفة"><i class="fas fa-brain"></i> الفلسفة</button>
-                     <button class="category-btn button" data-tag="علم"><i class="fas fa-flask"></i> العلوم</button>
-                     <button class="category-btn button" data-tag="برمجة"><i class="fas fa-code"></i> البرمجة</button>
-                     <button class="category-btn button" data-tag="أدب"><i class="fas fa-feather-alt"></i> الأدب</button>
+                     <button class="category-btn" data-tag="فلسفة"><i class="fas fa-brain"></i> الفلسفة</button>
+                     <button class="category-btn" data-tag="علم"><i class="fas fa-flask"></i> العلوم</button>
+                     <button class="category-btn" data-tag="برمجة"><i class="fas fa-code"></i> البرمجة</button>
+                     <button class="category-btn" data-tag="أدب"><i class="fas fa-feather-alt"></i> الأدب</button>
                 </div>
             </section>
             
-            <section id="results-container" aria-live="polite" role="region" aria-label="نتائج البحث وعرض الكتب"> 
+            <section id="results-container" class="main-section" aria-live="polite" role="region"> 
                 <h2 id="results-status" class="section-title">نتائج البحث في الأرشيف</h2>
                 <div id="books-grid" role="list"></div>
             </section>
             
-            <aside id="latest-books" role="complementary" aria-label="أحدث الكتب المضافة">
+            <aside id="latest-books" class="main-section" role="complementary">
                 <h2 class="section-title">💎 آخر الإضافات إلى الأرشيف</h2>
-                <div id="latest-books-grid" class="books-grid grid-auto" role="list"></div>
+                <div id="latest-books-grid" class="books-grid" role="list"></div>
             </aside>
             
-            <section id="about-section" role="article" aria-label="تعريف بمكتبة أرشيف الكتب المجانية">
+            <section id="about-section" class="main-section" role="article">
                  <h2 class="section-title">نبذة عن المكتبة</h2>
                  <blockquote>
                      "المعرفة قوة، وهي حق للجميع."
                  </blockquote>
-                 <p>مكتبة أرشيف الكتب المجانية هي مشروع ثقافي تقني، يهدف إلى توفير أكبر مجموعة من الكتب العربية المجانية وبصيغة PDF، مع التركيز على سهولة الوصول والتصميم العالمي باستخدام خطوط عربية فاخرة مثل Almarai لراحة القارئ.</p>
+                 <p>مكتبة أرشيف الكتب المجانية هي مشروع ثقافي تقني، يهدف إلى توفير أكبر مجموعة من الكتب العربية المجانية وبصيغة PDF، مع التركيز على سهولة الوصول والتصميم العالمي باستخدام خطوط عربية فاخرة لراحة القارئ.</p>
             </section>
             
         </div>
         
-        <button id="scroll-top-btn" class="button square" aria-label="التمرير إلى أعلى الصفحة" style="position: fixed; bottom: 20px; left: 20px;">⬆️</button>
+        <button id="scroll-top-btn" class="scroll-btn" aria-label="التمرير إلى أعلى الصفحة">⬆️</button>
     </main>
     
     <footer role="contentinfo">
@@ -126,11 +124,11 @@
                 <h3 class="post-title"></h3>
                 <p>المؤلف: <span>اسم المؤلف</span></p>
                 <div class="book-tags"></div>
-                <button class="download-btn button">تحميل PDF</button> 
+                <button class="download-btn">تحميل PDF</button> 
             </div>
         </div>
     </template>
     
-    <script src="js/app.js?v=20251024"></script>
+    <script src="js/app.js?v=20251025"></script>
 </body>
 </html>
