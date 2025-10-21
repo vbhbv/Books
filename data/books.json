@@ -1,9 +1,11 @@
+[
   {
-    "id": 1, 
-    "title": "عقدك النفسية سجنك الأبدي", 
-    "author": "د.يوسف حسني", 
-    "year": 2025, 
-    "tags": [ "منوعات", "تنمية ذاتية"],
-    "cover": "img/arsheef_alkutb.jpg", // <--- تم تحديث المسار إلى img/arsheef_alkutb.jpg
+    "id": 1,
+    "title": "عقداك النفسية سجنك الأبدي",
+    "author": "د. يوسف حسني",
+    "year": 2025,
+    "tags": [ "تنمية ذاتية", "منوعة" ],
+    "cover": "img/arsheef_alkutb.jpg", 
     "pdf_link": "pdfs/arsheef_alkutb.pdf"
   }
+]
