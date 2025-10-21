@@ -5,29 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light dark"> 
     
-    <title>مخزن الكتب المجانية | نقلة تقنية</title>
-    <meta name="description" content="أكبر مخزن للكتب المجانية بصيغة PDF. حمل كتبك المفضلة في الفلسفة، العلوم، والبرمجة بروابط مباشرة وآمنة عبر تيليجرام.">
-    <meta name="keywords" content="كتب مجانية, تحميل كتب PDF, مخزن كتب, مكتبة عربية, كتب فلسفة, كتب علمية, كتب برمجة">
+    <title>مخزن الكتب المجانية | مكتبة معرفية متطورة</title>
+    <meta name="description" content="مكتبة رقمية حديثة بخطوط عربية مريحة (Tajawal). تصفح وحمل كتبك المفضلة في الفلسفة، العلوم، والبرمجة بروابط مباشرة.">
+    <meta name="keywords" content="مكتبة رقمية, تحميل كتب PDF, Tajawal, كتب فلسفة, كتب علمية, كتب برمجة">
     
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://yourwebsite.com/index.html">
     
-    <meta property="og:title" content="مخزن الكتب المجانية | تحميل كتب PDF">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yourwebsite.com/index.html">
-    <meta property="og:image" content="https://yourwebsite.com/images/share-logo.jpg">
-    <meta property="og:description" content="أكبر مخزن للكتب المجانية بصيغة PDF.">
-    
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.example.com; style-src 'self' 'unsafe-inline';">
-    <meta name="referrer" content="no-referrer-when-downgrade">
-    
-    <meta name="theme-color" content="#64b5f6">
-    <link rel="manifest" href="/manifest.json">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.example.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
     
     <link rel="preload" href="js/app.js" as="script">
     <link rel="stylesheet" href="css/style.css"> 
 
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="light-mode">
@@ -43,12 +33,13 @@
     </div>
 
     <header role="banner"> 
-        <nav class="sticky-nav"> <div class="container nav-content">
+        <nav class="sticky-nav">
+            <div class="container nav-content">
                 <button id="menu-toggle" class="hamburger-btn button square" aria-expanded="false" aria-controls="side-menu" aria-label="فتح القائمة الجانبية">
                     <i class="fas fa-bars"></i>
                 </button>
 
-                <h1><a href="/" class="hero-title" title="الذهاب إلى الصفحة الرئيسية">مخزن الكتب المجانية 🎁</a></h1>
+                <h1><a href="/" class="hero-title" title="الذهاب إلى الصفحة الرئيسية">المكتبة الذكية</a></h1>
 
                 <button id="theme-toggle" class="mode-toggle-btn button square" aria-label="التبديل بين الوضع الفاتح والداكن" aria-pressed="false">
                     <i class="fas fa-moon"></i>
@@ -63,7 +54,7 @@
             <li><a href="#results-container" class="menu-link" role="link">البحث عن كتاب</a></li>
             <li><a href="#latest-books" class="menu-link" role="link">آخر الإضافات</a></li>
             <li><a href="#" class="menu-link" role="link">التصنيفات</a></li>
-            <li><a href="https://t.me/iiollr" target="_blank" class="menu-link telegram-link" role="link"><i class="fab fa-telegram-plane"></i> قناتنا</a></li>
+            <li><a href="https://t.me/iiollr" target="_blank" class="menu-link telegram-link" role="link"><i class="fab fa-telegram-plane"></i> تابعنا على تيليجرام</a></li>
         </ul>
     </nav>
     <div id="overlay" class="overlay"></div>
@@ -71,7 +62,7 @@
     <main id="main-content" role="main">
         <form class="search-section" role="search" aria-label="البحث في مخزن الكتب">
             <div class="search-box">
-                <input type="search" id="search-input" placeholder="ابحث باسم كتاب، أو مؤلف، أو تصنيف (فلسفة، برمجة، علوم)..." role="search">
+                <input type="search" id="search-input" placeholder="ابحث باسم كتاب، أو مؤلف، أو تصنيف..." role="search">
                 <button id="search-button" type="submit" class="button" aria-label="بدء البحث"><i class="fas fa-search"></i></button>
                 <button id="voice-search-btn" class="button square pulse-animation" aria-label="البحث الصوتي">🎤</button>
             </div>
@@ -84,13 +75,13 @@
             <div id="loading-status" role="status" aria-label="حالة تحميل الصفحة" hidden></div>
             
             <section id="results-container" aria-live="polite" role="region" aria-label="نتائج البحث وعرض الكتب"> 
-                <h2 id="results-status">نتائج البحث في المخزن</h2>
+                <h2 id="results-status" style="margin-top: 20px;">نتائج البحث في المخزن</h2>
                 <div id="books-grid" role="list">
                 </div>
             </section>
             
             <aside id="latest-books" role="complementary" aria-label="أحدث الكتب المضافة">
-                <h2 class="section-title">آخر الإضافات للمخزن</h2>
+                <h2 class="section-title" style="margin-top: 40px;">آخر الإضافات للمكتبة</h2>
                 <div id="latest-books-grid" class="books-grid grid-auto" role="list">
                 </div>
             </aside>
@@ -107,7 +98,7 @@
     <footer role="contentinfo">
         <div class="container footer-content">
             <p>
-                &copy; <span id="footer-date">2025</span> مخزن الكتب المجانية | تم الإنشاء في: <time datetime="2024-01-01">يناير 2024</time>
+                &copy; <span id="footer-date">2025</span> المكتبة الذكية | تم الإنشاء في: <time datetime="2024-01-01">يناير 2024</time>
             </p>
             <div class="social-links">
                 <a href="https://t.me/iiollr" target="_blank" aria-label="قناة تيليجرام"><i class="fab fa-telegram-plane"></i></a>
@@ -119,24 +110,17 @@
     </footer>
 
     <template id="post-template">
-        <div class="card" role="listitem"> 
-            <h3 class="post-title loading-skeleton"></h3>
-            <p>وصف مختصر...</p>
-            <button class="button" aria-describedby="read-more-hint">اقرأ المزيد</button> 
+        <div class="book-card" role="listitem"> 
+            <div class="book-cover loading-skeleton"></div>
+            <div class="card-info">
+                <h3 class="post-title"></h3>
+                <p>المؤلف: <span>اسم المؤلف</span></p>
+                <div class="book-tags"></div>
+                <button class="download-btn button">تحميل PDF</button> 
+            </div>
         </div>
     </template>
     
-    <custom-card style="display: none;">
-        <h3 slot="header">بطاقة متقدمة</h3>
-        <p slot="content">محتوى البطاقة هنا.</p>
-    </custom-card>
-
     <script src="js/app.js"></script>
-    <script>
-        // دالة مساعدة لزر القائمة الجانبية (تم الحفاظ عليها)
-        function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-        }
-    </script>
 </body>
 </html>
