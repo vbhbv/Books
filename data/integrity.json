@@ -1,0 +1,14 @@
+{
+  "integrity_hashes": {
+    "version": "1.0.0",
+    "external": {
+      "fontawesome_css": "sha384-XXXXXX...يجب توليد هذا الهاش...",
+      "google_fonts_css": "sha384-XXXXXX...يجب توليد هذا الهاش..."
+    },
+    "local": {
+      "js/script.js": "sha256-YYYYYYY...يتم توليد هذا الهاش محلياً...",
+      "css/style.css": "sha256-ZZZZZZZ...يتم توليد هذا الهاش محلياً...",
+      "data/books.json": "sha256-AAAAAAA...يتم توليد هذا الهاش محلياً..."
+    }
+  }
+}
