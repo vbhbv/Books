@@ -1,3 +1,4 @@
+// ... (الكود الكامل لملف app.js من الرد السابق) ...
 /*
  * ------------------------------------------------------------------
  * ملف app.js الكامل والنهائي
@@ -27,7 +28,6 @@ let searchTimeout;
 // II. وظائف المساعدة الرئيسية (منطق المكتبة)
 // ===============================================
 
-/** يعرض الكتب في شبكة معينة */
 function displayBooks(gridElement, books, query = '') {
     const resultsStatus = document.getElementById('results-status');
     const template = document.getElementById('post-template');
@@ -50,29 +50,24 @@ function displayBooks(gridElement, books, query = '') {
     const fragment = document.createDocumentFragment();
 
     books.forEach(book => {
-        // التأكد من أن القالب موجود
         const cardClone = template ? document.importNode(template.content, true) : document.createElement('div');
         const card = cardClone.querySelector('.book-card') || cardClone;
 
-        // تحديث محتوى البطاقة
         if (card.querySelector('.book-cover')) card.querySelector('.book-cover').innerHTML = book.cover;
         if (card.querySelector('h3')) card.querySelector('h3').textContent = book.title;
         const authorSpan = card.querySelector('.card-info p span');
         if(authorSpan) authorSpan.textContent = book.author;
         
-        // رابط التحميل
         const downloadBtn = card.querySelector('.download-btn');
         if (downloadBtn) {
             downloadBtn.onclick = () => window.open(book.pdf_link, '_blank');
             downloadBtn.innerHTML = `تحميل PDF <i class="fas fa-download"></i>`;
         }
         
-        // التصنيفات
         const tagsDiv = card.querySelector('.book-tags');
         if (tagsDiv) tagsDiv.innerHTML = book.tags.map(tag => `<span class="tag" data-tag="${tag}">${tag}</span>`).join('');
 
 
-        // تفاصيل الكتاب عند النقر
         card.addEventListener('click', (e) => {
             if (e.target.classList.contains('download-btn') || e.target.classList.contains('tag')) return; 
             alert(`معلومات عن الكتاب: ${book.title}\nسنة النشر: ${book.year}\nالتصنيفات: ${book.tags.join(', ')}`);
@@ -84,7 +79,6 @@ function displayBooks(gridElement, books, query = '') {
     gridElement.appendChild(fragment);
 }
 
-/** يعرض آخر 4 كتب مضافة */
 function displayLatestBooks() {
     const latestBooksGrid = document.getElementById('latest-books-grid');
     if (!latestBooksGrid) return;
@@ -93,22 +87,18 @@ function displayLatestBooks() {
     displayBooks(latestBooksGrid, latestFour);
 }
 
-
-/** يقوم بمنطق البحث ويخفي/يظهر الأقسام */
 function performSearch(query) {
     const booksGrid = document.getElementById('books-grid');
     if (!booksGrid) return;
     
     query = query.trim().toLowerCase();
     
-    // فلترة الكتب
     const filteredBooks = booksData.filter(book =>
         book.title.toLowerCase().includes(query) ||
         book.author.toLowerCase().includes(query) ||
         book.tags.some(tag => tag.toLowerCase().includes(query))
     );
     
-    // إخفاء/إظهار الأقسام الأخرى
     const sectionsToHide = ['latest-books', 'author-section', 'categories-section', 'about-section'];
     sectionsToHide.forEach(id => {
         const section = document.getElementById(id);
@@ -125,7 +115,6 @@ function performSearch(query) {
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // جلب العناصر الحيوية
     const themeToggle = document.getElementById('theme-toggle'); 
     const menuToggle = document.getElementById('menu-toggle');     
     const sideMenu = document.getElementById('side-menu');         
@@ -137,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBannerBtn = document.getElementById('close-banner-btn');
     const scrollTopBtn = document.getElementById('scroll-top-btn');
 
-    // 1. **الوضع الليلي (Dark Mode) - إصلاح زر التبديل**
+    // 1. **الوضع الليلي (Dark Mode) - وظيفة التبديل**
     const currentMode = localStorage.getItem('theme') || 'light-mode';
     document.documentElement.setAttribute('data-theme', currentMode === 'dark-mode' ? 'dark' : 'light'); 
 
@@ -152,20 +141,18 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (themeToggle) {
         const isDarkModeInitial = currentMode === 'dark-mode';
-        updateDarkMode(isDarkModeInitial); // ضبط الحالة الأولية
+        updateDarkMode(isDarkModeInitial);
         themeToggle.addEventListener('click', () => {
-            // التبديل بناءً على الحالة الحالية
             const isDarkMode = document.documentElement.getAttribute('data-theme') === 'light';
             updateDarkMode(isDarkMode);
         });
     }
 
-    // 2. **القائمة الجانبية (Hamburger Menu) - إصلاح زر البرغر و ×**
+    // 2. **القائمة الجانبية (Hamburger Menu) - وظيفة التبديل**
     const toggleMenu = () => {
          if (!sideMenu || !overlay) return;
          const isMenuOpen = sideMenu.classList.toggle('open');
          overlay.classList.toggle('active');
-         // منع التمرير في الخلفية (ميزة UX)
          bodyElement.style.overflow = isMenuOpen ? 'hidden' : 'auto'; 
          if (menuToggle) menuToggle.setAttribute('aria-expanded', isMenuOpen);
     };
@@ -174,7 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
     if (overlay) overlay.addEventListener('click', toggleMenu);
     
-    // إغلاق بالـ Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && sideMenu?.classList.contains('open') ?? false) {
             toggleMenu();
@@ -183,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. **شريط إشعار تيليجرام - إصلاح زر ×**
     if (telegramBanner) {
-        // إظهار البانر إذا لم يتم إخفاؤه مسبقاً
         if (localStorage.getItem('bannerHidden') !== 'true') {
             telegramBanner.style.opacity = '1';
         } else {
@@ -193,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (closeBannerBtn && telegramBanner) {
          closeBannerBtn.addEventListener('click', () => {
-             // إخفاء مع انسيابية
              telegramBanner.style.setProperty('opacity', '0');
              setTimeout(() => {
                  telegramBanner.style.setProperty('display', 'none');
@@ -207,7 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const latestBooksGrid = document.getElementById('latest-books-grid');
 
     if (booksGrid) {
-        // عرض جميع الكتب عند التحميل الأولي
         performSearch(''); 
     }
     if (latestBooksGrid) {
@@ -253,7 +236,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tag && searchInput) {
             searchInput.value = tag;
             performSearch(tag);
-            // إغلاق القائمة بعد النقر على تصنيف
             if (sideMenu?.classList.contains('open')) {
                  toggleMenu();
             }
@@ -272,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
          }
     });
 
-    // 6. **ميزة البحث الصوتي (Speech Recognition API) - إصلاح أيقونة الميكروفون**
+    // 6. **ميزة البحث الصوتي (Speech Recognition API)**
     document.getElementById('voice-search-btn')?.addEventListener('click', () => {
         if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
              alert('البحث الصوتي غير مدعوم في متصفحك الحالي أو يتطلب اتصالاً آمناً (HTTPS).');
@@ -285,7 +267,6 @@ document.addEventListener('DOMContentLoaded', () => {
         recognition.lang = 'ar-SA'; 
         const micIcon = document.getElementById('voice-search-btn').querySelector('i');
         
-        // تغيير أيقونة الميكروفون للإشارة إلى حالة التسجيل
         if (micIcon) micIcon.className = 'fas fa-microphone-alt-slash';
         
         recognition.onresult = (event) => {
@@ -297,7 +278,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         recognition.onend = () => {
-            // إعادة الأيقونة بعد الانتهاء
             if (micIcon) micIcon.className = 'fas fa-microphone';
         };
 
@@ -314,9 +294,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if(scrollTopBtn){
         window.addEventListener('scroll', () => {
             if (window.scrollY > 200) {
-                scrollTopBtn.style.display = 'flex'; // إظهار الزر
+                scrollTopBtn.style.display = 'flex';
             } else {
-                scrollTopBtn.style.display = 'none'; // إخفاء الزر
+                scrollTopBtn.style.display = 'none';
             }
         });
 
@@ -332,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
         footerDateSpan.textContent = currentYear;
     }
 
-    // 9. **تسجيل Service Worker (لتحسين الأداء لاحقاً)**
+    // 9. **تسجيل Service Worker**
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js', { scope: '/' })
             .catch(err => console.error('Service Worker Failed:', err));
