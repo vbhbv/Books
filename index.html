@@ -3,140 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="أكبر أرشيف مجاني للكتب العربية بصيغة PDF. ابحث بين آلاف العناوين والمؤلفين في الفلسفة، العلوم، البرمجة والأدب بتصميم عربي متجاوب.">
-    <meta name="color-scheme" content="light dark"> 
-    
-    <title>مكتبة أرشيف الكتب المجانية | تحفة تقنية ثقافية</title>
-    
-    <link rel="stylesheet" href="css/style.css?v=20251035"> 
-    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="manifest" href="/manifest.json">
-    
-    <link rel="preload" href="js/script.js?v=20251035" as="script">
+    <title>أرشيف الكتب المجانية | الصفحة الرئيسية</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" href="img/favicon.ico">
 </head>
 <body>
     
-    <header role="banner"> 
+    <div class="overlay" id="overlay"></div>
+
+    <header>
         <nav class="sticky-nav">
             <div class="container nav-content">
-                <button id="menu-toggle" class="nav-btn hamburger-btn" aria-expanded="false" aria-controls="side-menu" aria-label="فتح القائمة الجانبية">
-                    <i class="fas fa-bars"></i>
-                </button>
                 <div class="site-branding">
-                    <a href="/" title="الذهاب إلى الصفحة الرئيسية">
-                        <span class="site-title-part1">أرشيف الكتب</span>
-                        <span class="site-title-part2">المجانية</span>
+                    <a href="index.html">
+                        <span class="site-title-part1">أرشيف</span>
+                        <span class="site-title-part2">الكتب المجانية</span>
                     </a>
                 </div>
-                <button id="theme-toggle" class="nav-btn mode-toggle-btn" aria-label="التبديل بين الوضع الفاتح والداكن" aria-pressed="false">
+                <button class="nav-btn" id="theme-toggle" aria-label="تبديل الوضع الليلي">
                     <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-btn" id="menu-toggle" aria-expanded="false" aria-controls="side-menu">
+                    <i class="fas fa-bars"></i>
                 </button>
             </div>
         </nav>
     </header>
 
-    <nav id="side-menu" class="side-menu" role="dialog" aria-modal="true" aria-label="القائمة الرئيسية للموقع">
-        <button id="close-menu-btn" class="close-btn menu-close-btn" aria-label="إغلاق القائمة الجانبية"><i class="fas fa-times"></i></button>
+    <aside class="side-menu" id="side-menu" role="dialog" aria-modal="true" aria-label="قائمة التنقل الجانبية">
+        <button class="nav-btn menu-close-btn" id="close-menu-btn" aria-label="إغلاق القائمة">
+            <i class="fas fa-times"></i>
+        </button>
         <ul>
+            <li><a href="index.html" class="menu-link"><i class="fas fa-home"></i> الرئيسية</a></li>
+            <li><a href="category.html?cat=تنمية ذاتية" class="menu-link"><i class="fas fa-lightbulb"></i> تنمية ذاتية</a></li>
+            <li><a href="category.html?cat=كتب إسلامية" class="menu-link"><i class="fas fa-mosque"></i> كتب إسلامية</a></li>
+            <li><a href="category.html?cat=الأدب" class="menu-link"><i class="fas fa-feather"></i> الأدب</a></li>
+            <li><a href="category.html?cat=البرمجة" class="menu-link"><i class="fas fa-code"></i> البرمجة</a></li>
+            <li><a href="category.html?cat=العلوم" class="menu-link"><i class="fas fa-flask"></i> العلوم</a></li>
+            <li><a href="category.html?cat=الفلسفة" class="menu-link"><i class="fas fa-brain"></i> الفلسفة</a></li>
             <li><a href="#about-section" class="menu-link"><i class="fas fa-info-circle"></i> عن المكتبة</a></li>
-            <li><a href="#author-section" class="menu-link"><i class="fas fa-user-edit"></i> المؤلفون</a></li>
-            <li><a href="#categories-section" class="menu-link"><i class="fas fa-list-alt"></i> أقسام الكتب</a></li>
-            <li><a href="#latest-books" class="menu-link"><i class="fas fa-book-open"></i> آخر الإضافات</a></li>
-            <li><a href="https://t.me/iiollr" target="_blank" class="menu-link telegram-link"><i class="fab fa-telegram-plane"></i> تابعنا على تيليجرام</a></li>
+            <li><a href="https://t.me/iiollr" target="_blank" class="telegram-link"><i class="fab fa-telegram-plane"></i> قناة التليجرام</a></li>
         </ul>
-    </nav>
-    <div id="overlay" class="overlay"></div>
+    </aside>
 
-    <main id="main-content" role="main">
-        <form class="search-section" role="search" aria-label="البحث في أرشيف الكتب">
+    <main class="container" id="results-container">
+
+        <section id="search-section" class="main-section" role="search" aria-label="البحث في أرشيف الكتب">
             <div class="search-box">
-                <button id="voice-search-btn" class="search-btn voice-btn" type="button" aria-label="البحث الصوتي">
-                    <i class="fas fa-microphone"></i> 
-                </button>
-                <input type="search" id="search-input" placeholder="اكتب عنوان الكتاب، اسم المؤلف، أو قسم..." role="search">
-                <button id="search-button" type="button" class="search-btn submit-btn" aria-label="بدء البحث"><i class="fas fa-search"></i></button>
+                <button class="search-btn" id="main-search-button" type="button"><i class="fas fa-search"></i></button>
+                <input type="search" id="main-search-input" placeholder="اكتب عنوان الكتاب، اسم المؤلف، أو قسم..." aria-label="البحث في المكتبة">
+                <button class="clear-btn" id="clear-search-btn" type="button" style="display: none;"><i class="fas fa-times"></i></button>
+                <button class="voice-btn" id="voice-search-btn" type="button"><i class="fas fa-microphone"></i></button>
             </div>
-            <button id="random-book-btn" class="main-action-btn" type="button">كتاب عشوائي 💡</button>
-        </form>
-        
-        <div class="container">
             
-            <section id="author-section" class="main-section" role="region"> 
-                <h2 class="section-title">قائمة المؤلفين البارزين</h2>
-                <div id="authors-grid" class="authors-grid">
-                    <div class="author-card"><i class="fas fa-user-circle"></i><h4>أحمد شوقي</h4><p>5 كتب</p></div>
-                    <div class="author-card"><i class="fas fa-user-circle"></i><h4>نورة القحطاني</h4><p>3 كتب</p></div>
-                    <div class="author-card"><i class="fas fa-user-circle"></i><h4>خالد الزهراني</h4><p>2 كتاب</p></div>
+            <button id="random-book-btn" class="main-action-btn" type="button"><i class="fas fa-lightbulb"></i> كتاب عشوائي</button>
+            
+            <p id="results-status" style="text-align: center; margin-top: 15px; font-weight: 700;"></p>
+            
+            <div class="books-grid" id="books-grid" style="display: none;">
                 </div>
-            </section>
-            
-            <section id="categories-section" class="main-section" role="region"> 
-                <h2 class="section-title">أقسام المكتبة الرئيسية</h2>
-                <div id="categories-grid" class="categories-grid">
-                     <button class="category-btn" data-tag="فلسفة"><i class="fas fa-brain"></i> الفلسفة</button>
-                     <button class="category-btn" data-tag="علم"><i class="fas fa-flask"></i> العلوم</button>
-                     <button class="category-btn" data-tag="برمجة"><i class="fas fa-code"></i> البرمجة</button>
-                     <button class="category-btn" data-tag="أدب"><i class="fas fa-feather-alt"></i> الأدب</button>
-                     
-                     <button class="category-btn" data-tag="تنمية ذاتية"><i class="fas fa-leaf"></i> تنمية ذاتية</button>
-                     <button class="category-btn" data-tag="منوعة"><i class="fas fa-stream"></i> كتب أخرى (منوعة)</button>
-                     <button class="category-btn" data-tag="تاريخ"><i class="fas fa-landmark"></i> التاريخ</button>
-                     <button class="category-btn" data-tag="إسلامية"><i class="fas fa-quran"></i> كتب إسلامية</button>
-                </div>
-            </section>
-            
-            <section id="results-container" class="main-section" aria-live="polite" role="region"> 
-                <h2 id="results-status" class="section-title">نتائج البحث في الأرشيف</h2>
-                <div id="books-grid" role="list"></div>
-            </section>
-            
-            <aside id="latest-books" class="main-section" role="complementary">
-                <h2 class="section-title">💎 آخر الإضافات إلى الأرشيف</h2>
-                <div id="latest-books-grid" class="books-grid" role="list"></div>
-            </aside>
-            
-            <section id="about-section" class="main-section" role="article">
-                 <h2 class="section-title">نبذة عن المكتبة</h2>
-                 <blockquote>
-                     "المعرفة قوة، وهي حق للجميع."
-                 </blockquote>
-                 <p>مكتبة أرشيف الكتب المجانية هي مشروع ثقافي تقني، يهدف إلى توفير أكبر مجموعة من الكتب العربية المجانية وبصيغة PDF، مع التركيز على سهولة الوصول والتصميم العالمي باستخدام خطوط عربية فاخرة لراحة القارئ.</p>
-            </section>
-            
-        </div>
+        </section>
         
-        <button id="scroll-top-btn" class="scroll-btn" aria-label="التمرير إلى أعلى الصفحة">⬆️</button>
+        <section id="latest-books" class="main-section" role="region" aria-labelledby="latest-title">
+            <h2 class="section-title" id="latest-title">💎 آخر الإضافات إلى الأرشيف</h2>
+            <div class="books-grid" id="latest-books-grid">
+                </div>
+        </section>
+
+
+        <section id="about-section" class="main-section" role="region" aria-labelledby="about-title">
+            <h2 class="section-title" id="about-title">نبذة عن المكتبة</h2>
+            <p class="about-text">"المعرفة قوة، وهي حق للجميع." مكتبة أرشيف الكتب المجانية هي مشروع ثقافي تقني، يهدف إلى توفير أكبر مجموعة من الكتب والمراجع بصيغة PDF مجاناً ويسر.</p>
+            
+            <div class="stats" style="text-align: center; margin-top: 20px;">
+                 <p>إجمالي الكتب: <span id="total-books-count">0</span> كتاب</p>
+                 <p>عدد المؤلفين: <span id="total-authors-count">0</span> مؤلف</p>
+            </div>
+
+        </section>
+
     </main>
-    
+
     <footer>
         <div class="container footer-content">
-            <p>&copy; <span id="footer-date">2025</span> مكتبة أرشيف الكتب المجانية | تصميم عالمي</p>
-            <p>
-                للتواصل والجديد: <a href="https://t.me/iiollr" target="_blank" class="telegram-link-footer" aria-label="قناة تيليجرام للمكتبة">
-                    <i class="fab fa-telegram-plane"></i> انضم لقناتنا على تيليجرام
-                </a>
-            </p>
+            <p>جميع الحقوق محفوظة &copy; <span id="footer-date">2025</span></p>
             <div class="social-links">
-                <a href="mailto:info@yourlibrary.com" aria-label="راسلنا عبر البريد الإلكتروني"><i class="fas fa-envelope"></i></a>
+                <a href="https://t.me/iiollr" target="_blank" aria-label="قناة التليجرام"><i class="fab fa-telegram-plane telegram-link-footer"></i></a>
             </div>
         </div>
     </footer>
 
+    <button class="scroll-btn" id="scroll-top-btn" aria-label="الذهاب للأعلى"><i class="fas fa-arrow-up"></i></button>
+
     <template id="post-template">
-        <div class="book-card" role="listitem"> 
-            <div class="book-cover loading-skeleton"></div> 
+        <div class="book-card" tabindex="0">
+            <div class="book-cover"></div>
             <div class="card-info">
                 <h3 class="post-title"></h3>
-                <p>المؤلف: <span>اسم المؤلف</span></p>
+                <p>المؤلف: <span></span></p>
+                <p class="book-snippet"></p> 
                 <div class="book-tags"></div>
-                <a href="#" class="download-btn" target="_blank" download>
-                     تحميل PDF <i class="fas fa-download"></i>
-                </a>
+                <a href="#" class="download-btn" target="_blank">تحميل PDF <i class="fas fa-download"></i></a>
             </div>
         </div>
     </template>
     
-    <script src="js/script.js?v=20251035"></script>
+    <script src="js/script.js"></script> 
 </body>
 </html>
