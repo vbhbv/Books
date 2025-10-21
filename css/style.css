@@ -1,6 +1,6 @@
 /*
  * ------------------------------------------------------------------
- * ملف style.css النهائي: 10 إضافات جمالية ووظيفية (v20251035)
+ * ملف style.css النهائي: 10 إضافات جمالية ووظيفية (v20251039)
  * ------------------------------------------------------------------
  */
 @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap');
@@ -163,7 +163,7 @@ header {
     overflow: hidden; margin: 30px auto 15px; max-width: 600px;
     position: relative;
 }
-#search-input {
+#main-search-input, #section-search-input {
     padding: 10px 15px; border: none; outline: none; font-family: 'Almarai', sans-serif;
     font-size: 1em; color: var(--text-color); background-color: var(--card-bg);
     grid-column: 2 / 3; /* موضع الإدخال */
@@ -195,7 +195,13 @@ header {
     box-shadow: 0 0 var(--darker-primary);
 }
 
-.categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px 0; }
+/* تنسيق شبكة أزرار الأقسام (المعاد إضافتها) */
+.category-buttons-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+    gap: 15px; 
+    padding: 20px 0; 
+}
 .category-btn {
     background-color: var(--darker-primary); color: white; padding: 15px 10px;
     border-radius: 8px; border: none; cursor: pointer; font-size: 1em;
@@ -285,7 +291,53 @@ header {
 
 
 /* =============================================== */
-/* VI. الفوتر والأزرار الإضافية */
+/* VI. تنسيقات قائمة المؤلفين والإحصائيات (جديد) */
+/* =============================================== */
+
+.authors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.author-card {
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.author-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.author-card i {
+    font-size: 2.5em;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+.stats {
+    padding: 15px 0;
+    font-size: 1.1em;
+    color: var(--darker-primary);
+    font-weight: 700;
+}
+.stats span {
+    color: var(--accent-color);
+    font-weight: 800;
+    margin-right: 5px;
+}
+
+
+/* =============================================== */
+/* VII. الفوتر والأزرار الإضافية */
 /* =============================================== */
 footer {
     background-color: var(--footer-bg); color: white; padding: 30px 0;
