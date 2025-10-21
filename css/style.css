@@ -1,22 +1,23 @@
 /*
  * ------------------------------------------------------------------
- * ملف style.css النهائي: إصلاح Z-Index وضمان عمل الأزرار
+ * ملف style.css النهائي: إصلاح العنوان وضمان Z-Index فائق
  * ------------------------------------------------------------------
  */
 @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap');
 
 /* =============================================== */
-/* 0. متغيرات الألوان والخطوط */
+/* 0. متغيرات الألوان (Theme Variables) */
 /* =============================================== */
 :root {
-    --primary-color: #3f51b5;       /* أزرق نيلي */
+    --primary-color: #3f51b5;       
     --darker-primary: #303f9f;
-    --accent-color: #ff9800;        /* برتقالي دافئ */
+    --accent-color: #ff9800;        
     --text-color: #333;
-    --background-color: #fcfcfc;    /* خلفية فاتحة */
+    --background-color: #fcfcfc;    
     --card-bg: white;
     --header-bg: var(--primary-color); 
     --footer-bg: #1a1a1a; 
+    --border-color: rgba(0, 0, 0, 0.1);
 }
 
 [data-theme="dark"] {
@@ -28,6 +29,7 @@
     --card-bg: #2b2b2b; 
     --header-bg: #1f1f1f;
     --footer-bg: #1f1f1f;
+    --border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* =============================================== */
@@ -60,35 +62,17 @@ a { text-decoration: none; color: var(--primary-color); transition: color 0.3s; 
     display: block;
 }
 
+
 /* =============================================== */
-/* II. الأزرار العامة والقائمة العلوية (حل مشكلة عدم النقر) */
+/* II. إصلاح العنوان والأزرار العلوية (Header Fix) */
 /* =============================================== */
 
-/* زر عام للقائمة والأوضاع */
-.nav-btn {
-    width: 44px;
-    height: 44px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s;
-    background-color: var(--darker-primary);
-    color: white;
-    border-radius: 50%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.1em;
-    z-index: 100; /* مهم لضمان النقر */
-}
-.nav-btn:hover { background-color: var(--accent-color); color: var(--text-color); }
-
-/* شريط التنقل العلوي */
 header {
     position: sticky;
     top: 0;
     background-color: var(--header-bg);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    z-index: 50; /* Z-INDEX متوسط */
+    z-index: 100; /* Z-INDEX عالي جداً */
 }
 .sticky-nav { padding: 10px 0; }
 .nav-content {
@@ -96,7 +80,34 @@ header {
     justify-content: space-between;
     align-items: center;
 }
-.hero-title a { color: white; font-weight: 800; font-size: 1.5em;}
+
+/* تنسيق اسم الموقع */
+.site-branding a { 
+    font-size: 1.4em; 
+    font-weight: 800;
+    display: block; 
+    white-space: nowrap;
+}
+.site-title-part1 { color: white; }
+.site-title-part2 { color: var(--accent-color); font-weight: 400; } 
+
+/* زر عام للتبديل والقائمة (ضمان النقر) */
+.nav-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    cursor: pointer;
+    background-color: var(--darker-primary);
+    color: white;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1em;
+    z-index: 105; /* أعلى من الـ Header نفسه لضمان النقر */
+    position: relative; 
+}
+.nav-btn:hover { background-color: var(--accent-color); color: var(--text-color); }
 
 
 /* =============================================== */
@@ -107,6 +118,7 @@ header {
     color: white;
     padding: 10px 0;
     transition: opacity 0.3s;
+    z-index: 90; 
 }
 .banner-content {
     display: flex;
@@ -125,20 +137,23 @@ header {
     border: none;
     cursor: pointer;
 }
-.close-btn { /* زر الإغلاق العام (للبانر والقائمة الجانبية) */
+.close-btn { 
     background: none;
     border: none;
-    color: white; /* لون أبيض للبانر */
+    color: white; 
     font-size: 1.5em;
     cursor: pointer;
-    transition: opacity 0.3s;
+    z-index: 95; 
+    position: relative;
 }
-.menu-close-btn { /* لون مختلف لزر إغلاق القائمة الجانبية */
+.menu-close-btn { 
      color: var(--text-color); 
      position: absolute;
      top: 10px;
      left: 10px;
+     z-index: 1001; /* أعلى من القائمة نفسها */
 }
+
 
 /* =============================================== */
 /* IV. القائمة الجانبية (Side Menu) */
@@ -150,7 +165,7 @@ header {
     height: 100%;
     width: 280px;
     background-color: var(--card-bg);
-    z-index: 1000; /* أعلى Z-INDEX لضمان النقر */
+    z-index: 1000; /* أعلى Z-INDEX على الإطلاق */
     padding: 60px 20px 20px;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.4);
     transition: right 0.4s ease-out;
@@ -172,12 +187,13 @@ header {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
-    z-index: 999; /* Z-INDEX أقل من القائمة وأعلى من المحتوى */
+    z-index: 999; 
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.4s;
 }
 .overlay.active { opacity: 1; visibility: visible; }
+
 
 /* =============================================== */
 /* V. البحث والأقسام */
@@ -198,6 +214,8 @@ header {
     outline: none;
     font-family: 'Almarai', sans-serif;
     font-size: 1em;
+    color: var(--text-color);
+    background-color: var(--card-bg);
 }
 .search-btn {
     background-color: var(--primary-color);
@@ -222,7 +240,7 @@ header {
     cursor: pointer;
 }
 
-/* الأقسام والمؤلفون (كما هي) */
+/* الأقسام والمؤلفون */
 .categories-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -236,12 +254,85 @@ header {
     border-radius: 8px;
     border: none;
     cursor: pointer;
+    font-size: 1em;
+    font-family: 'Almarai', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
-.author-card i { color: var(--accent-color); }
+.author-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 15px;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.author-card i { color: var(--accent-color); font-size: 2em; margin-bottom: 5px; }
 
 
 /* =============================================== */
-/* VI. الفوتر والأزرار الإضافية */
+/* VI. بطاقات الكتب (Book Cards) */
+/* =============================================== */
+.books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    padding: 20px 0;
+}
+.book-card {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+.book-cover {
+    height: 150px;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+}
+.card-info { padding: 15px; flex-grow: 1; }
+.card-info h3 { font-size: 1.2em; margin-bottom: 5px; color: var(--primary-color); }
+.card-info p { font-size: 0.9em; color: var(--text-color); margin-bottom: 10px; }
+.book-tags { margin-bottom: 15px; }
+.tag {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: var(--text-color);
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.8em;
+    margin-left: 5px;
+    cursor: pointer;
+}
+.download-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+
+/* =============================================== */
+/* VII. الفوتر والأزرار الإضافية */
 /* =============================================== */
 footer {
     background-color: var(--footer-bg);
@@ -262,6 +353,21 @@ footer {
     color: white;
     border: none;
     cursor: pointer;
-    display: none; /* يتم إظهاره بواسطة JS */
+    display: none; 
     z-index: 40;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+}
+
+/* =============================================== */
+/* VIII. Media Queries (للتجاوب) */
+/* =============================================== */
+@media (max-width: 600px) {
+    .site-branding a { font-size: 1.2em; }
+    .search-box { margin: 20px auto 10px; border-radius: 20px; }
+    #search-input { padding: 8px 12px; }
+    .banner-content { justify-content: space-between; }
+    #telegram-banner p { font-size: 0.9em; }
+    .side-menu { width: 250px; }
 }
