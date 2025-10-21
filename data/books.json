@@ -1,83 +1,9 @@
-[
-    { 
-        "id": 1, 
-        "title": "مقدمة في الفلسفة الحديثة", 
-        "author": "أحمد شوقي", 
-        "year": 2024, 
-        "tags": ["فلسفة", "منطق"], 
-        "cover": "img/cover1.jpg", 
-        "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_1" 
-    }, 
-    { 
-        "id": 2, 
-        "title": "أسرار الكون والفيزياء", 
-        "author": "نورة القحطاني", 
-        "year": 2025, 
-        "tags": ["علم", "فيزياء"], 
-        "cover": "img/cover2.png", 
-        "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_2" 
-    },
-    { 
-        "id": 3, 
-        "title": "فن الإقناع والجدل", 
-        "author": "خالد الزهراني", 
-        "year": 2023, 
-        "tags": ["منطق", "بلاغة"], 
-        "cover": "img/cover3.jpg", 
-        "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_3" 
-    },
-    { 
-        "id": 4, 
-        "title": "مكتبة النور للبرمجة", 
-        "author": "محمد علي", 
-        "year": 2025, 
-        "tags": ["برمجة", "JavaScript"], 
-        "cover": "img/cover4.png", 
-        "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_4" 
-    },
-    { 
-        "id": 5, 
-        "title": "أساسيات الذكاء الاصطناعي", 
-        "author": "سارة محمود", 
-        "year": 2024, 
-        "tags": ["برمجة", "AI", "علم"], 
-        "cover": "img/cover5.jpg", 
-        "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_5" 
-    },
-    { 
-        "id": 6, 
-        "title": "تاريخ الحضارات القديمة", 
-        "author": "علي عبدالله", 
-        "year": 2020, 
-        "tags": ["تاريخ", "ثقافة", "فلسفة"], 
-        "cover": "img/cover6.jpg", 
-        "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_6" 
-    },
-    { 
-        "id": 7, 
-        "title": "كيمياء الحياة", 
-        "author": "فاطمة الزهراء", 
-        "year": 2024, 
-        "tags": ["علم", "كيمياء", "أحياء"], 
-        "cover": "img/cover7.png", 
-        "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_7" 
-    },
-    { 
-        "id": 8, 
-        "title": "الرواية العربية المعاصرة", 
-        "author": "يوسف إدريس", 
-        "year": 2021, 
-        "tags": ["أدب", "روايات"], 
-        "cover": "img/cover8.jpg", 
-        "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_8" 
-    },
-    { 
-        "id": 9, 
-        "title": "تحليل البيانات الضخمة", 
-        "author": "أحمد خالد", 
-        "year": 2025, 
-        "tags": ["برمجة", "بيانات", "AI"], 
-        "cover": "img/cover9.jpg", 
-        "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_9" 
-    }
-]
+  {
+    "id": 1, 
+    "title": "عقدك النفسية سجنك الأبدي", 
+    "author": "د.يوسف حسني", 
+    "year": 2025, 
+    "tags": [ "منوعات", "تنمية ذاتية"],
+    "cover": "img/arsheef_alkutb.jpg", // <--- تم تحديث المسار إلى img/arsheef_alkutb.jpg
+    "pdf_link": "pdfs/arsheef_alkutb.pdf"
+  }
