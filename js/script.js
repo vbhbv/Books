@@ -1,7 +1,6 @@
-// ... (الكود الكامل لملف app.js من الرد السابق) ...
 /*
  * ------------------------------------------------------------------
- * ملف app.js الكامل والنهائي
+ * ملف app.js الكامل والنهائي (v20251027)
  * مكتبة أرشيف الكتب المجانية - إصلاح شامل لوظائف الأزرار والبحث
  * ------------------------------------------------------------------
  */
@@ -28,6 +27,7 @@ let searchTimeout;
 // II. وظائف المساعدة الرئيسية (منطق المكتبة)
 // ===============================================
 
+/** يعرض الكتب في شبكة معينة */
 function displayBooks(gridElement, books, query = '') {
     const resultsStatus = document.getElementById('results-status');
     const template = document.getElementById('post-template');
@@ -38,6 +38,7 @@ function displayBooks(gridElement, books, query = '') {
         if (query) {
              resultsStatus.textContent = `نتائج البحث عن: "${query}" في الأرشيف (${books.length} كتاب)`;
         } else {
+             // يتم تحديث هذا العنوان عند العرض الأولي للصفحة
              resultsStatus.textContent = "الكتب المتوفرة في الأرشيف (ابدأ البحث)";
         }
 
@@ -50,6 +51,7 @@ function displayBooks(gridElement, books, query = '') {
     const fragment = document.createDocumentFragment();
 
     books.forEach(book => {
+        // فحص وجود الـ Template لضمان التوافق
         const cardClone = template ? document.importNode(template.content, true) : document.createElement('div');
         const card = cardClone.querySelector('.book-card') || cardClone;
 
@@ -60,7 +62,10 @@ function displayBooks(gridElement, books, query = '') {
         
         const downloadBtn = card.querySelector('.download-btn');
         if (downloadBtn) {
-            downloadBtn.onclick = () => window.open(book.pdf_link, '_blank');
+            downloadBtn.onclick = (e) => {
+                 e.stopPropagation(); // منع النقر على البطاقة بالكامل عند الضغط على الزر
+                 window.open(book.pdf_link, '_blank');
+            };
             downloadBtn.innerHTML = `تحميل PDF <i class="fas fa-download"></i>`;
         }
         
@@ -68,9 +73,11 @@ function displayBooks(gridElement, books, query = '') {
         if (tagsDiv) tagsDiv.innerHTML = book.tags.map(tag => `<span class="tag" data-tag="${tag}">${tag}</span>`).join('');
 
 
+        // حدث النقر على البطاقة (للتفاصيل)
         card.addEventListener('click', (e) => {
+            // تجاهل النقر إذا كان على زر التحميل أو العلامة (Tag)
             if (e.target.classList.contains('download-btn') || e.target.classList.contains('tag')) return; 
-            alert(`معلومات عن الكتاب: ${book.title}\nسنة النشر: ${book.year}\nالتصنيفات: ${book.tags.join(', ')}`);
+            alert(`معلومات عن الكتاب: ${book.title}\nالمؤلف: ${book.author}\nسنة النشر: ${book.year}\nالتصنيفات: ${book.tags.join(', ')}`);
         });
         
         fragment.appendChild(card);
@@ -79,6 +86,7 @@ function displayBooks(gridElement, books, query = '') {
     gridElement.appendChild(fragment);
 }
 
+/** يعرض آخر 4 كتب مضافة */
 function displayLatestBooks() {
     const latestBooksGrid = document.getElementById('latest-books-grid');
     if (!latestBooksGrid) return;
@@ -87,6 +95,8 @@ function displayLatestBooks() {
     displayBooks(latestBooksGrid, latestFour);
 }
 
+
+/** يقوم بمنطق البحث ويخفي/يظهر الأقسام */
 function performSearch(query) {
     const booksGrid = document.getElementById('books-grid');
     if (!booksGrid) return;
@@ -99,6 +109,7 @@ function performSearch(query) {
         book.tags.some(tag => tag.toLowerCase().includes(query))
     );
     
+    // إخفاء الأقسام عند وجود استعلام بحث (Query)
     const sectionsToHide = ['latest-books', 'author-section', 'categories-section', 'about-section'];
     sectionsToHide.forEach(id => {
         const section = document.getElementById(id);
@@ -227,10 +238,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = e.target;
         let tag = null;
 
+        // البحث عبر العلامات الموجودة في بطاقات الكتب
         if (target.classList.contains('tag')) {
             tag = target.getAttribute('data-tag');
-        } else if (target.classList.contains('category-btn')) {
-            tag = target.getAttribute('data-tag');
+        } 
+        // البحث عبر أزرار التصنيفات الرئيسية
+        else if (target.closest('.category-btn')) {
+             // استخدام closest للتأكد من التقاط النقر حتى على الأيقونة
+             tag = target.closest('.category-btn').getAttribute('data-tag');
         }
 
         if (tag && searchInput) {
@@ -312,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
         footerDateSpan.textContent = currentYear;
     }
 
-    // 9. **تسجيل Service Worker**
+    // 9. **تسجيل Service Worker (لتحسين الأداء - PWA)**
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js', { scope: '/' })
             .catch(err => console.error('Service Worker Failed:', err));
