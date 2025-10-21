@@ -1,18 +1,18 @@
 /*
  * ------------------------------------------------------------------
- * ملف app.js النهائي: دعم صور الأغلفة والتحميل من JSON (v20251029)
+ * ملف app.js النهائي: إصلاح شامل ومنظم لجميع الأزرار (v20251030)
  * ------------------------------------------------------------------
  */
 
 // ===============================================
 // I. البيانات الأصلية والثوابت
 // ===============================================
-let booksData = []; // سيتم ملؤه من ملف /data/books.json
+let booksData = []; // يتم ملؤه من ملف /data/books.json
 const DEBOUNCE_DELAY = 300; 
 let searchTimeout;
 
 // ===============================================
-// II. وظائف المساعدة الرئيسية (منطق المكتبة)
+// II. وظائف المساعدة الرئيسية (منطق المكتبة والبحث)
 // ===============================================
 
 /** يعرض الكتب في شبكة معينة */
@@ -21,35 +21,33 @@ function displayBooks(gridElement, books, query = '') {
     const template = document.getElementById('post-template');
     
     if (!template || !gridElement) return;
-
     gridElement.innerHTML = '';
     
+    // (منطق عرض حالة نتائج البحث) ...
     if (gridElement.id === 'books-grid' && resultsStatus) {
         const titleText = query 
             ? `نتائج البحث عن: "${query}" في الأرشيف (${books.length} كتاب)` 
             : "جميع الكتب المتوفرة في الأرشيف";
         resultsStatus.textContent = titleText;
-
         if (books.length === 0 && query) {
             gridElement.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--text-color);">لم يتم العثور على نتائج مطابقة.</p>';
             return;
         }
     }
     
+    // (منطق إنشاء بطاقات الكتب) ...
     const fragment = document.createDocumentFragment();
-
     books.forEach(book => {
         const cardClone = document.importNode(template.content, true);
         const card = cardClone.querySelector('.book-card');
 
-        // 👈🏻 تحديث معالجة الغلاف (باستخدام <img>)
+        // معالجة الغلاف (باستخدام <img>)
         const bookCoverDiv = card.querySelector('.book-cover');
         if (bookCoverDiv) {
             const img = document.createElement('img');
             img.src = book.cover; 
             img.alt = `غلاف كتاب: ${book.title}`; 
             img.loading = 'lazy'; 
-            
             bookCoverDiv.innerHTML = ''; 
             bookCoverDiv.appendChild(img);
         }
@@ -63,13 +61,13 @@ function displayBooks(gridElement, books, query = '') {
         if (downloadLink) {
             downloadLink.href = book.pdf_link;
             downloadLink.setAttribute('download', `${book.title} - ${book.author}.pdf`);
-            downloadLink.addEventListener('click', (e) => { e.stopPropagation(); });
+            downloadLink.addEventListener('click', (e) => { e.stopPropagation(); }); // منع فتح البطاقة بالكامل
         }
         
         const tagsDiv = card.querySelector('.book-tags');
         if (tagsDiv) tagsDiv.innerHTML = book.tags.map(tag => `<span class="tag" data-tag="${tag}">${tag}</span>`).join('');
 
-        // حدث النقر على البطاقة (للتفاصيل)
+        // حدث النقر على البطاقة
         card.addEventListener('click', (e) => {
             if (e.target.classList.contains('tag')) return; 
             alert(`معلومات عن الكتاب: ${book.title}\nالمؤلف: ${book.author}\nسنة النشر: ${book.year}\nالتصنيفات: ${book.tags.join(', ')}`);
@@ -92,7 +90,7 @@ function displayLatestBooks() {
 }
 
 
-/** يقوم بمنطق البحث ويخفي/يظهر الأقسام */
+/** يقوم بمنطق البحث */
 function performSearch(query) {
     if (booksData.length === 0) return;
     const booksGrid = document.getElementById('books-grid');
@@ -106,6 +104,7 @@ function performSearch(query) {
         book.tags.some(tag => tag.toLowerCase().includes(query))
     );
     
+    // إظهار/إخفاء الأقسام بناءً على وجود استعلام بحث
     const sectionsToHide = ['latest-books', 'author-section', 'categories-section', 'about-section'];
     sectionsToHide.forEach(id => {
         const section = document.getElementById(id);
@@ -127,7 +126,6 @@ async function loadBooksData() {
         }
         booksData = await response.json();
         
-        // بمجرد تحميل البيانات، ابدأ بعرض الكتب
         performSearch(''); 
         displayLatestBooks();
         
@@ -141,7 +139,7 @@ async function loadBooksData() {
 
 
 // ===============================================
-// III. دالة DOMContentLoaded الرئيسية (إصلاحات الأزرار والـ Menu)
+// III. دالة DOMContentLoaded الرئيسية (تهيئة الأزرار)
 // ===============================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -149,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. تحميل البيانات
     loadBooksData(); 
 
-    // 2. العناصر الأساسية
+    // 2. العناصر الأساسية (IDs)
     const themeToggle = document.getElementById('theme-toggle'); 
     const menuToggle = document.getElementById('menu-toggle');     
     const sideMenu = document.getElementById('side-menu');         
@@ -179,11 +177,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. القائمة الجانبية (Hamburger Menu) - إصلاح شامل ومضمون
+    // 4. **إصلاح عمل القائمة الجانبية (Hamburger Menu) - هذا هو الضمان!**
     const toggleMenu = () => {
          if (!sideMenu || !overlay) return;
-         const isMenuOpen = sideMenu.classList.contains('open');
-         
+         const isMenuOpen = sideMenu.classList.contains('open'); // الاعتماد على الكلاس
+
          if (isMenuOpen) {
              sideMenu.classList.remove('open');
              overlay.classList.remove('active');
@@ -197,11 +195,14 @@ document.addEventListener('DOMContentLoaded', () => {
          }
     };
     
+    // ربط أحداث النقر بالقائمة (مضمون العمل الآن)
     if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
     if (closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
     if (overlay) overlay.addEventListener('click', toggleMenu);
+    
+    // الإغلاق باستخدام زر ESC
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && sideMenu?.classList.contains('open') ?? false) { toggleMenu(); }
+        if (e.key === 'Escape' && sideMenu?.classList.contains('open')) { toggleMenu(); }
     });
 
     // 5. شريط إشعار تيليجرام
@@ -210,13 +211,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (closeBannerBtn && telegramBanner) {
          closeBannerBtn.addEventListener('click', () => {
-             telegramBanner.style.setProperty('opacity', '0');
-             setTimeout(() => { telegramBanner.style.setProperty('display', 'none'); }, 300);
+             // إخفاء فوري وتعيين في التخزين المحلي
+             telegramBanner.style.display = 'none'; 
              localStorage.setItem('bannerHidden', 'true');
          });
     }
 
-    // 6. منطق البحث العادي والبحث الفوري (Tags & Categories)
+    // 6. منطق البحث
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
@@ -230,6 +231,8 @@ document.addEventListener('DOMContentLoaded', () => {
             searchInput.focus();
         });
     }
+    
+    // 7. ربط النقرات على العلامات وروابط القائمة الجانبية
     document.addEventListener('click', (e) => {
         const target = e.target;
         let tag = null;
@@ -239,9 +242,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tag && searchInput) {
             searchInput.value = tag;
             performSearch(tag);
-            if (sideMenu?.classList.contains('open')) { toggleMenu(); }
+            if (sideMenu?.classList.contains('open')) { toggleMenu(); } // إغلاق القائمة بعد النقر على تصنيف
         }
         
+        // الانتقال للقسم عبر الروابط في القائمة الجانبية
         if (target.classList.contains('menu-link') && target.getAttribute('href').startsWith('#')) {
             e.preventDefault();
             const targetId = target.getAttribute('href').substring(1);
@@ -250,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 7. زر "كتاب عشوائي"
+    // 8. زر "كتاب عشوائي"
     document.getElementById('random-book-btn')?.addEventListener('click', () => {
          if (booksData.length === 0) { alert('يتم تحميل بيانات الكتب، يرجى الانتظار.'); return; }
          const randomIndex = Math.floor(Math.random() * booksData.length);
@@ -258,30 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
          alert(`كتاب اليوم المختار: ${booksData[randomIndex].title}.`);
     });
 
-    // 8. ميزة البحث الصوتي (API)
-    document.getElementById('voice-search-btn')?.addEventListener('click', () => {
-        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-             alert('البحث الصوتي غير مدعوم في متصفحك الحالي.'); return;
-        }
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-        recognition.lang = 'ar-SA'; 
-        const micIcon = document.getElementById('voice-search-btn').querySelector('i');
-        
-        if (micIcon) micIcon.className = 'fas fa-microphone-alt-slash';
-        recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            if (searchInput) { searchInput.value = transcript; performSearch(transcript); }
-        };
-        recognition.onend = () => { if (micIcon) micIcon.className = 'fas fa-microphone'; };
-        recognition.onerror = (event) => { 
-            console.error('Speech Recognition Error:', event.error);
-            if (micIcon) micIcon.className = 'fas fa-microphone';
-        };
-        recognition.start();
-    });
-
-    // 9. زر الصعود للأعلى (Scroll Top Button)
+    // 9. زر الصعود للأعلى
     if(scrollTopBtn){
         window.addEventListener('scroll', () => {
             scrollTopBtn.style.display = window.scrollY > 200 ? 'flex' : 'none';
@@ -289,11 +270,9 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
     }
 
-    // 10. تحديث تاريخ الفوتر
+    // 10. تحديث تاريخ الفوتر وتسجيل Service Worker
     const footerDateSpan = document.getElementById('footer-date');
     if (footerDateSpan) { footerDateSpan.textContent = new Date().getFullYear(); }
-
-    // 11. تسجيل Service Worker
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js', { scope: '/' })
             .catch(err => console.error('Service Worker Failed:', err));
