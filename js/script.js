@@ -1,6 +1,6 @@
 /*
  * ------------------------------------------------------------------
- * ملف script.js المُعاد تحديثه (إزالة منطق التوسيع)
+ * ملف script.js المُعدّل والنهائي (يشمل جميع تصحيحات المستخدم)
  * ------------------------------------------------------------------
  */
 
@@ -10,13 +10,10 @@
 let booksData = []; 
 const DEBOUNCE_DELAY = 300; 
 let searchTimeout;
-// تم إزالة: let currentCategory = null; 
 
 // ===============================================
 // II. وظائف المساعدة الرئيسية (منطق المكتبة)
 // ===============================================
-
-// تم إزالة: function getCategoryFromURL() { ... }
 
 function displayBooks(gridElement, books, query = '') {
     const resultsStatus = document.getElementById('results-status');
@@ -26,7 +23,6 @@ function displayBooks(gridElement, books, query = '') {
     gridElement.innerHTML = '';
     
     if (resultsStatus) {
-        // تحديث الحالة فقط للصفحة الرئيسية
         resultsStatus.textContent = query 
            ? `نتائج البحث عن: "${query}" في الأرشيف (${books.length} كتاب)` 
            : "";
@@ -44,8 +40,6 @@ function displayBooks(gridElement, books, query = '') {
     books.forEach(book => {
         const cardClone = document.importNode(template.content, true);
         const card = cardClone.querySelector('.book-card');
-        
-        card.querySelector('.download-btn')?.addEventListener('click', () => trackDownload(book.title));
         
         const snippetElement = card.querySelector('.book-snippet');
         if (snippetElement) { snippetElement.textContent = book.snippet || 'اضغط للعرض التفاصيل...'; }
@@ -66,18 +60,43 @@ function displayBooks(gridElement, books, query = '') {
         const authorSpan = card.querySelector('.card-info p span');
         if(authorSpan) authorSpan.textContent = book.author;
         
-        const downloadLink = card.querySelector('.download-btn'); 
-        if (downloadLink) {
-            downloadLink.href = book.pdf_link; 
-            downloadLink.setAttribute('download', `${book.title} - ${book.author}.pdf`);
-            downloadLink.addEventListener('click', (e) => { e.stopPropagation(); }); 
+        // 🏆 منطق روابط التحميل (تمت إضافة تليجرام هنا)
+        const downloadLinksDiv = card.querySelector('.download-links');
+        if (downloadLinksDiv) {
+            downloadLinksDiv.innerHTML = ''; 
+
+            // رابط التحميل المباشر
+            if (book.pdf_link) {
+                const directLink = document.createElement('a');
+                directLink.href = book.pdf_link; 
+                directLink.className = 'download-btn';
+                directLink.setAttribute('download', `${book.title} - ${book.author}.pdf`);
+                directLink.innerHTML = '<i class="fas fa-download"></i> تحميل مباشر';
+                directLink.addEventListener('click', (e) => { 
+                    e.stopPropagation();
+                    trackDownload(book.title);
+                });
+                downloadLinksDiv.appendChild(directLink);
+            }
+
+            // رابط تليجرام (يجب أن يكون موجوداً في books.json)
+            if (book.telegram_link) {
+                const telegramLink = document.createElement('a');
+                telegramLink.href = book.telegram_link;
+                telegramLink.className = 'download-btn telegram-btn'; // يمكنك إضافة تنسيق خاص لـ telegram-btn في CSS
+                telegramLink.setAttribute('target', '_blank');
+                telegramLink.innerHTML = '<i class="fab fa-telegram-plane"></i> عبر تليجرام';
+                telegramLink.addEventListener('click', (e) => { e.stopPropagation(); }); 
+                downloadLinksDiv.appendChild(telegramLink);
+            }
         }
+        
         
         const tagsDiv = card.querySelector('.book-tags');
         if (tagsDiv) tagsDiv.innerHTML = book.tags.map(tag => `<span class="tag" data-tag="${tag}">${tag}</span>`).join('');
 
         card.addEventListener('click', (e) => {
-            if (e.target.classList.contains('tag')) return; 
+            if (e.target.classList.contains('tag') || e.target.classList.contains('download-btn')) return; 
             alert(`معلومات عن الكتاب: ${book.title}\nالمؤلف: ${book.author}\nسنة النشر: ${book.year}\nالتصنيفات: ${book.tags.join(', ')}`);
         });
         
@@ -99,12 +118,11 @@ function displayLatestBooks() {
     displayBooks(latestBooksGrid, latestFour);
 }
 
+// 🏆 دالة البحث الرئيسية (تدعم البحث عن طريق الفئة)
 function performSearch(query) {
     if (booksData.length === 0) return;
     
-    // تم إزالة: const isCategoryPage = currentCategory !== null;
     const booksGrid = document.getElementById('books-grid'); 
-    
     const latestSection = document.getElementById('latest-books');
     const authorsSection = document.getElementById('author-section'); 
     const categoriesSection = document.getElementById('categories-section'); 
@@ -113,16 +131,16 @@ function performSearch(query) {
     
     query = query.trim().toLowerCase();
     
-    // تم إزالة: منطق تصفية searchPool بناءً على currentCategory
-    let searchPool = booksData; 
+    let searchPool = booksData;
     
     const filteredBooks = searchPool.filter(book =>
         book.title.toLowerCase().includes(query) ||
         book.author.toLowerCase().includes(query) ||
-        book.tags.some(tag => tag.toLowerCase().includes(query))
+        // هذا السطر يسمح بالبحث عن الفئة (العلامة)
+        book.tags.some(tag => tag.toLowerCase().includes(query)) 
     );
     
-    // منطق العرض للصفحة الرئيسية فقط
+    // منطق العرض والإخفاء للأقسام
     if (latestSection && authorsSection && categoriesSection) {
         const displayMode = query ? 'none' : 'block';
 
@@ -138,7 +156,7 @@ function performSearch(query) {
         }
     }
 
-    displayBooks(booksGrid, filteredBooks, query); // تم إزالة: isCategoryPage
+    displayBooks(booksGrid, filteredBooks, query); 
     
     localStorage.setItem('lastSearchQuery', query);
 }
@@ -155,7 +173,7 @@ async function loadBooksData() {
         resultsContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align:center;">يتم تحميل بيانات المكتبة...</p>';
     }
     
-    // المسارات التي ثبت أنها كانت مشكلتك (سنستخدمها لضمان التحديد)
+    // المسارات التي ثبت أنها تعمل على GitHub Pages
     const possiblePaths = [
         '/Books/data/books.json', 
         './data/books.json', 
@@ -174,8 +192,6 @@ async function loadBooksData() {
             if (!Array.isArray(booksData)) { throw new Error("JSON format error: Expected an array of books."); }
             
             if (resultsContainer) resultsContainer.innerHTML = ''; 
-            
-            // تم إزالة: منطق التوجيه بناءً على currentCategory
             
             updateLibraryStats(); 
             displayLatestBooks();
@@ -247,7 +263,7 @@ function animateCountUp(element, finalValue) {
 
 function handleEnterKeySearch(event) {
     if (event.key === 'Enter') {
-        const searchInput = document.getElementById('main-search-input'); // تم التبسيط
+        const searchInput = document.getElementById('main-search-input'); 
         if (searchInput) {
             event.preventDefault(); 
             performSearch(searchInput.value);
@@ -270,7 +286,6 @@ function trackDownload(bookTitle) {
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // 1. تحميل البيانات
     loadBooksData(); 
 
     // 2. العناصر الأساسية 
@@ -281,13 +296,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlay = document.getElementById('overlay');
     const bodyElement = document.body;
     
-    // 🔑 تحديد الحقول مرة واحدة فقط
-    const searchInput = document.getElementById('main-search-input'); // تم التبسيط
-    const searchButton = document.getElementById('main-search-button'); // تم التبسيط
+    const searchInput = document.getElementById('main-search-input'); 
+    const searchButton = document.getElementById('main-search-button'); 
     const clearSearchBtn = document.getElementById('clear-search-btn');
 
     const scrollTopBtn = document.getElementById('scroll-top-btn');
-    const voiceSearchBtn = document.getElementById('voice-search-btn'); 
+    const voiceSearchBtn = document.getElementById('voice-search-btn'); // ❌ ملغي
 
     
     // 3. الوضع الليلي (Dark Mode)
@@ -365,18 +379,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // منع البحث الصوتي لعدم وجود API مفعّل
+    // ❌ إلغاء البحث الصوتي (يبقى الزر معطلًا برسالة)
     if (voiceSearchBtn) {
-        voiceSearchBtn.addEventListener('click', () => {
-             alert("خاصية البحث الصوتي غير مفعلة حالياً في هذا الإصدار.");
+        voiceSearchBtn.addEventListener('click', (e) => {
+             e.preventDefault();
+             alert("خاصية البحث الصوتي ملغاة بناءً على طلبك.");
         });
     }
 
-    // 6. ربط النقرات على العلامات وروابط القائمة الجانبية
+    // 6. ربط النقرات على العلامات وروابط القائمة الجانبية (الآن يدعم النقر على الأقسام)
     document.addEventListener('click', (e) => {
         const target = e.target;
         let tag = null;
-        if (target.classList.contains('tag')) { tag = target.getAttribute('data-tag'); } 
+        
+        // النقر على الأقسام الرئيسية (يفترض أن القسم يحمل class="category-link" أو "category-tag")
+        if (target.closest('.category-tag') || target.classList.contains('category-tag')) { 
+            tag = target.closest('.category-tag')?.getAttribute('data-tag') || target.getAttribute('data-tag');
+        }
+        
+        // النقر على علامات التاج داخل بطاقة الكتاب
+        if (target.classList.contains('tag')) { tag = target.getAttribute('data-tag'); }
         
         if (tag && searchInput) {
             searchInput.value = tag;
@@ -396,6 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('random-book-btn')?.addEventListener('click', () => {
          if (booksData.length === 0) { alert('يتم تحميل بيانات الكتب، يرجى الانتظار.'); return; }
          const randomIndex = Math.floor(Math.random() * booksData.length);
+         // يفتح الرابط المباشر
          window.open(booksData[randomIndex].pdf_link, '_blank'); 
          alert(`كتاب اليوم المختار: ${booksData[randomIndex].title}.`);
     });
