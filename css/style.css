@@ -1,6 +1,6 @@
 /*
  * ------------------------------------------------------------------
- * ملف style.css النهائي: ربط الوظائف وإضافة 5 تحسينات جمالية (v20251034)
+ * ملف style.css النهائي: 10 إضافات جمالية ووظيفية (v20251035)
  * ------------------------------------------------------------------
  */
 @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap');
@@ -18,6 +18,7 @@
     --header-bg: var(--primary-color); 
     --footer-bg: #1a1a1a; 
     --border-color: rgba(0, 0, 0, 0.1);
+    --hover-bg: #f0f0f0; /* 🚀 إضافة #9: لون خلفية للتفاعل */
 }
 
 [data-theme="dark"] {
@@ -30,6 +31,7 @@
     --header-bg: #1f1f1f;
     --footer-bg: #1f1f1f;
     --border-color: rgba(255, 255, 255, 0.1);
+    --hover-bg: #3c3c3c; /* 🚀 إضافة #9: لون خلفية داكن للتفاعل */
 }
 
 /* =============================================== */
@@ -46,6 +48,8 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    /* 🚀 إضافة #6: سحب خلفية الصفحة (Scroll Bounce Effect) */
+    overscroll-behavior-y: contain; 
 }
 
 main { flex-grow: 1; }
@@ -59,21 +63,21 @@ a { text-decoration: none; color: var(--primary-color); transition: color 0.3s; 
     padding-bottom: 10px;
     border-bottom: 2px solid var(--accent-color);
     display: block;
-    /* 🚀 الإضافة #4: ظل نص (Text Shadow) للعناوين */
+    /* 🚀 إضافة #4: ظل نص (Text Shadow) للعناوين */
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
-/* 🚀 الإضافة #5: خط فاصل مزخرف بين الأقسام */
+/* 🚀 إضافة #5: خط فاصل مزخرف بين الأقسام */
 .main-section { 
     position: relative; 
-    padding-bottom: 20px;
+    padding-bottom: 40px; /* زيادة التباعد لإتاحة مساحة للخط الفاصل */
 }
 .main-section:not(:last-child)::after {
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: 20px; /* تعديل الموضع */
     left: 50%;
     transform: translateX(-50%);
-    width: 100px; /* طول الخط الفاصل */
+    width: 100px;
     height: 3px;
     background: repeating-linear-gradient(
         45deg,
@@ -107,8 +111,13 @@ header {
     align-items: center; font-size: 1.1em; 
     z-index: 1010; 
     position: relative; 
+    /* 🚀 إضافة #7: تدوير أيقونة القائمة الجانبية عند الفتح */
+    transition: transform 0.4s;
 }
-.nav-btn:hover { background-color: var(--accent-color); color: var(--text-color); }
+/* يتطلب إضافة كلاس menu-toggle على زر الهمبرغر */
+#menu-toggle.open {
+    transform: rotate(90deg);
+}
 
 
 /* =============================================== */
@@ -140,7 +149,7 @@ header {
 .side-menu ul { list-style: none; padding: 0; }
 .side-menu li { margin-bottom: 15px; }
 .side-menu a { display: block; padding: 10px; color: var(--text-color); font-weight: 700; border-bottom: 1px solid var(--border-color); }
-.side-menu a:hover { background-color: rgba(var(--primary-color), 0.1); }
+.side-menu a:hover { background-color: var(--hover-bg); } /* 🚀 إضافة #9: استخدام متغير لون التفاعل */
 .telegram-link { color: #229ED9; }
 
 
@@ -148,26 +157,41 @@ header {
 /* IV. البحث والأقسام */
 /* =============================================== */
 .search-box {
-    display: grid; grid-template-columns: auto 1fr auto; align-items: stretch;
+    /* 🚀 إضافة #10: دعم زر مسح البحث */
+    display: grid; grid-template-columns: auto 1fr auto auto; align-items: stretch;
     border: 2px solid var(--primary-color); border-radius: 25px;
     overflow: hidden; margin: 30px auto 15px; max-width: 600px;
+    position: relative;
 }
 #search-input {
     padding: 10px 15px; border: none; outline: none; font-family: 'Almarai', sans-serif;
     font-size: 1em; color: var(--text-color); background-color: var(--card-bg);
+    grid-column: 2 / 3; /* موضع الإدخال */
 }
-.search-btn { background-color: var(--primary-color); color: white; padding: 10px 12px; border: none; cursor: pointer; font-size: 1.1em; }
+.search-btn, .voice-btn, .clear-btn {
+    padding: 10px 12px; border: none; cursor: pointer; font-size: 1.1em;
+    display: flex; justify-content: center; align-items: center;
+}
+.search-btn { background-color: var(--primary-color); color: white; }
 .voice-btn { background-color: var(--accent-color); color: var(--text-color); }
+.clear-btn { 
+    background-color: transparent; 
+    color: var(--text-color); 
+    display: none; /* يتم إخفاؤه افتراضياً */
+    font-size: 1.4em;
+    padding: 0 10px;
+    width: 44px; /* لضمان المساحة الكافية للنقر */
+}
 .main-action-btn {
     display: block; width: 100%; max-width: 300px; margin: 10px auto;
     padding: 10px 20px; background-color: var(--accent-color);
     color: var(--text-color); font-weight: 700; border: none; border-radius: 5px; cursor: pointer;
-    /* 🚀 الإضافة #1: تأثير 3D بسيط على زر 'كتاب عشوائي' */
+    /* 🚀 إضافة #1: تأثير 3D بسيط على زر 'كتاب عشوائي' */
     box-shadow: 0 4px var(--darker-primary); 
     transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 .main-action-btn:active {
-    transform: translateY(4px); /* يضغط الزر للأسفل */
+    transform: translateY(4px);
     box-shadow: 0 0 var(--darker-primary);
 }
 
@@ -181,7 +205,7 @@ header {
 .category-btn:hover { 
     background-color: var(--accent-color); 
     color: var(--text-color);
-    /* 🚀 الإضافة #3: تأثير تكبير بسيط على أزرار الأقسام */
+    /* 🚀 إضافة #3: تأثير تكبير بسيط على أزرار الأقسام */
     transform: scale(1.05); 
 }
 
@@ -198,8 +222,11 @@ header {
     
     /* 🛠️ ربط الإضافة المبتكرة #2: حركة Fade-in */
     opacity: 0; 
-    transform: translateY(20px); /* يبدأ من الأسفل قليلاً */
+    transform: translateY(20px); 
     transition: opacity 0.6s ease-out, transform 0.6s ease-out, box-shadow 0.3s;
+    
+    /* 🚀 إضافة #8: تأثير الشفافية عند التمرير */
+    filter: brightness(100%);
 }
 
 .book-card.fade-in {
@@ -207,7 +234,12 @@ header {
     transform: translateY(0);
 }
 
-.book-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); }
+.book-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
+    /* 🚀 إضافة #8: تأثير الشفافية عند التمرير */
+    filter: brightness(105%); 
+}
 .book-cover {
     height: 150px;
     background-color: #ccc;
@@ -216,11 +248,23 @@ header {
     align-items: center;
     color: var(--text-color);
     overflow: hidden; 
+    /* 🚀 إضافة #10: تطبيق زوايا دائرية على صورة الغلاف */
+    border-radius: 10px 10px 0 0;
+    /* 🚀 إضافة #6: تدرج بسيط على الغلاف */
+    position: relative;
+    z-index: 1;
 }
+.book-cover::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.1), transparent 50%);
+    z-index: 2;
+}
+
 .book-cover img {
-    width: 100%; height: 100%; object-fit: cover; border-radius: 10px 10px 0 0; display: block;
+    width: 100%; height: 100%; object-fit: cover; display: block;
 }
-.book-cover.loading-skeleton { background-color: transparent !important; }
 .card-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
 .post-title { font-size: 1.2em; margin-bottom: 10px; font-weight: 800; color: var(--darker-primary); }
 .card-info p { font-size: 0.9em; color: var(--text-color); margin-bottom: 10px; }
@@ -254,11 +298,11 @@ footer {
 
 .scroll-btn {
     position: fixed; bottom: 20px; left: 20px; width: 40px;
-    height: 40px; border-radius: 50%; background-color: var(--primary-color);
-    color: white; border: none; cursor: pointer; display: none; 
-    z-index: 40; justify-content: center; align-items: center; font-size: 1.2em;
-    /* 🚀 الإضافة #2: تظليل دائري لزر الصعود للأعلى */
+    height: 40px; border-radius: 50%; color: white; border: none; cursor: pointer; 
+    display: none; z-index: 40; justify-content: center; align-items: center; font-size: 1.2em;
+    /* 🚀 إضافة #2: تظليل دائري لزر الصعود للأعلى */
     box-shadow: 0 0 15px rgba(var(--primary-color), 0.7);
+    transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 /* =============================================== */
@@ -271,9 +315,8 @@ footer {
     .footer-content { justify-content: center; text-align: center; }
 }
 
-/* 🚀 الإضافة #5 (تغييرات إضافية للخط الفاصل) */
 @media (max-width: 800px) {
     .main-section:not(:last-child)::after {
-        width: 70px; /* تقصير الخط الفاصل على الشاشات الصغيرة */
+        width: 70px;
     }
 }
