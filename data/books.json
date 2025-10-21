@@ -5,7 +5,7 @@
         "author": "أحمد شوقي", 
         "year": 2024, 
         "tags": ["فلسفة", "منطق"], 
-        "cover": "غلاف 1", 
+        "cover": "img/cover1.jpg", 
         "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_1" 
     }, 
     { 
@@ -14,7 +14,7 @@
         "author": "نورة القحطاني", 
         "year": 2025, 
         "tags": ["علم", "فيزياء"], 
-        "cover": "غلاف 2", 
+        "cover": "img/cover2.png", 
         "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_2" 
     },
     { 
@@ -23,7 +23,7 @@
         "author": "خالد الزهراني", 
         "year": 2023, 
         "tags": ["منطق", "بلاغة"], 
-        "cover": "غلاف 3", 
+        "cover": "img/cover3.jpg", 
         "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_3" 
     },
     { 
@@ -32,17 +32,52 @@
         "author": "محمد علي", 
         "year": 2025, 
         "tags": ["برمجة", "JavaScript"], 
-        "cover": "غلاف 4", 
+        "cover": "img/cover4.png", 
         "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_4" 
     },
-    // ... استمر بإضافة الكتب هنا ...
     { 
-        "id": 10, 
-        "title": "الجمال في العمارة الإسلامية", 
-        "author": "فهد العتيبي", 
+        "id": 5, 
+        "title": "أساسيات الذكاء الاصطناعي", 
+        "author": "سارة محمود", 
+        "year": 2024, 
+        "tags": ["برمجة", "AI", "علم"], 
+        "cover": "img/cover5.jpg", 
+        "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_5" 
+    },
+    { 
+        "id": 6, 
+        "title": "تاريخ الحضارات القديمة", 
+        "author": "علي عبدالله", 
+        "year": 2020, 
+        "tags": ["تاريخ", "ثقافة", "فلسفة"], 
+        "cover": "img/cover6.jpg", 
+        "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_6" 
+    },
+    { 
+        "id": 7, 
+        "title": "كيمياء الحياة", 
+        "author": "فاطمة الزهراء", 
+        "year": 2024, 
+        "tags": ["علم", "كيمياء", "أحياء"], 
+        "cover": "img/cover7.png", 
+        "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_7" 
+    },
+    { 
+        "id": 8, 
+        "title": "الرواية العربية المعاصرة", 
+        "author": "يوسف إدريس", 
+        "year": 2021, 
+        "tags": ["أدب", "روايات"], 
+        "cover": "img/cover8.jpg", 
+        "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_8" 
+    },
+    { 
+        "id": 9, 
+        "title": "تحليل البيانات الضخمة", 
+        "author": "أحمد خالد", 
         "year": 2025, 
-        "tags": ["تاريخ", "فنون", "عمارة"], 
-        "cover": "غلاف 10", 
-        "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_الخاص_10" 
-    } 
+        "tags": ["برمجة", "بيانات", "AI"], 
+        "cover": "img/cover9.jpg", 
+        "pdf_link": "https://t.me/iiollr/رابط_ملف_الكتاب_9" 
+    }
 ]
