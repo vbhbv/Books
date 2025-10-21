@@ -1,18 +1,18 @@
 /*
  * ------------------------------------------------------------------
- * ملف app.js النهائي: إصلاح شامل ومنظم لجميع الأزرار (v20251030)
+ * ملف app.js النهائي: إصلاح شامل للـ Events و Z-Index (v20251031)
  * ------------------------------------------------------------------
  */
 
 // ===============================================
 // I. البيانات الأصلية والثوابت
 // ===============================================
-let booksData = []; // يتم ملؤه من ملف /data/books.json
+let booksData = []; 
 const DEBOUNCE_DELAY = 300; 
 let searchTimeout;
 
 // ===============================================
-// II. وظائف المساعدة الرئيسية (منطق المكتبة والبحث)
+// II. وظائف المساعدة الرئيسية (منطق المكتبة)
 // ===============================================
 
 /** يعرض الكتب في شبكة معينة */
@@ -23,20 +23,20 @@ function displayBooks(gridElement, books, query = '') {
     if (!template || !gridElement) return;
     gridElement.innerHTML = '';
     
-    // (منطق عرض حالة نتائج البحث) ...
     if (gridElement.id === 'books-grid' && resultsStatus) {
         const titleText = query 
             ? `نتائج البحث عن: "${query}" في الأرشيف (${books.length} كتاب)` 
             : "جميع الكتب المتوفرة في الأرشيف";
         resultsStatus.textContent = titleText;
+
         if (books.length === 0 && query) {
             gridElement.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--text-color);">لم يتم العثور على نتائج مطابقة.</p>';
             return;
         }
     }
     
-    // (منطق إنشاء بطاقات الكتب) ...
     const fragment = document.createDocumentFragment();
+
     books.forEach(book => {
         const cardClone = document.importNode(template.content, true);
         const card = cardClone.querySelector('.book-card');
@@ -61,13 +61,13 @@ function displayBooks(gridElement, books, query = '') {
         if (downloadLink) {
             downloadLink.href = book.pdf_link;
             downloadLink.setAttribute('download', `${book.title} - ${book.author}.pdf`);
-            downloadLink.addEventListener('click', (e) => { e.stopPropagation(); }); // منع فتح البطاقة بالكامل
+            downloadLink.addEventListener('click', (e) => { e.stopPropagation(); }); 
         }
         
         const tagsDiv = card.querySelector('.book-tags');
         if (tagsDiv) tagsDiv.innerHTML = book.tags.map(tag => `<span class="tag" data-tag="${tag}">${tag}</span>`).join('');
 
-        // حدث النقر على البطاقة
+        // حدث النقر على البطاقة 
         card.addEventListener('click', (e) => {
             if (e.target.classList.contains('tag')) return; 
             alert(`معلومات عن الكتاب: ${book.title}\nالمؤلف: ${book.author}\nسنة النشر: ${book.year}\nالتصنيفات: ${book.tags.join(', ')}`);
@@ -104,7 +104,6 @@ function performSearch(query) {
         book.tags.some(tag => tag.toLowerCase().includes(query))
     );
     
-    // إظهار/إخفاء الأقسام بناءً على وجود استعلام بحث
     const sectionsToHide = ['latest-books', 'author-section', 'categories-section', 'about-section'];
     sectionsToHide.forEach(id => {
         const section = document.getElementById(id);
@@ -147,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. تحميل البيانات
     loadBooksData(); 
 
-    // 2. العناصر الأساسية (IDs)
+    // 2. العناصر الأساسية (التي يجب أن تعمل أزرارها)
     const themeToggle = document.getElementById('theme-toggle'); 
     const menuToggle = document.getElementById('menu-toggle');     
     const sideMenu = document.getElementById('side-menu');         
@@ -177,12 +176,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. **إصلاح عمل القائمة الجانبية (Hamburger Menu) - هذا هو الضمان!**
-    const toggleMenu = () => {
+    // 4. **إصلاح عمل القائمة الجانبية (Hamburger Menu) - تركيز قاطع!**
+    const toggleMenu = (forceClose = false) => {
          if (!sideMenu || !overlay) return;
-         const isMenuOpen = sideMenu.classList.contains('open'); // الاعتماد على الكلاس
+         const isMenuOpen = sideMenu.classList.contains('open');
 
-         if (isMenuOpen) {
+         if (isMenuOpen || forceClose) {
              sideMenu.classList.remove('open');
              overlay.classList.remove('active');
              bodyElement.style.overflow = 'auto'; 
@@ -195,23 +194,24 @@ document.addEventListener('DOMContentLoaded', () => {
          }
     };
     
-    // ربط أحداث النقر بالقائمة (مضمون العمل الآن)
-    if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
-    if (closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
-    if (overlay) overlay.addEventListener('click', toggleMenu);
+    // ربط الأحداث بالقائمة (مضمون العمل الآن)
+    if (menuToggle) menuToggle.addEventListener('click', () => toggleMenu());
+    if (closeMenuBtn) closeMenuBtn.addEventListener('click', () => toggleMenu(true));
+    if (overlay) overlay.addEventListener('click', () => toggleMenu(true));
     
     // الإغلاق باستخدام زر ESC
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && sideMenu?.classList.contains('open')) { toggleMenu(); }
+        if (e.key === 'Escape' && sideMenu?.classList.contains('open')) { toggleMenu(true); }
     });
 
-    // 5. شريط إشعار تيليجرام
+    // 5. شريط إشعار تيليجرام - **تم تبسيط الإخفاء**
     if (telegramBanner) {
+        // فحص حالة العرض عند التحميل
         telegramBanner.style.display = localStorage.getItem('bannerHidden') !== 'true' ? 'block' : 'none';
     }
     if (closeBannerBtn && telegramBanner) {
          closeBannerBtn.addEventListener('click', () => {
-             // إخفاء فوري وتعيين في التخزين المحلي
+             // إخفاء فوري لضمان الاستجابة
              telegramBanner.style.display = 'none'; 
              localStorage.setItem('bannerHidden', 'true');
          });
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tag && searchInput) {
             searchInput.value = tag;
             performSearch(tag);
-            if (sideMenu?.classList.contains('open')) { toggleMenu(); } // إغلاق القائمة بعد النقر على تصنيف
+            if (sideMenu?.classList.contains('open')) { toggleMenu(true); } // إغلاق القائمة بعد النقر على تصنيف
         }
         
         // الانتقال للقسم عبر الروابط في القائمة الجانبية
@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const targetId = target.getAttribute('href').substring(1);
             document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
-            if (sideMenu?.classList.contains('open')) { toggleMenu(); }
+            if (sideMenu?.classList.contains('open')) { toggleMenu(true); }
         }
     });
 
@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
          alert(`كتاب اليوم المختار: ${booksData[randomIndex].title}.`);
     });
 
-    // 9. زر الصعود للأعلى
+    // 9. زر الصعود للأعلى (Scroll Top Button)
     if(scrollTopBtn){
         window.addEventListener('scroll', () => {
             scrollTopBtn.style.display = window.scrollY > 200 ? 'flex' : 'none';
