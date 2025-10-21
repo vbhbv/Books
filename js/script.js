@@ -1,6 +1,6 @@
 /*
  * ------------------------------------------------------------------
- * ملف script.js النهائي والمصمم مع الإضافات المبتكرة
+ * ملف script.js النهائي: 10 إضافات ابتكارية وتصحيح مسار التحميل (v20251035)
  * ------------------------------------------------------------------
  */
 
@@ -45,12 +45,28 @@ function displayBooks(gridElement, books, query = '') {
         const cardClone = document.importNode(template.content, true);
         const card = cardClone.querySelector('.book-card');
 
+        // 🚀 إضافة #7: تتبع نقرات التحميل لكل كتاب
+        card.querySelector('.download-btn')?.addEventListener('click', () => trackDownload(book.title));
+
+        // 🚀 إضافة #10: عرض نص مختصر للكتاب (يتطلب إضافة <p class="book-snippet"></p> في HTML)
+        const snippetElement = card.querySelector('.book-snippet');
+        if (snippetElement) {
+             snippetElement.textContent = book.snippet || 'اضغط للعرض التفاصيل...'; 
+        }
+
         const bookCoverDiv = card.querySelector('.book-cover');
         if (bookCoverDiv) {
             const img = document.createElement('img');
             img.src = book.cover; 
             img.alt = `غلاف كتاب: ${book.title}`; 
             img.loading = 'lazy'; 
+            
+            // 🚀 إضافة #8: إضافة معالج للأخطاء (Fallback) عند فشل تحميل الغلاف
+            img.onerror = () => {
+                img.src = '/img/default_cover.jpg'; // افترض وجود غلاف افتراضي هنا
+                img.alt = 'غلاف افتراضي';
+            };
+
             bookCoverDiv.innerHTML = ''; 
             bookCoverDiv.appendChild(img);
         }
@@ -77,7 +93,7 @@ function displayBooks(gridElement, books, query = '') {
         // 🚀 إضافة #2: إضافة حركة تدهور (Fade-in) للبطاقة
         setTimeout(() => {
              card.classList.add('fade-in');
-        }, 50); // تأخير بسيط للسماح بالتنسيق
+        }, 50);
         
         fragment.appendChild(card);
     });
@@ -122,7 +138,7 @@ function performSearch(query) {
     localStorage.setItem('lastSearchQuery', query);
 }
 
-/** وظيفة تحميل البيانات من ملف JSON */
+/** وظيفة تحميل البيانات من ملف JSON - (تصحيح المسار المزدوج) */
 async function loadBooksData() {
     const errorContainer = document.createElement('p');
     errorContainer.style.color = 'red';
@@ -134,34 +150,39 @@ async function loadBooksData() {
         resultsContainer.innerHTML = '<p style="text-align:center;">يتم تحميل بيانات المكتبة...</p>';
     }
 
-    try {
-        // 🚨 التصحيح الأساسي: استخدام المسار المطلق لضمان التحميل على GitHub Pages
-        const response = await fetch('/data/books.json'); 
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+    // 🏆 تصحيح الخطأ: قائمة بالمسارات المحتملة للبيانات
+    const possiblePaths = ['/data/books.json', './data/books.json'];
+    let success = false;
+    
+    for (const path of possiblePaths) {
+        try {
+            const response = await fetch(path); 
+            if (!response.ok) { continue; } 
+            
+            booksData = await response.json();
+            
+            if (!Array.isArray(booksData)) {
+                 throw new Error("JSON format error: Expected an array of books.");
+            }
+            
+            if (resultsContainer) resultsContainer.innerHTML = ''; 
+            
+            updateLibraryStats(); 
+            performSearch(''); 
+            displayLatestBooks();
+            success = true;
+            break; 
+            
+        } catch (error) {
+            console.error(`خطأ في تحميل بيانات الكتب من المسار ${path}:`, error);
         }
-        
-        booksData = await response.json();
-        
-        if (!Array.isArray(booksData)) {
-             throw new Error("JSON format error: Expected an array of books (must start with [ and end with ]).");
-        }
-        
-        if (resultsContainer) resultsContainer.innerHTML = ''; 
-        
-        // 🚀 إضافة #5: تحديث عدد المؤلفين والكتب في قسم الإحصائيات (إذا كان الكود موجوداً)
-        updateLibraryStats(); 
-        
-        performSearch(''); 
-        displayLatestBooks();
-        
-    } catch (error) {
-        console.error("خطأ في تحميل بيانات الكتب من ملف JSON:", error);
-        
+    }
+    
+    if (!success) {
+        console.error("فشل تحميل البيانات من جميع المسارات المتاحة.");
         if (resultsContainer) {
             resultsContainer.innerHTML = ''; 
-            errorContainer.innerHTML = 'تعذر تحميل بيانات المكتبة. يرجى التحقق من ملف <span style="font-weight: bold;">/data/books.json</span> (تأكد من أنه مصفوفة JSON: يبدأ بـ [ وينتهي بـ ]).';
+            errorContainer.innerHTML = 'تعذر تحميل بيانات المكتبة. يرجى التأكد من أن ملف <span style="font-weight: bold;">data/books.json</span> موجود وصيغته صحيحة.';
             document.querySelector('main')?.prepend(errorContainer);
         }
     }
@@ -169,51 +190,32 @@ async function loadBooksData() {
 
 
 // ===============================================
-// III. الإضافات المبتكرة (Innovative Additions)
+// III. الإضافات المبتكرة العشرة (Innovative Additions)
 // ===============================================
 
 /** 🚀 إضافة #1: وظيفة لتحديث إحصائيات المكتبة (المؤلفين والكتب) */
 function updateLibraryStats() {
     if (booksData.length === 0) return;
 
-    // 1. حساب عدد الكتب الكلي
     const totalBooks = booksData.length;
-    
-    // 2. حساب عدد المؤلفين الفريدين
     const uniqueAuthors = new Set(booksData.map(book => book.author.trim().toLowerCase()));
     const totalAuthors = uniqueAuthors.size;
+    
+    const totalBooksEl = document.getElementById('total-books-count');
+    const totalAuthorsEl = document.getElementById('total-authors-count');
 
-    // يمكنك الآن عرض هذه الأرقام في أي مكان في الـ HTML (مثلاً في الفوتر أو في قسم المؤلفين)
-    // مثال (افتراضي): إذا كان لديك span بـ id="total-books-count"
-    // const booksCountSpan = document.getElementById('total-books-count');
-    // if (booksCountSpan) booksCountSpan.textContent = totalBooks;
-
-    // مثال (افتراضي): تحديث مؤلف افتراضي في قسم المؤلفين
-    const authorsGrid = document.getElementById('authors-grid');
-    if (authorsGrid) {
-         // نستخدم المؤلفين الأكثر تكراراً بدلاً من الأسماء الثابتة
-         const authorCounts = {};
-         booksData.forEach(book => {
-             authorCounts[book.author] = (authorCounts[book.author] || 0) + 1;
-         });
-         const topAuthors = Object.entries(authorCounts)
-             .sort(([, a], [, b]) => b - a)
-             .slice(0, 3);
-             
-         // هذا يتطلب وجود Authors Grid بتصميم مناسب في الـ HTML
-         // لكننا سنستخدم alert بسيط هنا لتجنب تغيير الـ HTML
-         console.log(`إجمالي الكتب: ${totalBooks}, إجمالي المؤلفين: ${totalAuthors}.`);
-    }
+    // 🚀 إضافة #9: تحديث الإحصائيات (يتطلب وجود العناصر في HTML)
+    if (totalBooksEl) totalBooksEl.textContent = totalBooks;
+    if (totalAuthorsEl) totalAuthorsEl.textContent = totalAuthors;
 }
 
 
 /** 🚀 إضافة #3: تأثير عداد (Count-Up) لعدد نتائج البحث */
 function animateCountUp(element, finalValue) {
     if (finalValue === 0) return;
-    const duration = 800; // مدة الحركة بالمللي ثانية
+    const duration = 800; 
     let startTime;
     
-    // حفظ النص الأصلي وتغيير العدد فقط
     const originalText = element.textContent.replace(/\((.*?)\)/, '(COUNT)');
 
     const step = (timestamp) => {
@@ -222,7 +224,6 @@ function animateCountUp(element, finalValue) {
         const percentage = Math.min(progress / duration, 1);
         const currentValue = Math.floor(percentage * finalValue);
 
-        // تحديث العنصر
         element.textContent = originalText.replace('(COUNT)', `(${currentValue} كتاب)`);
 
         if (percentage < 1) {
@@ -231,6 +232,26 @@ function animateCountUp(element, finalValue) {
     };
     
     window.requestAnimationFrame(step);
+}
+
+/** 🚀 إضافة #6: تفعيل البحث عند ضغط زر Enter */
+function handleEnterKeySearch(event) {
+    if (event.key === 'Enter') {
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            event.preventDefault(); // منع الإرسال الافتراضي
+            performSearch(searchInput.value);
+            searchInput.blur(); // إخفاء لوحة المفاتيح في الجوال
+        }
+    }
+}
+
+/** 🚀 إضافة #7: تتبع نقرات التحميل (إحصائية بسيطة) */
+function trackDownload(bookTitle) {
+    let downloadCounts = JSON.parse(localStorage.getItem('downloadCounts') || '{}');
+    downloadCounts[bookTitle] = (downloadCounts[bookTitle] || 0) + 1;
+    localStorage.setItem('downloadCounts', JSON.stringify(downloadCounts));
+    console.log(`تم تسجيل تحميل كتاب: ${bookTitle}. إجمالي التحميلات: ${downloadCounts[bookTitle]}`);
 }
 
 
@@ -259,6 +280,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (lastQuery && lastQuery.trim() !== '') {
         searchInput.value = lastQuery;
         performSearch(lastQuery);
+    }
+    
+    // 🚀 إضافة #6: ربط دالة Enter Key
+    if (searchInput) {
+        searchInput.addEventListener('keydown', handleEnterKeySearch);
     }
 
 
@@ -313,6 +339,9 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => { performSearch(e.target.value); }, DEBOUNCE_DELAY);
+            // 🚀 إضافة #10: إظهار/إخفاء زر مسح البحث عند الكتابة
+            const clearBtn = document.getElementById('clear-search-btn');
+            if (clearBtn) clearBtn.style.display = e.target.value.length > 0 ? 'block' : 'none';
         });
     }
     
@@ -324,6 +353,17 @@ document.addEventListener('DOMContentLoaded', () => {
             searchInput.focus();
         });
     }
+
+    // 🚀 إضافة #10: زر مسح البحث (يتطلب إضافة الزر في HTML)
+    const clearSearchBtn = document.getElementById('clear-search-btn');
+    if (clearSearchBtn && searchInput) {
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            performSearch('');
+            clearSearchBtn.style.display = 'none';
+            searchInput.focus();
+        });
+    }
     
     // منع البحث الصوتي لعدم وجود API مفعّل
     if (voiceSearchBtn) {
@@ -332,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 6. ربط النقرات على العلامات وروابط القائمة الجانبية ... [كود الروابط] ...
+    // 6. ربط النقرات على العلامات وروابط القائمة الجانبية ...
     
     document.addEventListener('click', (e) => {
         const target = e.target;
@@ -354,7 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 7. زر "كتاب عشوائي" ... [كود الكتاب العشوائي] ...
+    // 7. زر "كتاب عشوائي" ...
     
     document.getElementById('random-book-btn')?.addEventListener('click', () => {
          if (booksData.length === 0) { alert('يتم تحميل بيانات الكتب، يرجى الانتظار.'); return; }
@@ -363,11 +403,14 @@ document.addEventListener('DOMContentLoaded', () => {
          alert(`كتاب اليوم المختار: ${booksData[randomIndex].title}.`);
     });
 
-    // 8. زر الصعود للأعلى (Scroll Top Button) ... [كود زر الصعود] ...
+    // 8. زر الصعود للأعلى (Scroll Top Button) ...
     
     if(scrollTopBtn){
         window.addEventListener('scroll', () => {
             scrollTopBtn.style.display = window.scrollY > 200 ? 'flex' : 'none';
+            // 🚀 إضافة #9: تأثير اللون الديناميكي للزر بناءً على الوضع الليلي
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            scrollTopBtn.style.backgroundColor = isDark ? 'var(--accent-color)' : 'var(--primary-color)';
         });
         scrollTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
     }
@@ -379,8 +422,4 @@ document.addEventListener('DOMContentLoaded', () => {
         navigator.serviceWorker.register('/sw.js', { scope: '/' })
             .catch(err => console.error('Service Worker Failed:', err));
     }
-    
-    // 🚀 إضافة #2 (تنشيط حركة التدهور): تتطلب إضافة تنسيق CSS إضافي لـ .book-card.fade-in
-    // .book-card { opacity: 0; transition: opacity 0.5s ease-out; }
-    // .book-card.fade-in { opacity: 1; }
 });
