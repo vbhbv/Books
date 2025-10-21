@@ -3,130 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المكتبة الإلكترونية: نقلة تقنية</title>
-    
     <meta name="color-scheme" content="light dark"> 
     
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://yourwebsite.com/current-page-url">
+    <title>مخزن الكتب المجانية | نقلة تقنية</title>
+    <meta name="description" content="أكبر مخزن للكتب المجانية بصيغة PDF. حمل كتبك المفضلة في الفلسفة، العلوم، والبرمجة بروابط مباشرة وآمنة عبر تيليجرام.">
+    <meta name="keywords" content="كتب مجانية, تحميل كتب PDF, مخزن كتب, مكتبة عربية, كتب فلسفة, كتب علمية, كتب برمجة">
     
-    <meta property="og:title" content="عنوان مقالتك المميز">
-    <meta property="og:image" content="https://yourwebsite.com/images/share-image.jpg">
-    <meta property="og:description" content="وصف قصير للمحتوى لتشاركه على فيسبوك/تويتر.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yourwebsite.com/index.html">
+    
+    <meta property="og:title" content="مخزن الكتب المجانية | تحميل كتب PDF">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourwebsite.com/index.html">
+    <meta property="og:image" content="https://yourwebsite.com/images/share-logo.jpg">
+    <meta property="og:description" content="أكبر مخزن للكتب المجانية بصيغة PDF.">
     
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.example.com; style-src 'self' 'unsafe-inline';">
     <meta name="referrer" content="no-referrer-when-downgrade">
     
+    <meta name="theme-color" content="#64b5f6">
+    <link rel="manifest" href="/manifest.json">
+    
     <link rel="preload" href="app.js" as="script">
+    <link rel="preload" href="https://fonts.gstatic.com/s/cairo/v20/.../xxxx.woff2" as="font" type="font/woff2" crossorigin>
+    
     <link rel="stylesheet" href="style.css"> 
 
-    <link rel="preload" href="/fonts/custom-font.woff2" as="font" type="font/woff2" crossorigin>
-    
     <link rel="preconnect" href="https://api.example.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
-
-    <a href="#main-content" class="skip-link">تخطي التنقل إلى المحتوى الرئيسي</a>
+<body class="light-mode">
     
-    <header role="banner">
-        <nav class="sticky-nav" role="navigation">
-            <div class="container">
-                <a href="/" class="logo" aria-label="الصفحة الرئيسية للموقع">الموقع الذكي</a>
-                
-                <div aria-live="polite" id="status-message" style="display: none;"></div>
+    <a href="#main-content" class="skip-link">تخطي التنقل إلى المحتوى الرئيسي</a>
 
-                <button id="voice-search-btn" class="button square pulse-animation" aria-label="البحث الصوتي">🎤</button>
-                <input type="search" id="search-input" placeholder="ابحث هنا..." role="search">
+    <div id="telegram-banner" role="banner" aria-label="إشعار الانضمام إلى قناة تيليجرام">
+        <div class="container banner-content">
+            <p>انضم إلى قناة **مخزن الكتب المجانية** على تيليجرام للحصول على أحدث الكتب! 📚</p>
+            <a href="https://t.me/iiollr" target="_blank" class="banner-btn button" role="link">انضم الآن <i class="fab fa-telegram-plane"></i></a>
+            <button id="close-banner-btn" class="button square" aria-label="إغلاق إشعار تيليجرام"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+
+    <header role="banner"> 
+        <nav class="sticky-nav"> <div class="container nav-content">
+                <button id="menu-toggle" class="hamburger-btn button square" aria-expanded="false" aria-controls="side-menu" aria-label="فتح القائمة الجانبية">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <h1><a href="/" class="hero-title" title="الذهاب إلى الصفحة الرئيسية">مخزن الكتب المجانية 🎁</a></h1>
+
+                <button id="theme-toggle" class="mode-toggle-btn button square" aria-label="التبديل بين الوضع الفاتح والداكن" aria-pressed="false">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
         </nav>
-        <h1 class="hero-title">مكتبة معرفية بخطوط مرنة</h1>
     </header>
-    
-    <main role="main" id="main-content">
+
+    <main id="main-content" role="main">
+        <form class="search-section" role="search" aria-label="البحث في مخزن الكتب">
+            <div class="search-box">
+                <input type="search" id="search-input" placeholder="ابحث باسم كتاب، أو مؤلف، أو تصنيف (فلسفة، برمجة، علوم)..." role="search">
+                <button id="search-button" type="submit" class="button" aria-label="بدء البحث"><i class="fas fa-search"></i></button>
+                <button id="voice-search-btn" class="button square pulse-animation" aria-label="البحث الصوتي">🎤</button>
+            </div>
+            <button id="random-book-btn" class="modern-btn button" type="button">تصفح كتاب عشوائي</button>
+        </form>
         
-        <div id="reading-progress-bar" style="position: fixed; top: 0; right: 0; height: 5px; width: 0; z-index: 1001;"></div>
+        <div class="container">
+            <div id="reading-progress-bar" style="position: fixed; top: 0; right: 0; height: 5px; width: 0; z-index: 1001;"></div>
 
-        <div id="drop-area" role="region" aria-label="منطقة سحب وإفلات الملفات" style="border: 2px dashed #ccc; padding: 20px; text-align: center;">اسحب الملفات هنا</div>
-
-        <section id="posts-container" class="grid-auto" role="region" aria-label="قائمة المقالات"></section>
-
-        <template id="post-template">
-            <div class="card" role="listitem"> 
-                <h3 class="post-title loading-skeleton"></h3>
-                <p>عدد المشاهدات: <span>0</span></p>
-                <button class="button" aria-describedby="read-more-hint">اقرأ المزيد</button> 
-                <span id="read-more-hint" hidden>انقر للانتقال إلى المقال الكامل.</span>
-            </div>
-        </template>
-
-        <article id="article" role="article" aria-labelledby="hero-title">
+            <div id="loading-status" role="status" aria-label="حالة تحميل الصفحة" hidden></div>
             
-            <p>هذه فقرة تجريبية. سيتم تمييز الكلمات المفتاحية هنا.</p>
-            
-            <div class="card">
-                <img data-src="placeholder.jpg" alt="صورة المقالة الرئيسية" loading="lazy" decoding="async" style="height: 100px; width: 100px;"> 
-                <div>
-                    <h2>بطاقة محتوى</h2>
-                    <p>هذا النص داخل بطاقة تستفيد من كود `:has()`.</p>
+            <section id="results-container" aria-live="polite" role="region" aria-label="نتائج البحث وعرض الكتب"> 
+                <h2 id="results-status">نتائج البحث في المخزن</h2>
+                <div id="books-grid" role="list">
                 </div>
-            </div>
-
-            <figure role="img" aria-labelledby="caption-id">
-                <img src="small-diagram.png" alt="رسم بياني يوضح تدفق البيانات" decoding="async">
-                <figcaption id="caption-id">شكل توضيحي يوضح البنية الأساسية.</figcaption>
-            </figure>
+            </section>
             
-            <blockquote>اقتباس مهم يوضح أهمية المحتوى.</blockquote>
+            <aside id="latest-books" role="complementary" aria-label="أحدث الكتب المضافة">
+                <h2 class="section-title">آخر الإضافات للمخزن</h2>
+                <div id="latest-books-grid" class="books-grid grid-auto" role="list">
+                </div>
+            </aside>
             
-            <button id="heavy-module-btn" class="button" aria-busy="false">تحميل إحصائيات متقدمة</button>
-
-            <details role="group">
-                <summary>تفاصيل إضافية حول الأداء</summary>
-                <p>هذا القسم يخفي محتوى ثانويًا لتحسين التركيز الأولي للقارئ.</p>
+            <details style="margin-top: 30px;" role="group">
+                <summary>لماذا مخزن الكتب المجانية؟</summary>
+                <p>نحن نستخدم أحدث تقنيات HTML5 و ARIA لضمان أفضل وصولية وأداء للمحتوى العربي.</p>
             </details>
-
-            <button onclick="document.getElementById('feedback-dialog').showModal()">إرسال ملاحظات</button>
-            
-            <dialog id="feedback-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
-                <h3 id="dialog-title">إرسال ملاحظاتك</h3>
-                <form method="dialog">
-                    <input type="email" id="email-input" placeholder="بريدك الإلكتروني (تحقق مباشر)">
-                    <button id="submit-btn" disabled>إرسال</button>
-                    <button value="cancel">إلغاء</button>
-                </form>
-            </dialog>
-
-            <p>كلمة طويلة جداً قد تنكسر هنا بشكل مناسب: <span class="break-word-demo">تكنولوجيا<wbr>المعلومات<wbr>والاتصالات<wbr>المتقدمة</span>.</p>
-
-        </article>
-
-        <button id="theme-toggle" class="button square" aria-label="تبديل الثيم الفاتح/الداكن">🌓</button>
+        </div>
         
         <button id="scroll-top-btn" class="button square" aria-label="التمرير إلى أعلى الصفحة" style="position: fixed; bottom: 20px; left: 20px;">⬆️</button>
-
-        <div id="loading-status" role="status" aria-label="حالة تحميل الصفحة" hidden></div>
-
     </main>
-
+    
     <footer role="contentinfo">
-        <div class="container">
-            <p role="presentation">
-                تم الإنشاء في: <time datetime="2024-01-01">يناير 2024</time> | حقوق النشر © <span id="footer-date"></span>
+        <div class="container footer-content">
+            <p>
+                &copy; <span id="footer-date">2025</span> مخزن الكتب المجانية | تم الإنشاء في: <time datetime="2024-01-01">يناير 2024</time>
             </p>
-            
-            <picture>
-                <source srcset="image.avif" type="image/avif">
-                <source srcset="image.webp" type="image/webp">
-                <img src="image.png" alt="صورة عالية الدقة">
-            </picture>
-
-            <custom-card>
-                <h3 slot="header">بطاقة متقدمة</h3>
-                <p slot="content">محتوى البطاقة هنا.</p>
-            </custom-card>
+            <div class="social-links">
+                <a href="https://t.me/iiollr" target="_blank" aria-label="قناة تيليجرام"><i class="fab fa-telegram-plane"></i></a>
+                <a href="mailto:info@yourlibrary.com" aria-label="راسلنا عبر البريد الإلكتروني"><i class="fas fa-envelope"></i></a>
+            </div>
+            <a href="/security.pgp" rel="pgpkey" style="color: rgba(255,255,255,0.7); font-size: 0.8em; margin-top: 5px;">مفتاح الأمان PGP</a>
         </div>
+        <div class="footer-bottom-bar">صنع بشغف لخدمة القارئ العربي.</div>
     </footer>
 
-    <script src="app.js"></script> 
+    <template id="post-template">
+        <div class="card" role="listitem"> 
+            <h3 class="post-title loading-skeleton"></h3>
+            <p>وصف مختصر...</p>
+            <button class="button" aria-describedby="read-more-hint">اقرأ المزيد</button> 
+        </div>
+    </template>
+    
+    <custom-card style="display: none;">
+        <h3 slot="header">بطاقة متقدمة</h3>
+        <p slot="content">محتوى البطاقة هنا.</p>
+    </custom-card>
+
+    <script src="app.js"></script>
+    <script>
+        // دالة مساعدة لزر القائمة الجانبية (تم الحفاظ عليها)
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
 </body>
 </html>
