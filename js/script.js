@@ -1,7 +1,6 @@
 /*
  * ------------------------------------------------------------------
- * ملف script.js النهائي والموحد (Router Mode) (v20251039)
- * الوظائف: يخدم index.html و category.html، ويحل مشكلة مسار JSON.
+ * ملف script.js المُعاد تحديثه (إزالة منطق التوسيع)
  * ------------------------------------------------------------------
  */
 
@@ -11,59 +10,32 @@
 let booksData = []; 
 const DEBOUNCE_DELAY = 300; 
 let searchTimeout;
-let currentCategory = null; // متغير لتخزين القسم الحالي (إذا كنا في صفحة قسم)
+// تم إزالة: let currentCategory = null; 
 
 // ===============================================
 // II. وظائف المساعدة الرئيسية (منطق المكتبة)
 // ===============================================
 
-/** يستخرج اسم القسم من رابط الصفحة إذا كان موجوداً */
-function getCategoryFromURL() {
-    const pageName = window.location.pathname.split('/').pop();
-    if (pageName !== 'category.html') {
-        return null; 
-    }
+// تم إزالة: function getCategoryFromURL() { ... }
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const category = urlParams.get('cat');
-    
-    if (category) {
-        const decodedCategory = decodeURIComponent(category);
-        document.getElementById('category-name')?.textContent = decodedCategory;
-        document.title = `أرشيف الكتب المجانية | ${decodedCategory}`;
-        return decodedCategory;
-    }
-    return null;
-}
-
-/** يعرض الكتب في شبكة معينة (مع دعم وضع Router) */
-function displayBooks(gridElement, books, isCategoryPage = false, query = '') {
+function displayBooks(gridElement, books, query = '') {
     const resultsStatus = document.getElementById('results-status');
     const template = document.getElementById('post-template');
     
     if (!template || !gridElement) return;
     gridElement.innerHTML = '';
     
-    // منطق تحديث الحالة والعنوان (موحد)
     if (resultsStatus) {
-        if (isCategoryPage) {
-             resultsStatus.textContent = query 
-                ? `نتائج البحث عن: "${query}" في قسم ${currentCategory} (${books.length} كتاب)` 
-                : `يتم عرض ${books.length} كتاب في قسم ${currentCategory}.`;
-        } else { // الصفحة الرئيسية
-             resultsStatus.textContent = query 
-                ? `نتائج البحث عن: "${query}" في الأرشيف (${books.length} كتاب)` 
-                : "";
-        }
+        // تحديث الحالة فقط للصفحة الرئيسية
+        resultsStatus.textContent = query 
+           ? `نتائج البحث عن: "${query}" في الأرشيف (${books.length} كتاب)` 
+           : "";
 
-        if (books.length === 0 && (isCategoryPage || query)) {
-            const message = (isCategoryPage && !query) 
-                ? 'لا تتوفر كتب في هذا التصنيف حالياً.' 
-                : 'لم يتم العثور على نتائج مطابقة.';
+        if (books.length === 0 && query) {
+            const message = 'لم يتم العثور على نتائج مطابقة.';
             gridElement.innerHTML = `<p style="grid-column: 1 / -1; text-align: center; color: var(--text-color); margin-top: 20px;">${message}</p>`;
             return;
         }
-        // 🚀 إضافة #3: تشغيل تأثير العد لنتائج البحث
         if (query) { animateCountUp(resultsStatus, books.length); }
     }
     
@@ -85,8 +57,7 @@ function displayBooks(gridElement, books, isCategoryPage = false, query = '') {
             img.alt = `غلاف كتاب: ${book.title}`; 
             img.loading = 'lazy'; 
             
-            // 🚀 إضافة #8: إضافة معالج للأخطاء (Fallback) عند فشل تحميل الغلاف
-            img.onerror = () => { img.src = '/img/default_cover.jpg'; img.alt = 'غلاف افتراضي'; };
+            img.onerror = () => { img.src = 'img/default_cover.jpg'; img.alt = 'غلاف افتراضي'; };
             bookCoverDiv.innerHTML = ''; 
             bookCoverDiv.appendChild(img);
         }
@@ -110,7 +81,6 @@ function displayBooks(gridElement, books, isCategoryPage = false, query = '') {
             alert(`معلومات عن الكتاب: ${book.title}\nالمؤلف: ${book.author}\nسنة النشر: ${book.year}\nالتصنيفات: ${book.tags.join(', ')}`);
         });
         
-        // 🚀 إضافة #2: إضافة حركة تدهور (Fade-in) للبطاقة
         setTimeout(() => { card.classList.add('fade-in'); }, 50);
 
         fragment.appendChild(card);
@@ -120,24 +90,21 @@ function displayBooks(gridElement, books, isCategoryPage = false, query = '') {
 }
 
 
-/** يعرض آخر 4 كتب مضافة (فقط في الصفحة الرئيسية) */
 function displayLatestBooks() {
     if (booksData.length === 0) return;
     const latestBooksGrid = document.getElementById('latest-books-grid');
     if (!latestBooksGrid) return;
     const sortedBooks = [...booksData].sort((a, b) => (b.id || b.year) - (a.id || a.year)); 
     const latestFour = sortedBooks.slice(0, 4); 
-    displayBooks(latestBooksGrid, latestFour, false);
+    displayBooks(latestBooksGrid, latestFour);
 }
 
-/** يقوم بمنطق البحث (شامل في Index، ومحدود في Category) */
 function performSearch(query) {
     if (booksData.length === 0) return;
     
-    const isCategoryPage = currentCategory !== null;
+    // تم إزالة: const isCategoryPage = currentCategory !== null;
     const booksGrid = document.getElementById('books-grid'); 
     
-    // العناصر التي يجب إخفاؤها في الصفحة الرئيسية عند البحث
     const latestSection = document.getElementById('latest-books');
     const authorsSection = document.getElementById('author-section'); 
     const categoriesSection = document.getElementById('categories-section'); 
@@ -146,21 +113,17 @@ function performSearch(query) {
     
     query = query.trim().toLowerCase();
     
-    // 1. تحديد المجموعة الأساسية للبحث
-    let searchPool = booksData;
-    if (isCategoryPage) {
-        searchPool = booksData.filter(book => book.tags.some(tag => tag === currentCategory));
-    }
+    // تم إزالة: منطق تصفية searchPool بناءً على currentCategory
+    let searchPool = booksData; 
     
-    // 2. تصفية الكتب
     const filteredBooks = searchPool.filter(book =>
         book.title.toLowerCase().includes(query) ||
         book.author.toLowerCase().includes(query) ||
         book.tags.some(tag => tag.toLowerCase().includes(query))
     );
     
-    // 3. إظهار/إخفاء الأقسام في الصفحة الرئيسية فقط
-    if (!isCategoryPage && latestSection && authorsSection && categoriesSection) {
+    // منطق العرض للصفحة الرئيسية فقط
+    if (latestSection && authorsSection && categoriesSection) {
         const displayMode = query ? 'none' : 'block';
 
         latestSection.style.display = displayMode;
@@ -168,21 +131,19 @@ function performSearch(query) {
         categoriesSection.style.display = displayMode;
         
         if (query) {
-            booksGrid.style.display = 'grid'; // إظهار شبكة نتائج البحث
+            booksGrid.style.display = 'grid'; 
         } else {
-            booksGrid.style.display = 'none'; // إخفاء شبكة نتائج البحث
-            displayLatestBooks(); // إعادة عرض آخر الإضافات
+            booksGrid.style.display = 'none'; 
+            displayLatestBooks(); 
         }
     }
 
-    // 4. عرض النتائج
-    displayBooks(booksGrid, filteredBooks, isCategoryPage, query);
+    displayBooks(booksGrid, filteredBooks, query); // تم إزالة: isCategoryPage
     
-    // 5. حفظ آخر بحث في ذاكرة المتصفح
     localStorage.setItem('lastSearchQuery', query);
 }
 
-/** وظيفة تحميل البيانات من ملف JSON - (الحل الجذري للمسار) */
+// ⚠️ هذه هي الدالة المعدلة بمسارات محددة للنجاح
 async function loadBooksData() {
     const errorContainer = document.createElement('p');
     errorContainer.style.color = 'red';
@@ -191,18 +152,14 @@ async function loadBooksData() {
     
     const resultsContainer = document.getElementById('latest-books-grid') || document.getElementById('books-grid');
     if (resultsContainer) {
-        // رسالة تحميل مؤقتة
         resultsContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align:center;">يتم تحميل بيانات المكتبة...</p>';
     }
-
-    // 🏆 تصحيح الخطأ: قائمة بالمسارات المحتملة للبيانات (4 مسارات)
-    // المسار 4 هو مسار مطلق يعتمد على اسم المستودع، وهو الأكثر احتمالية للعمل على GitHub Pages.
-    const repoName = window.location.pathname.split('/')[1]; // يفترض أن اسم المستودع هو الجزء الأول
+    
+    // المسارات التي ثبت أنها كانت مشكلتك (سنستخدمها لضمان التحديد)
     const possiblePaths = [
-        `/${repoName}/data/books.json`, // المسار المطلق باستخدام اسم المستودع (الأكثر نجاحا)
+        '/Books/data/books.json', 
         './data/books.json', 
-        '/data/books.json',
-        '/Books/data/books.json' // مسار محدد بناءً على لقطات الشاشة
+        'data/books.json'
     ];
     
     let success = false;
@@ -218,34 +175,23 @@ async function loadBooksData() {
             
             if (resultsContainer) resultsContainer.innerHTML = ''; 
             
-            // ----------------------------------------------------
-            // 🏆 منطق التوجيه (Routing Logic)
-            // ----------------------------------------------------
-            currentCategory = getCategoryFromURL();
+            // تم إزالة: منطق التوجيه بناءً على currentCategory
             
-            if (currentCategory) {
-                // الوضع 1: نحن في صفحة قسم (category.html)
-                performSearch(''); // لعرض جميع كتب القسم
-            } else {
-                // الوضع 2: نحن في الصفحة الرئيسية (index.html)
-                updateLibraryStats(); 
-                displayLatestBooks();
+            updateLibraryStats(); 
+            displayLatestBooks();
 
-                // استرجاع آخر بحث وتشغيله (للبحث الشامل)
-                const lastQuery = localStorage.getItem('lastSearchQuery');
-                const searchInput = document.getElementById('main-search-input');
-                if (lastQuery && lastQuery.trim() !== '' && searchInput) {
-                    searchInput.value = lastQuery;
-                    performSearch(lastQuery);
-                }
+            const lastQuery = localStorage.getItem('lastSearchQuery');
+            const searchInput = document.getElementById('main-search-input');
+            if (lastQuery && lastQuery.trim() !== '' && searchInput) {
+                searchInput.value = lastQuery;
+                performSearch(lastQuery);
             }
-            // ----------------------------------------------------
             
             success = true;
             break; 
             
         } catch (error) {
-            console.error(`خطأ في تحميل بيانات الكتب من المسار ${path}:`, error);
+            console.error(`فشل تحميل بيانات الكتب من المسار ${path}:`, error);
         }
     }
     
@@ -264,11 +210,9 @@ async function loadBooksData() {
 // III. الإضافات المبتكرة العشرة (وظائف مشتركة)
 // ===============================================
 
-/** 🚀 إضافة #1: وظيفة لتحديث إحصائيات المكتبة (المؤلفين والكتب) */
 function updateLibraryStats() {
     if (booksData.length === 0) return;
     const totalBooks = booksData.length;
-    // ... [بقية منطق الإحصائيات لم يتغير]
     const uniqueAuthors = new Set(booksData.map(book => book.author.trim().toLowerCase()));
     const totalAuthors = uniqueAuthors.size;
     const totalBooksEl = document.getElementById('total-books-count');
@@ -278,7 +222,6 @@ function updateLibraryStats() {
 }
 
 
-/** 🚀 إضافة #3: تأثير عداد (Count-Up) لعدد نتائج البحث */
 function animateCountUp(element, finalValue) {
     if (finalValue === 0) return;
     const duration = 800; 
@@ -302,10 +245,9 @@ function animateCountUp(element, finalValue) {
     window.requestAnimationFrame(step);
 }
 
-/** 🚀 إضافة #6: تفعيل البحث عند ضغط زر Enter */
 function handleEnterKeySearch(event) {
     if (event.key === 'Enter') {
-        const searchInput = document.getElementById('main-search-input') || document.getElementById('section-search-input');
+        const searchInput = document.getElementById('main-search-input'); // تم التبسيط
         if (searchInput) {
             event.preventDefault(); 
             performSearch(searchInput.value);
@@ -314,7 +256,6 @@ function handleEnterKeySearch(event) {
     }
 }
 
-/** 🚀 إضافة #7: تتبع نقرات التحميل (إحصائية بسيطة) */
 function trackDownload(bookTitle) {
     let downloadCounts = JSON.parse(localStorage.getItem('downloadCounts') || '{}');
     downloadCounts[bookTitle] = (downloadCounts[bookTitle] || 0) + 1;
@@ -340,8 +281,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlay = document.getElementById('overlay');
     const bodyElement = document.body;
     
-    const searchInput = document.getElementById('main-search-input') || document.getElementById('section-search-input'); 
-    const searchButton = document.getElementById('main-search-button') || document.getElementById('section-search-button');
+    // 🔑 تحديد الحقول مرة واحدة فقط
+    const searchInput = document.getElementById('main-search-input'); // تم التبسيط
+    const searchButton = document.getElementById('main-search-button'); // تم التبسيط
+    const clearSearchBtn = document.getElementById('clear-search-btn');
 
     const scrollTopBtn = document.getElementById('scroll-top-btn');
     const voiceSearchBtn = document.getElementById('voice-search-btn'); 
@@ -353,8 +296,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
         localStorage.setItem('theme', isDark ? 'dark-mode' : 'light-mode');
         if (themeToggle) {
-             // 🔑 الأيقونات: هذا الكود سليم. يجب التأكد من تحميل Font Awesome في HTML.
-             themeToggle.querySelector('i').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+             const icon = themeToggle.querySelector('i');
+             if(icon) icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
              themeToggle.setAttribute('aria-pressed', isDark);
         }
     };
@@ -399,8 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => { performSearch(e.target.value); }, DEBOUNCE_DELAY);
             
-            const clearBtn = document.getElementById('clear-search-btn');
-            if (clearBtn) clearBtn.style.display = e.target.value.length > 0 ? 'block' : 'none';
+            if (clearSearchBtn) clearSearchBtn.style.display = e.target.value.length > 0 ? 'block' : 'none';
         });
         searchInput.addEventListener('keydown', handleEnterKeySearch);
     }
@@ -413,8 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 🚀 إضافة #10: زر مسح البحث 
-    const clearSearchBtn = document.getElementById('clear-search-btn');
+    // 🚀 زر مسح البحث 
     if (clearSearchBtn && searchInput) {
         clearSearchBtn.addEventListener('click', () => {
             searchInput.value = '';
@@ -443,7 +384,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (sideMenu?.classList.contains('open')) { toggleMenu(true); } 
         }
         
-        // معالجة التنقل السلس (Smooth Scroll)
         if (target.classList.contains('menu-link') && target.getAttribute('href').startsWith('#')) {
             e.preventDefault();
             const targetId = target.getAttribute('href').substring(1);
@@ -456,7 +396,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('random-book-btn')?.addEventListener('click', () => {
          if (booksData.length === 0) { alert('يتم تحميل بيانات الكتب، يرجى الانتظار.'); return; }
          const randomIndex = Math.floor(Math.random() * booksData.length);
-         // 🔑 فتح رابط التحميل مباشرة (بدلاً من PDF Link)
          window.open(booksData[randomIndex].pdf_link, '_blank'); 
          alert(`كتاب اليوم المختار: ${booksData[randomIndex].title}.`);
     });
@@ -466,7 +405,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if(scrollTopBtn){
         window.addEventListener('scroll', () => {
             scrollTopBtn.style.display = window.scrollY > 200 ? 'flex' : 'none';
-            // 🚀 إضافة #9: تأثير اللون الديناميكي للزر 
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
             scrollTopBtn.style.backgroundColor = isDark ? 'var(--accent-color)' : 'var(--primary-color)';
         });
