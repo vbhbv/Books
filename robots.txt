@@ -1,0 +1,17 @@
+# User-agent: * تعني تطبيق هذه القواعد على جميع برامج زحف محركات البحث (مثل Googlebot, Bingbot, إلخ)
+User-agent: *
+
+# Disallow: /pdfs/ تمنع محركات البحث من فهرسة ملفات PDF مباشرةً
+# من الأفضل ألا تفهرس محركات البحث ملفات PDF مباشرة، بل تركز على صفحة HTML للكتاب
+Disallow: /pdfs/
+
+# Disallow: /data/ تمنع فهرسة ملفات البيانات
+# لا نحتاج لفهرسة ملف JSON أو أي ملف بيانات خام
+Disallow: /data/
+
+# Allow: / تسمح بفهرسة جميع الصفحات الأخرى (مثل index.html و CSS/JS)
+Allow: /
+
+# تحديد مسار ملف خريطة الموقع (Sitemap)
+# يمكنك إنشاء هذا الملف لاحقًا لتوجيه جوجل لأهم صفحاتك
+Sitemap: https://vbvbv.github.io/sitemap.xml
