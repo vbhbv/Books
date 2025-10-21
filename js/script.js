@@ -1,6 +1,6 @@
 /*
  * ------------------------------------------------------------------
- * ملف app.js النهائي: إصلاح شامل للـ Events و Z-Index (v20251031)
+ * ملف app.js النهائي: تم تعديل الشريط وتهيئة الأزرار (v20251032)
  * ------------------------------------------------------------------
  */
 
@@ -15,6 +15,8 @@ let searchTimeout;
 // II. وظائف المساعدة الرئيسية (منطق المكتبة)
 // ===============================================
 
+// ... (وظائف displayBooks, displayLatestBooks, performSearch, loadBooksData تبقى كما هي صحيحة) ...
+
 /** يعرض الكتب في شبكة معينة */
 function displayBooks(gridElement, books, query = '') {
     const resultsStatus = document.getElementById('results-status');
@@ -23,6 +25,7 @@ function displayBooks(gridElement, books, query = '') {
     if (!template || !gridElement) return;
     gridElement.innerHTML = '';
     
+    // (منطق عرض حالة نتائج البحث) ...
     if (gridElement.id === 'books-grid' && resultsStatus) {
         const titleText = query 
             ? `نتائج البحث عن: "${query}" في الأرشيف (${books.length} كتاب)` 
@@ -41,7 +44,6 @@ function displayBooks(gridElement, books, query = '') {
         const cardClone = document.importNode(template.content, true);
         const card = cardClone.querySelector('.book-card');
 
-        // معالجة الغلاف (باستخدام <img>)
         const bookCoverDiv = card.querySelector('.book-cover');
         if (bookCoverDiv) {
             const img = document.createElement('img');
@@ -56,7 +58,6 @@ function displayBooks(gridElement, books, query = '') {
         const authorSpan = card.querySelector('.card-info p span');
         if(authorSpan) authorSpan.textContent = book.author;
         
-        // ربط رابط التحميل المباشر
         const downloadLink = card.querySelector('.download-btn'); 
         if (downloadLink) {
             downloadLink.href = book.pdf_link;
@@ -67,7 +68,6 @@ function displayBooks(gridElement, books, query = '') {
         const tagsDiv = card.querySelector('.book-tags');
         if (tagsDiv) tagsDiv.innerHTML = book.tags.map(tag => `<span class="tag" data-tag="${tag}">${tag}</span>`).join('');
 
-        // حدث النقر على البطاقة 
         card.addEventListener('click', (e) => {
             if (e.target.classList.contains('tag')) return; 
             alert(`معلومات عن الكتاب: ${book.title}\nالمؤلف: ${book.author}\nسنة النشر: ${book.year}\nالتصنيفات: ${book.tags.join(', ')}`);
@@ -79,7 +79,6 @@ function displayBooks(gridElement, books, query = '') {
     gridElement.appendChild(fragment);
 }
 
-/** يعرض آخر 4 كتب مضافة */
 function displayLatestBooks() {
     if (booksData.length === 0) return;
     const latestBooksGrid = document.getElementById('latest-books-grid');
@@ -89,8 +88,6 @@ function displayLatestBooks() {
     displayBooks(latestBooksGrid, latestFour);
 }
 
-
-/** يقوم بمنطق البحث */
 function performSearch(query) {
     if (booksData.length === 0) return;
     const booksGrid = document.getElementById('books-grid');
@@ -113,7 +110,6 @@ function performSearch(query) {
     displayBooks(booksGrid, filteredBooks, query);
 }
 
-/** وظيفة تحميل البيانات من ملف JSON */
 async function loadBooksData() {
     const resultsContainer = document.getElementById('results-container');
     if (resultsContainer) resultsContainer.innerHTML = '<p style="text-align:center;">يتم تحميل بيانات المكتبة...</p>';
@@ -146,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. تحميل البيانات
     loadBooksData(); 
 
-    // 2. العناصر الأساسية (التي يجب أن تعمل أزرارها)
+    // 2. العناصر الأساسية 
     const themeToggle = document.getElementById('theme-toggle'); 
     const menuToggle = document.getElementById('menu-toggle');     
     const sideMenu = document.getElementById('side-menu');         
@@ -176,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. **إصلاح عمل القائمة الجانبية (Hamburger Menu) - تركيز قاطع!**
+    // 4. **إصلاح عمل القائمة الجانبية (Hamburger Menu)**
     const toggleMenu = (forceClose = false) => {
          if (!sideMenu || !overlay) return;
          const isMenuOpen = sideMenu.classList.contains('open');
@@ -194,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
          }
     };
     
-    // ربط الأحداث بالقائمة (مضمون العمل الآن)
+    // ربط الأحداث بالقائمة 
     if (menuToggle) menuToggle.addEventListener('click', () => toggleMenu());
     if (closeMenuBtn) closeMenuBtn.addEventListener('click', () => toggleMenu(true));
     if (overlay) overlay.addEventListener('click', () => toggleMenu(true));
@@ -204,16 +200,40 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape' && sideMenu?.classList.contains('open')) { toggleMenu(true); }
     });
 
-    // 5. شريط إشعار تيليجرام - **تم تبسيط الإخفاء**
+    // 5. شريط إشعار تيليجرام - **تم تعديل المنطق ليتناسب مع CSS الجديد**
+    const hideBanner = (banner) => {
+        if (banner) {
+             banner.style.maxHeight = '0';
+             banner.style.opacity = '0';
+             setTimeout(() => { banner.style.display = 'none'; }, 300); // إخفاء بعد الانيميشن
+             localStorage.setItem('bannerHidden', 'true');
+        }
+    };
+    
+    const showBanner = (banner) => {
+         if (banner) {
+             banner.style.display = 'block';
+             setTimeout(() => {
+                 banner.style.maxHeight = '50px'; 
+                 banner.style.opacity = '1'; 
+             }, 10);
+         }
+    };
+    
+    // فحص حالة العرض عند التحميل
     if (telegramBanner) {
-        // فحص حالة العرض عند التحميل
-        telegramBanner.style.display = localStorage.getItem('bannerHidden') !== 'true' ? 'block' : 'none';
+         if (localStorage.getItem('bannerHidden') === 'true') {
+             telegramBanner.style.display = 'none';
+             telegramBanner.style.maxHeight = '0';
+         } else {
+             // عرض الشريط الافتراضي مع الانيميشن
+             showBanner(telegramBanner);
+         }
     }
+    
     if (closeBannerBtn && telegramBanner) {
          closeBannerBtn.addEventListener('click', () => {
-             // إخفاء فوري لضمان الاستجابة
-             telegramBanner.style.display = 'none'; 
-             localStorage.setItem('bannerHidden', 'true');
+             hideBanner(telegramBanner);
          });
     }
 
@@ -242,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tag && searchInput) {
             searchInput.value = tag;
             performSearch(tag);
-            if (sideMenu?.classList.contains('open')) { toggleMenu(true); } // إغلاق القائمة بعد النقر على تصنيف
+            if (sideMenu?.classList.contains('open')) { toggleMenu(true); } 
         }
         
         // الانتقال للقسم عبر الروابط في القائمة الجانبية
