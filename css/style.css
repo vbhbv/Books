@@ -1,10 +1,10 @@
 /*
  * ------------------------------------------------------------------
- * ملف style.css النهائي: الجمالية الثقافية والخط الفاخر
+ * ملف style.css النهائي: إصلاح التضارب والجمالية الثقافية
  * ------------------------------------------------------------------
  */
 @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap'); /* خط احتياطي */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
 
 @layer reset, utilities, components, layout, animation;
 
@@ -14,11 +14,10 @@
     --darker-primary: #303f9f;
     --accent-color: #ff9800;        /* برتقالي دافئ (للإبراز) */
     --text-color: #333;
-    --text-dark: #1a1a1a;
     --background-color: #fcfcfc;    /* خلفية بيضاء ناصعة */
     --card-bg: white;
     --header-bg: var(--primary-color); 
-    --footer-bg: var(--text-dark); 
+    --footer-bg: #1a1a1a; 
     --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     --border-color: rgba(0, 0, 0, 0.1);
 }
@@ -31,179 +30,169 @@
     --background-color: #1a1a1a; 
     --card-bg: #2b2b2b; 
     --header-bg: #1f1f1f;
+    --footer-bg: #1f1f1f;
     --card-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
     --border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* =============================================== */
-/* II. إعادة الضبط والأساسيات (الخطوط) */
+/* II. إعادة الضبط والأساسيات */
 /* =============================================== */
 @layer reset {
-    /* تطبيق خط Almarai على كل شيء */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     body {
         font-family: 'Almarai', 'Tajawal', sans-serif; 
-        line-height: 1.8;
-        /* ... باقي التنسيقات الأساسية ... */
+        direction: rtl;
+        transition: background-color 0.6s, color 0.6s;
+        background-color: var(--background-color);
+        color: var(--text-color);
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-    }
-    
-    .section-title {
-        font-family: 'Almarai', sans-serif; 
-        font-weight: 800; /* Extra Bold */
-        color: var(--primary-color);
-        text-align: center;
-        margin: 40px 0 25px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid var(--accent-color);
-        display: inline-block;
-        width: auto;
     }
 }
 
 
 /* =============================================== */
-/* III. المكونات (Components) */
+/* III. المكونات (Components) - إصلاحات حاسمة */
 /* =============================================== */
 @layer components {
 
+    .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+
     /* ====== Header & Navigation Bar ====== */
-    header { background-color: var(--header-bg); }
-    .hero-title a { color: white; font-weight: 800; }
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 50; /* Z-INDEX عالي ليكون فوق كل المحتوى */
+        background-color: var(--header-bg);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        /* هذا يضمن أن الأزرار قابلة للنقر */
+        position: relative; 
+        z-index: 60; 
+    }
     
     /* ====== Telegram Banner - إصلاح التنسيق ====== */
     #telegram-banner {
         background-color: #229ED9;
         color: white;
         padding: 10px 0;
-        /* تم إضافة display: flex في HTML لضمان ظهوره */
+        transition: opacity 0.3s ease-out;
+        /* لا يوجد position: fixed هنا لتجنب التضارب في الشريط العلوي */
     }
-    
-    /* ====== Side Menu - إعادة تنسيق متطورة ====== */
-    .side-menu a {
-        color: var(--text-dark);
-        font-weight: 700;
-        padding: 10px 0;
-        i { color: var(--accent-color); margin-left: 10px; }
-        [data-theme="dark"] & { color: var(--text-color); }
-    }
-    
-    /* ====== Search & Input Styling (إبقاء التصميم الحديث) ====== */
-    .search-box {
-        border: 2px solid var(--primary-color);
-        box-shadow: 0 0 10px rgba(63, 81, 181, 0.2);
-    }
-    
-    /* ====== Book Cards (تصميم أكثر أناقة) ====== */
-    .book-card {
-        border: 1px solid var(--border-color);
-        transition: transform 0.3s, box-shadow 0.3s;
-        &:hover {
-            border-color: var(--primary-color);
-        }
-        .book-cover { 
-            /* إضافة حافة ناعمة للغلاف */
-            border-bottom: 3px solid var(--accent-color); 
-        }
-        .card-info {
-             padding: 15px;
-             text-align: center;
-        }
-    }
-    
-    /* ====== تصنيف الأقسام (Categories Grid) ====== */
-    .categories-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 20px;
-        padding: 20px 0;
-    }
-    .category-btn {
-        background-color: var(--darker-primary);
-        color: white;
-        font-weight: 700;
-        padding: 20px 10px;
-        border-radius: 8px;
-        transition: background-color 0.3s;
-        i { margin-left: 10px; }
-        &:hover { background-color: var(--accent-color); color: var(--text-dark); }
-    }
-
-    /* ====== قسم المؤلفين (Authors Grid) ====== */
-    .authors-grid {
+    .banner-content {
         display: flex;
         justify-content: center;
-        flex-wrap: wrap;
-        gap: 20px;
-        padding: 20px 0;
-    }
-    .author-card {
-        text-align: center;
-        padding: 15px 20px;
-        background: var(--card-bg);
-        border-radius: 12px;
-        box-shadow: var(--card-shadow);
-        width: 150px;
-        cursor: pointer;
-        i { font-size: 2.5em; color: var(--accent-color); margin-bottom: 5px; }
-        h4 { font-weight: 800; color: var(--text-dark); margin-bottom: 3px; }
-        p { font-size: 0.9em; color: gray; }
-    }
-    
-    /* ====== About Section & Blockquote ====== */
-    blockquote {
-        border-right: 5px solid var(--accent-color); 
-        background-color: color-mix(in srgb, var(--primary-color) 10%, transparent);
-        color: var(--text-dark);
-        font-style: italic;
-        padding: 20px;
-        border-radius: 0 15px 15px 0;
-        margin: 30px auto;
-        font-size: 1.1em;
-        font-weight: 700;
-        max-width: 800px;
-        
-        [data-theme="dark"] & { 
-            color: var(--text-color);
-            background-color: color-mix(in srgb, var(--primary-color) 15%, #1a1a1a);
-        }
-    }
-}
-
-
-/* =============================================== */
-/* IV. التخطيط (Layout) */
-/* =============================================== */
-@layer layout {
-    
-    main { flex-grow: 1; }
-    
-    #books-grid, #latest-books-grid { 
-        display: grid; 
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-        gap: 30px; 
-        padding: 30px 0; 
-    }
-    
-    /* ====== Footer - إصلاح التذييل (ضمان ظهوره) ====== */
-    footer {
-        background-color: var(--footer-bg);
-        color: white;
-        padding: 30px 0;
-        text-align: center;
-        width: 100%;
-    }
-    .footer-content {
-        display: flex;
-        justify-content: space-between;
         align-items: center;
-        flex-wrap: wrap;
         gap: 15px;
+        flex-wrap: wrap; 
+        position: relative; /* لضبط زر الإغلاق */
     }
-    .footer-bottom-bar {
-         background-color: rgba(0,0,0,0.1);
-         padding: 8px 0;
-         font-size: 0.9em;
+    .close-banner-style {
+        background: none;
+        color: white;
+        font-size: 1.2em;
+        padding: 5px;
+    }
+    
+    /* ====== Buttons Styling ====== */
+    .button {
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 4px;
+        /* ضمان ظهور الأيقونات */
+        display: inline-flex; 
+        align-items: center;
+    }
+    
+    /* ====== Side Menu - إصلاح الظهور والروابط ====== */
+    .side-menu {
+        position: fixed;
+        top: 0;
+        right: -300px; 
+        height: 100%;
+        width: 280px;
+        background-color: var(--card-bg);
+        z-index: 1000; /* Z-INDEX الأعلى على الإطلاق */
+        padding: 60px 20px 20px;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.4);
+        transition: right 0.4s ease-out;
+    }
+    .side-menu.open {
+        right: 0;
+    }
+    .close-btn {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: none;
+        border: none;
+        font-size: 2em;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    /* ====== Overlay ====== */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s;
+    }
+    .overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    /* ====== Search Box - ترتيب الأيقونات والمدخلات ====== */
+    .search-box {
+        display: grid;
+        grid-template-columns: auto 1fr auto; /* صوتي - مدخل - بحث */
+        align-items: stretch;
+        gap: 0;
+        /* إزالة أي نقاط صفراء */
+        border: 2px solid var(--primary-color);
+    }
+    #search-input {
+        padding: 10px 15px;
+        border: none;
+        outline: none;
+        /* حذف أي خلفيات أو حدود تسبب ظهور النقاط الصفراء */
+    }
+    #voice-search-btn, #search-button {
+        background-color: var(--primary-color);
+        padding: 10px 12px;
+        border-radius: 0;
+        /* زيادة حجم الأيقونة قليلًا */
+        i { font-size: 1.1em; } 
+    }
+    #voice-search-btn {
+        background-color: var(--accent-color);
+    }
+
+    /* ====== Authors Grid (إزالة الخلفية الصفراء إذا كانت موجودة) ====== */
+    .author-card i { 
+        color: var(--accent-color); 
+    }
+    
+    /* ====== Footer - ضمان ظهوره ====== */
+    footer {
+        margin-top: 50px; /* لضمان وجود مسافة بين المحتوى والتذييل */
     }
 }
