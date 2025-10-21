@@ -48,7 +48,7 @@
         </ul>
     </aside>
 
-    <main class="container" id="results-container">
+    <main class="container">
 
         <section id="search-section" class="main-section" role="search" aria-label="البحث في أرشيف الكتب">
             <div class="search-box">
@@ -66,6 +66,28 @@
                 </div>
         </section>
         
+        <section id="author-section" class="main-section" role="region" aria-labelledby="author-title">
+            <h2 class="section-title" id="author-title">قائمة المؤلفين البارزين</h2>
+            <div class="authors-grid" id="authors-grid">
+                 </div>
+            <div class="stats" style="text-align: center; margin-top: 20px;">
+                <p>إجمالي الكتب: <span id="total-books-count">0</span> كتاب</p>
+                <p>عدد المؤلفين: <span id="total-authors-count">0</span> مؤلف</p>
+            </div>
+        </section>
+
+        <section id="categories-section" class="main-section" role="region" aria-labelledby="categories-title">
+            <h2 class="section-title" id="categories-title">أقسام المكتبة الرئيسية</h2>
+            <div class="category-buttons-grid">
+                <a href="category.html?cat=تنمية ذاتية" class="category-btn" data-category="تنمية ذاتية"><i class="fas fa-lightbulb"></i> تنمية ذاتية</a>
+                <a href="category.html?cat=الأدب" class="category-btn" data-category="الأدب"><i class="fas fa-feather-alt"></i> الأدب</a>
+                <a href="category.html?cat=البرمجة" class="category-btn" data-category="البرمجة"><i class="fas fa-code"></i> البرمجة</a>
+                <a href="category.html?cat=كتب إسلامية" class="category-btn" data-category="كتب إسلامية"><i class="fas fa-mosque"></i> كتب إسلامية</a>
+                <a href="category.html?cat=العلوم" class="category-btn" data-category="العلوم"><i class="fas fa-flask"></i> العلوم</a>
+                <a href="category.html?cat=الفلسفة" class="category-btn" data-category="الفلسفة"><i class="fas fa-brain"></i> الفلسفة</a>
+            </div>
+        </section>
+
         <section id="latest-books" class="main-section" role="region" aria-labelledby="latest-title">
             <h2 class="section-title" id="latest-title">💎 آخر الإضافات إلى الأرشيف</h2>
             <div class="books-grid" id="latest-books-grid">
@@ -76,12 +98,6 @@
         <section id="about-section" class="main-section" role="region" aria-labelledby="about-title">
             <h2 class="section-title" id="about-title">نبذة عن المكتبة</h2>
             <p class="about-text">"المعرفة قوة، وهي حق للجميع." مكتبة أرشيف الكتب المجانية هي مشروع ثقافي تقني، يهدف إلى توفير أكبر مجموعة من الكتب والمراجع بصيغة PDF مجاناً ويسر.</p>
-            
-            <div class="stats" style="text-align: center; margin-top: 20px;">
-                 <p>إجمالي الكتب: <span id="total-books-count">0</span> كتاب</p>
-                 <p>عدد المؤلفين: <span id="total-authors-count">0</span> مؤلف</p>
-            </div>
-
         </section>
 
     </main>
