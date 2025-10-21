@@ -1,6 +1,6 @@
 /*
  * ------------------------------------------------------------------
- * ملف style.css النهائي: إصلاح العنوان وضمان Z-Index فائق (v20251028)
+ * ملف style.css النهائي: دعم صور الأغلفة (v20251029)
  * ------------------------------------------------------------------
  */
 @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap');
@@ -63,251 +63,87 @@ a { text-decoration: none; color: var(--primary-color); transition: color 0.3s; 
 }
 
 /* =============================================== */
-/* II. إصلاح العنوان والأزرار العلوية (Header Fix) */
+/* II. القائمة العلوية والتنقل */
 /* =============================================== */
 header {
     position: sticky;
     top: 0;
     background-color: var(--header-bg);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    z-index: 100; /* Z-INDEX عالي جداً */
+    z-index: 100; 
 }
 .sticky-nav { padding: 10px 0; }
-.nav-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* تنسيق اسم الموقع */
-.site-branding a { 
-    font-size: 1.4em; 
-    font-weight: 800;
-    display: block; 
-    white-space: nowrap;
-}
+.nav-content { display: flex; justify-content: space-between; align-items: center; }
+.site-branding a { font-size: 1.4em; font-weight: 800; display: block; white-space: nowrap; }
 .site-title-part1 { color: white; }
 .site-title-part2 { color: var(--accent-color); font-weight: 400; } 
-
-/* زر عام للتبديل والقائمة (ضمان النقر) */
 .nav-btn {
-    width: 44px;
-    height: 44px;
-    border: none;
-    cursor: pointer;
-    background-color: var(--darker-primary);
-    color: white;
-    border-radius: 50%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.1em;
-    z-index: 105; /* أعلى من الـ Header نفسه لضمان النقر */
-    position: relative; 
+    width: 44px; height: 44px; border: none; cursor: pointer;
+    background-color: var(--darker-primary); color: white;
+    border-radius: 50%; display: inline-flex; justify-content: center;
+    align-items: center; font-size: 1.1em; z-index: 105; position: relative; 
 }
 .nav-btn:hover { background-color: var(--accent-color); color: var(--text-color); }
 
-
 /* =============================================== */
-/* III. شريط تيليجرام (Banner) */
-/* =============================================== */
-#telegram-banner {
-    background-color: #229ED9;
-    color: white;
-    padding: 10px 0;
-    transition: opacity 0.3s;
-    z-index: 90; 
-}
-.banner-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    position: relative;
-}
-.banner-btn {
-    background-color: var(--accent-color);
-    color: var(--text-color);
-    padding: 8px 15px;
-    border-radius: 5px;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-}
-.close-btn { 
-    background: none;
-    border: none;
-    color: white; 
-    font-size: 1.5em;
-    cursor: pointer;
-    z-index: 95; 
-    position: relative;
-}
-.menu-close-btn { 
-     color: var(--text-color); 
-     position: absolute;
-     top: 10px;
-     left: 10px;
-     z-index: 1001; /* أعلى من القائمة نفسها */
-}
-
-
-/* =============================================== */
-/* IV. القائمة الجانبية (Side Menu) */
+/* III. القائمة الجانبية (Side Menu) */
 /* =============================================== */
 .side-menu {
-    position: fixed;
-    top: 0;
-    right: -300px; 
-    height: 100%;
-    width: 280px;
-    background-color: var(--card-bg);
-    z-index: 1000; /* أعلى Z-INDEX على الإطلاق */
-    padding: 60px 20px 20px;
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.4);
-    transition: right 0.4s ease-out;
+    position: fixed; top: 0; right: -300px; height: 100%; width: 280px;
+    background-color: var(--card-bg); z-index: 1000; padding: 60px 20px 20px;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.4); transition: right 0.4s ease-out;
     list-style: none;
 }
 .side-menu.open { right: 0; }
-.side-menu ul { list-style: none; padding: 0; }
-.side-menu li { margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-.side-menu a {
-    font-size: 1.2em;
-    font-weight: 700;
-    color: var(--text-color); 
-    display: block;
-}
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 999; 
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.4s;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); z-index: 999; 
+    opacity: 0; visibility: hidden; transition: opacity 0.4s;
 }
 .overlay.active { opacity: 1; visibility: visible; }
+.menu-close-btn { color: var(--text-color); position: absolute; top: 10px; left: 10px; z-index: 1001; }
 
 
 /* =============================================== */
-/* V. البحث والأقسام */
+/* IV. البحث والأقسام */
 /* =============================================== */
-.search-section { padding-top: 20px; }
 .search-box {
-    display: grid;
-    grid-template-columns: auto 1fr auto; 
-    align-items: stretch;
-    border: 2px solid var(--primary-color);
-    border-radius: 25px;
-    overflow: hidden;
-    margin: 30px auto 15px;
-    max-width: 600px;
+    display: grid; grid-template-columns: auto 1fr auto; align-items: stretch;
+    border: 2px solid var(--primary-color); border-radius: 25px;
+    overflow: hidden; margin: 30px auto 15px; max-width: 600px;
 }
 #search-input {
-    padding: 10px 15px;
-    border: none;
-    outline: none;
-    font-family: 'Almarai', sans-serif;
-    font-size: 1em;
-    color: var(--text-color);
-    background-color: var(--card-bg);
+    padding: 10px 15px; border: none; outline: none; font-family: 'Almarai', sans-serif;
+    font-size: 1em; color: var(--text-color); background-color: var(--card-bg);
 }
-.search-btn {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 10px 12px;
-    border: none;
-    cursor: pointer;
-    font-size: 1.1em;
-}
+.search-btn { background-color: var(--primary-color); color: white; padding: 10px 12px; border: none; cursor: pointer; font-size: 1.1em; }
 .voice-btn { background-color: var(--accent-color); color: var(--text-color); }
 .main-action-btn {
-    display: block;
-    width: 100%;
-    max-width: 300px;
-    margin: 10px auto;
-    padding: 10px 20px;
-    background-color: var(--accent-color);
-    color: var(--text-color);
-    font-weight: 700;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    display: block; width: 100%; max-width: 300px; margin: 10px auto;
+    padding: 10px 20px; background-color: var(--accent-color);
+    color: var(--text-color); font-weight: 700; border: none; border-radius: 5px; cursor: pointer;
 }
-
-/* الأقسام والمؤلفون */
-.categories-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-    padding: 20px 0;
-}
+.categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px 0; }
 .category-btn {
-    background-color: var(--darker-primary);
-    color: white;
-    padding: 15px 10px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-size: 1em;
-    font-family: 'Almarai', sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: background-color 0.3s;
+    background-color: var(--darker-primary); color: white; padding: 15px 10px;
+    border-radius: 8px; border: none; cursor: pointer; font-size: 1em;
+    font-family: 'Almarai', sans-serif; display: flex; align-items: center;
+    justify-content: center; gap: 8px; transition: background-color 0.3s;
 }
 .category-btn:hover { background-color: var(--accent-color); color: var(--text-color); }
 
-.authors-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 20px;
-    padding: 20px 0;
-    text-align: center;
-}
-.author-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 15px;
-    background-color: var(--card-bg);
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--border-color);
-}
-.author-card i { color: var(--accent-color); font-size: 2em; margin-bottom: 5px; }
-
 
 /* =============================================== */
-/* VI. بطاقات الكتب (Book Cards) */
+/* V. بطاقات الكتب (Book Cards) */
 /* =============================================== */
-.books-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    padding: 20px 0;
-}
+.books-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; padding: 20px 0; }
 .book-card {
-    background-color: var(--card-bg);
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--border-color);
-    transition: transform 0.3s, box-shadow 0.3s;
-    cursor: pointer;
+    background-color: var(--card-bg); border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); overflow: hidden;
+    display: flex; flex-direction: column; border: 1px solid var(--border-color);
+    transition: transform 0.3s, box-shadow 0.3s; cursor: pointer;
 }
-.book-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
+
 .book-cover {
     height: 150px;
     background-color: #ccc;
@@ -315,81 +151,47 @@ header {
     justify-content: center;
     align-items: center;
     color: var(--text-color);
+    overflow: hidden; /* مهم لقص الصورة */
 }
-.card-info { padding: 15px; flex-grow: 1; }
-.card-info h3 { font-size: 1.2em; margin-bottom: 5px; color: var(--primary-color); }
-.card-info p { font-size: 0.9em; color: var(--text-color); margin-bottom: 10px; }
-.book-tags { margin-bottom: 15px; }
-.tag {
-    display: inline-block;
-    background-color: var(--accent-color);
-    color: var(--text-color);
-    padding: 3px 8px;
-    border-radius: 3px;
-    font-size: 0.8em;
-    margin-left: 5px;
-    cursor: pointer;
-}
-/* تنسيق رابط التحميل كزر */
-.download-btn {
+
+/* 👈🏻 تنسيق الصورة الفعلية داخل حاوية الغلاف */
+.book-cover img {
     width: 100%;
-    padding: 10px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 700;
-    
-    /* تنسيقات إضافية لوسم <a> لجعله يبدو كزر */
-    display: block; 
-    text-align: center; 
-    text-decoration: none; 
-    transition: background-color 0.3s;
+    height: 100%;
+    object-fit: cover; /* لضمان ملء المساحة دون تشويه الصورة */
+    border-radius: 10px 10px 0 0; 
+    display: block;
 }
-.download-btn:hover {
-    background-color: var(--darker-primary);
+/* إزالة تأثير التحميل بعد تحميل الصورة */
+.book-cover.loading-skeleton {
+    background-color: transparent !important;
 }
+
+.download-btn {
+    width: 100%; padding: 10px; background-color: var(--primary-color);
+    color: white; border: none; border-radius: 5px; cursor: pointer;
+    font-weight: 700; display: block; text-align: center; 
+    text-decoration: none; transition: background-color 0.3s;
+}
+.download-btn:hover { background-color: var(--darker-primary); }
 
 
 /* =============================================== */
-/* VII. الفوتر والأزرار الإضافية */
+/* VI. الفوتر والأزرار الإضافية */
 /* =============================================== */
 footer {
-    background-color: var(--footer-bg);
-    color: white;
-    padding: 30px 0;
-    text-align: center;
-    width: 100%;
-    margin-top: 50px;
+    background-color: var(--footer-bg); color: white; padding: 30px 0;
+    text-align: center; width: 100%; margin-top: 50px;
 }
 .scroll-btn {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    cursor: pointer;
-    display: none; 
-    z-index: 40;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.2em;
+    position: fixed; bottom: 20px; left: 20px; width: 40px;
+    height: 40px; border-radius: 50%; background-color: var(--primary-color);
+    color: white; border: none; cursor: pointer; display: none; 
+    z-index: 40; justify-content: center; align-items: center; font-size: 1.2em;
 }
 
-/* =============================================== */
-/* VIII. Media Queries (للتجاوب) */
-/* =============================================== */
 @media (max-width: 600px) {
     .site-branding a { font-size: 1.2em; }
     .search-box { margin: 20px auto 10px; border-radius: 20px; }
-    #search-input { padding: 8px 12px; }
-    .banner-content { justify-content: space-between; }
-    #telegram-banner p { font-size: 0.9em; }
-    .close-btn { position: static; }
     .side-menu { width: 250px; }
 }
