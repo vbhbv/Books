@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أرشيف الكتب المجانية | القسم</title> 
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" href="img/favicon.ico">
+</head>
+<body>
+    
+    <div class="overlay" id="overlay"></div>
+
+    <header>
+        <nav class="sticky-nav">
+            <div class="container nav-content">
+                <div class="site-branding">
+                    <a href="index.html">
+                        <span class="site-title-part1">أرشيف</span>
+                        <span class="site-title-part2">الكتب المجانية</span>
+                    </a>
+                </div>
+                <button class="nav-btn" id="theme-toggle" aria-label="تبديل الوضع الليلي">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-btn" id="menu-toggle" aria-expanded="false" aria-controls="side-menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <aside class="side-menu" id="side-menu" role="dialog" aria-modal="true" aria-label="قائمة التنقل الجانبية">
+        <button class="nav-btn menu-close-btn" id="close-menu-btn" aria-label="إغلاق القائمة">
+            <i class="fas fa-times"></i>
+        </button>
+        <ul>
+            <li><a href="index.html" class="menu-link"><i class="fas fa-home"></i> الرئيسية</a></li>
+            <li><a href="category.html?cat=تنمية ذاتية" class="menu-link"><i class="fas fa-lightbulb"></i> تنمية ذاتية</a></li>
+            <li><a href="category.html?cat=كتب إسلامية" class="menu-link"><i class="fas fa-mosque"></i> كتب إسلامية</a></li>
+            <li><a href="category.html?cat=الأدب" class="menu-link"><i class="fas fa-feather"></i> الأدب</a></li>
+            <li><a href="category.html?cat=البرمجة" class="menu-link"><i class="fas fa-code"></i> البرمجة</a></li>
+            <li><a href="category.html?cat=العلوم" class="menu-link"><i class="fas fa-flask"></i> العلوم</a></li>
+            <li><a href="category.html?cat=الفلسفة" class="menu-link"><i class="fas fa-brain"></i> الفلسفة</a></li>
+            <li><a href="index.html#about-section" class="menu-link"><i class="fas fa-info-circle"></i> عن المكتبة</a></li>
+            <li><a href="https://t.me/iiollr" target="_blank" class="telegram-link"><i class="fab fa-telegram-plane"></i> قناة التليجرام</a></li>
+        </ul>
+    </aside>
+
+    <main class="container" id="category-main-content">
+
+        <section id="category-title-section" class="main-section" role="region" aria-labelledby="category-name">
+            <h1 class="section-title">قسم: <span id="category-name">...</span></h1> 
+        </section>
+
+        <section id="category-search-section" class="main-section" role="search" aria-label="البحث داخل القسم">
+            <div class="search-box">
+                <button class="search-btn" id="section-search-button" type="button"><i class="fas fa-search"></i></button>
+                <input type="search" id="section-search-input" placeholder="ابحث داخل هذا القسم فقط..." aria-label="البحث في القسم">
+                <button class="clear-btn" id="clear-search-btn" type="button" style="display: none;"><i class="fas fa-times"></i></button>
+                <button class="voice-btn" id="voice-search-btn" type="button"><i class="fas fa-microphone"></i></button>
+            </div>
+            
+            <p id="results-status" style="text-align: center; margin-top: 15px; font-weight: 700;">يتم تحميل البيانات...</p>
+        </section>
+
+        <section id="category-books-section" class="main-section" role="region" aria-labelledby="category-name">
+            <div class="books-grid" id="books-grid">
+                </div>
+        </section>
+
+
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <p>جميع الحقوق محفوظة &copy; <span id="footer-date">2025</span></p>
+            <div class="social-links">
+                <a href="https://t.me/iiollr" target="_blank" aria-label="قناة التليجرام"><i class="fab fa-telegram-plane telegram-link-footer"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <button class="scroll-btn" id="scroll-top-btn" aria-label="الذهاب للأعلى"><i class="fas fa-arrow-up"></i></button>
+
+    <template id="post-template">
+        <div class="book-card" tabindex="0">
+            <div class="book-cover"></div>
+            <div class="card-info">
+                <h3 class="post-title"></h3>
+                <p>المؤلف: <span></span></p>
+                <p class="book-snippet"></p> 
+                <div class="book-tags"></div>
+                <a href="#" class="download-btn" target="_blank">تحميل PDF <i class="fas fa-download"></i></a>
+            </div>
+        </div>
+    </template>
+    
+    <script src="js/script.js"></script> 
+</body>
+</html>
