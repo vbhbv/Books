@@ -1,6 +1,6 @@
 /*
  * ------------------------------------------------------------------
- * ملف app.js النهائي: تم تعديل الشريط وتهيئة الأزرار (v20251032)
+ * ملف app.js النهائي: إزالة الشريط وتثبيت منطق القائمة (v20251033)
  * ------------------------------------------------------------------
  */
 
@@ -15,8 +15,6 @@ let searchTimeout;
 // II. وظائف المساعدة الرئيسية (منطق المكتبة)
 // ===============================================
 
-// ... (وظائف displayBooks, displayLatestBooks, performSearch, loadBooksData تبقى كما هي صحيحة) ...
-
 /** يعرض الكتب في شبكة معينة */
 function displayBooks(gridElement, books, query = '') {
     const resultsStatus = document.getElementById('results-status');
@@ -25,7 +23,6 @@ function displayBooks(gridElement, books, query = '') {
     if (!template || !gridElement) return;
     gridElement.innerHTML = '';
     
-    // (منطق عرض حالة نتائج البحث) ...
     if (gridElement.id === 'books-grid' && resultsStatus) {
         const titleText = query 
             ? `نتائج البحث عن: "${query}" في الأرشيف (${books.length} كتاب)` 
@@ -79,6 +76,7 @@ function displayBooks(gridElement, books, query = '') {
     gridElement.appendChild(fragment);
 }
 
+/** يعرض آخر 4 كتب مضافة */
 function displayLatestBooks() {
     if (booksData.length === 0) return;
     const latestBooksGrid = document.getElementById('latest-books-grid');
@@ -88,6 +86,8 @@ function displayLatestBooks() {
     displayBooks(latestBooksGrid, latestFour);
 }
 
+
+/** يقوم بمنطق البحث */
 function performSearch(query) {
     if (booksData.length === 0) return;
     const booksGrid = document.getElementById('books-grid');
@@ -110,6 +110,7 @@ function performSearch(query) {
     displayBooks(booksGrid, filteredBooks, query);
 }
 
+/** وظيفة تحميل البيانات من ملف JSON */
 async function loadBooksData() {
     const resultsContainer = document.getElementById('results-container');
     if (resultsContainer) resultsContainer.innerHTML = '<p style="text-align:center;">يتم تحميل بيانات المكتبة...</p>';
@@ -150,8 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlay = document.getElementById('overlay');
     const bodyElement = document.body;
     const searchInput = document.getElementById('search-input');
-    const telegramBanner = document.getElementById('telegram-banner');
-    const closeBannerBtn = document.getElementById('close-banner-btn');
+    // const telegramBanner = document.getElementById('telegram-banner'); // تم حذف الشريط
+    // const closeBannerBtn = document.getElementById('close-banner-btn'); // تم حذف الزر
     const scrollTopBtn = document.getElementById('scroll-top-btn');
 
     // 3. الوضع الليلي (Dark Mode)
@@ -172,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. **إصلاح عمل القائمة الجانبية (Hamburger Menu)**
+    // 4. **منطق عمل القائمة الجانبية (Hamburger Menu) - هذا هو الضمان!**
     const toggleMenu = (forceClose = false) => {
          if (!sideMenu || !overlay) return;
          const isMenuOpen = sideMenu.classList.contains('open');
@@ -200,44 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape' && sideMenu?.classList.contains('open')) { toggleMenu(true); }
     });
 
-    // 5. شريط إشعار تيليجرام - **تم تعديل المنطق ليتناسب مع CSS الجديد**
-    const hideBanner = (banner) => {
-        if (banner) {
-             banner.style.maxHeight = '0';
-             banner.style.opacity = '0';
-             setTimeout(() => { banner.style.display = 'none'; }, 300); // إخفاء بعد الانيميشن
-             localStorage.setItem('bannerHidden', 'true');
-        }
-    };
-    
-    const showBanner = (banner) => {
-         if (banner) {
-             banner.style.display = 'block';
-             setTimeout(() => {
-                 banner.style.maxHeight = '50px'; 
-                 banner.style.opacity = '1'; 
-             }, 10);
-         }
-    };
-    
-    // فحص حالة العرض عند التحميل
-    if (telegramBanner) {
-         if (localStorage.getItem('bannerHidden') === 'true') {
-             telegramBanner.style.display = 'none';
-             telegramBanner.style.maxHeight = '0';
-         } else {
-             // عرض الشريط الافتراضي مع الانيميشن
-             showBanner(telegramBanner);
-         }
-    }
-    
-    if (closeBannerBtn && telegramBanner) {
-         closeBannerBtn.addEventListener('click', () => {
-             hideBanner(telegramBanner);
-         });
-    }
-
-    // 6. منطق البحث
+    // 5. منطق البحث
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
@@ -252,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // 7. ربط النقرات على العلامات وروابط القائمة الجانبية
+    // 6. ربط النقرات على العلامات وروابط القائمة الجانبية
     document.addEventListener('click', (e) => {
         const target = e.target;
         let tag = null;
@@ -274,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 8. زر "كتاب عشوائي"
+    // 7. زر "كتاب عشوائي"
     document.getElementById('random-book-btn')?.addEventListener('click', () => {
          if (booksData.length === 0) { alert('يتم تحميل بيانات الكتب، يرجى الانتظار.'); return; }
          const randomIndex = Math.floor(Math.random() * booksData.length);
@@ -282,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
          alert(`كتاب اليوم المختار: ${booksData[randomIndex].title}.`);
     });
 
-    // 9. زر الصعود للأعلى (Scroll Top Button)
+    // 8. زر الصعود للأعلى (Scroll Top Button)
     if(scrollTopBtn){
         window.addEventListener('scroll', () => {
             scrollTopBtn.style.display = window.scrollY > 200 ? 'flex' : 'none';
@@ -290,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
     }
 
-    // 10. تحديث تاريخ الفوتر وتسجيل Service Worker
+    // 9. تحديث تاريخ الفوتر وتسجيل Service Worker
     const footerDateSpan = document.getElementById('footer-date');
     if (footerDateSpan) { footerDateSpan.textContent = new Date().getFullYear(); }
     if ('serviceWorker' in navigator) {
