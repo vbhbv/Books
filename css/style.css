@@ -1,57 +1,37 @@
 /*
  * ------------------------------------------------------------------
- * الملف الكامل style.css (40 كود جديد + القديم)
+ * ملف style.css الجديد: تصميم مكتبة حديث ومهدئ
  * ------------------------------------------------------------------
  */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
 
 /* (4) طبقات التتالي: @layer - لضمان تطبيق القواعد بترتيب منطقي */
 @layer reset, utilities, components, layout, animation;
 
-/* =============================================== */
-/* I. المتغيرات والوضع الليلي (Themes & Colors) */
-/* =============================================== */
 :root {
-    /* (3) متغيرات CSS الأصلية - الألوان الهادئة */
-    --primary-color: #64b5f6;      /* أزرق فاتح ومهدئ */
-    --darker-primary: #3d88e5;     /* متغير جديد للـ hover */
-    --accent-color: #ff8a65;       /* مرجاني فاتح للإبراز */
-    --text-dark: #37474f;          
-    --background-color: #fcfcfc;
+    /* الألوان الجديدة والمهدئة */
+    --primary-color: #00796b;       /* أخضر غامق ومهدئ */
+    --darker-primary: #004d40;
+    --accent-color: #ffb74d;        /* برتقالي هادئ للإبراز */
+    --text-color: #333;
+    --background-color: #f5f5f5;    /* خلفية رمادية فاتحة */
     --card-bg: white;
-    --text-color: var(--text-dark);
-    --header-bg-gradient: linear-gradient(135deg, #4dd0e1 0%, #64b5f6 100%); 
-    --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-    --hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); 
-    --quote-color: var(--primary-color); /* لون الاقتباس */
-
-    /* (21) متغيرات جديدة لدعم ثيم LCH المتقدم */
-    --lch-hue-base: 240; 
-    --lch-primary: lch(40% 60 var(--lch-hue-base)); 
+    --header-bg: var(--primary-color); 
+    --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --hover-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); 
+    --quote-color: var(--accent-color);
 }
 
-/* (16) دعم الثيم الفاتح/الداكن عبر data-theme (أفضل من كلاس body) */
 [data-theme="dark"], body.dark-mode {
-    --background-color: #1f1f1f; 
-    --card-bg: #2b2b2b; 
+    --primary-color: #80cbc4; 
+    --darker-primary: #4db6ac;
+    --accent-color: #ffa000;
     --text-color: #e0e0e0;
-    --header-bg-gradient: linear-gradient(135deg, #303f9f 0%, #1a237e 100%);
-    --card-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-    --primary-color: #7986cb; /* ألوان متكيفة */
-    --accent-color: #ffa07a;
-    --text-dark: #f0f0f0;
-    --lch-primary: lch(60% 60 var(--lch-hue-base));
+    --background-color: #121212; /* خلفية داكنة جداً */
+    --card-bg: #1e1e1e; 
+    --header-bg: #1f1f1f;
+    --card-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
 }
-
-/* (17) تطبيق الثيم الداكن التلقائي */
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) { /* يطبق الداكن إذا لم يتم تحديده يدوياً */
-        --background-color: #1f1f1f; 
-        --card-bg: #2b2b2b; 
-        --text-color: #e0e0e0;
-        --header-bg-gradient: linear-gradient(135deg, #303f9f 0%, #1a237e 100%);
-    }
-}
-
 
 /* =============================================== */
 /* II. إعادة الضبط والأساسيات (@layer reset) */
@@ -59,48 +39,20 @@
 @layer reset {
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
-    /* (23) خاصية التمرير (Scroll behavior) السلس */
-    html { 
-        scroll-behavior: smooth; 
-        /* (6) تحسين قراءة الفقرات */
-        line-height: 1.65;
-    }
+    html { scroll-behavior: smooth; }
     
-    /* تصحيح: إخفاء رابط "تخطي التنقل" ليظهر فقط عند التركيز عليه */
-    .skip-link {
-        position: absolute;
-        top: -40px;
-        left: 0;
-        background: var(--accent-color);
-        color: white;
-        padding: 8px;
-        z-index: 9999;
-    }
-    .skip-link:focus {
-        top: 0;
-    }
-    
-    /* (22) إعادة ضبط التركيز المرئي (Focus) */
-    :focus { outline: 3px solid var(--accent-color); outline-offset: 2px; }
-
+    /* تطبيق خط Tajawal على كل شيء */
     body {
-        font-family: 'Cairo', 'Arial', sans-serif; /* دمج الخط القديم مع الخطوط الآمنة */
+        font-family: 'Tajawal', sans-serif; 
         direction: rtl;
+        line-height: 1.7;
         transition: background-color 0.6s, color 0.6s;
         background-color: var(--background-color);
         color: var(--text-color);
     }
     
-    /* (20) التحكم في الصور */
-    img { object-fit: cover; max-width: 100%; display: block; } 
-    
-    /* (7) روابط نصية واضحة */
-    article a:not(.button) { 
-        text-decoration-color: var(--accent-color); 
-        text-underline-offset: 4px; 
-        transition: color 0.3s;
-        color: var(--primary-color);
-    }
+    .skip-link:focus { top: 0; } /* إخفاء باقي الكود في index.html */
+    :focus { outline: 3px solid var(--accent-color); outline-offset: 2px; }
 }
 
 /* =============================================== */
@@ -112,132 +64,138 @@
     
     /* ====== Header & Navigation ====== */
     header {
-        background: var(--header-bg-gradient);
+        background-color: var(--header-bg);
         color: white;
-        padding: 20px 0;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* (2) CSS Nesting & :has() في التنقل */
-    .sticky-nav {
-        position: sticky; 
-        top: 0; 
-        z-index: 1000; 
-        /* (28) تأثير التمويه الخلفي */
-        backdrop-filter: blur(10px); 
-        background-color: color-mix(in srgb, var(--background-color) 80%, transparent); /* استخدام color-mix */
         padding: 10px 0;
-
-        .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* (1) :has() لتمييز أيقونة البحث الصوتي */
-        &:has(.pulse-animation) .logo {
-            filter: drop-shadow(0 0 5px var(--accent-color));
-        }
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
-    
-    /* (5) Fluid Typography */
-    .hero-title {
-        font-size: clamp(2rem, 5vw + 1rem, 4rem); 
-        /* (4) موازنة التفاف النص */
-        text-wrap: balance; 
-        margin-top: 2rem;
-        /* (27) أنماط تباين عالية للقارئ */
-        color: white; 
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    }
+    .hero-title a { color: white; text-decoration: none; }
 
-    /* ====== الأزرار (Buttons) ====== */
-    .button {
+    /* ====== Search & Input Styling ====== */
+    .search-section {
+        background-color: color-mix(in srgb, var(--background-color) 80%, var(--card-bg));
+        padding: 30px 20px;
+        /* استخدام الـ Flexbox للتركيز على زر البحث */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    .search-box {
+        display: flex; 
+        border: 2px solid var(--primary-color);
+        border-radius: 50px;
+        overflow: hidden; 
+        background: var(--card-bg);
+        width: 100%;
+        max-width: 700px;
+        box-shadow: var(--card-shadow);
+    }
+    #search-input {
+        flex-grow: 1; 
+        border: none;
+        padding: 15px 25px;
+        font-size: 1.1em;
+        background: transparent;
+        color: var(--text-color);
+        font-family: 'Tajawal', sans-serif; 
+    }
+    #search-button, #voice-search-btn {
         background-color: var(--primary-color);
         color: white;
-        padding: 0.75rem 1.5rem;
-        transition: all 0.3s;
+        padding: 15px 20px;
         border: none;
-        border-radius: 4px;
         cursor: pointer;
-        font-weight: bold;
+        flex-shrink: 0;
+    }
+    
+    /* ====== بطاقات الكتب (Book Cards) - تصميم جوهري للمكتبة ====== */
+    .book-card {
+        background: var(--card-bg);
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease-out;
+        overflow: hidden;
+        
+        &:hover {
+            box-shadow: var(--hover-shadow);
+            transform: translateY(-5px) scale(1.02);
+        }
+        
+        /* تصميم غلاف الكتاب */
+        .book-cover { 
+            height: 200px; 
+            background: #ccc; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.5em;
+            color: var(--text-dark);
+        }
+        
+        .card-info {
+            padding: 15px;
+            text-align: right;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
 
-        /* (30) استخدام خاصية aspect-ratio للأزرار المربعة */
-        &.square { aspect-ratio: 1 / 1; padding: 0.5rem; border-radius: 50%; }
-        
-        /* (15) تأثير نبضي (Pulse Effect) - للزر المخصص */
-        &.pulse-animation {
-            /* يتم تعريف animation في @layer animation */
+        h3 {
+            color: var(--primary-color);
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+
+        .download-btn {
+            background-color: var(--accent-color);
+            color: var(--text-dark); /* تغيير لون النص للوضوح */
+            font-weight: 700;
+            border-radius: 5px;
+            margin-top: 10px;
         }
         
-        &:hover { 
-            background-color: var(--darker-primary);
-            transform: translateY(-2px); 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        /* (14) حالة الأزرار المعطلة */
-        &:disabled { 
-            opacity: 0.5; 
-            cursor: not-allowed; 
+        /* (1) استخدام :has() لتنسيق البطاقات ذات التفاصيل الإضافية */
+        &:has(.book-tags) .card-info {
+            padding-bottom: 5px;
         }
     }
     
-    .modern-btn { /* الزر القديم */
-        background-color: var(--secondary-color);
-        color: white;
-        border: none;
-        padding: 10px 25px;
-        border-radius: 25px;
+    .tag {
+        background-color: color-mix(in srgb, var(--primary-color) 15%, transparent);
+        color: var(--primary-color); 
+        font-size: 0.8em;
+        padding: 4px 10px;
+        border-radius: 15px;
         cursor: pointer;
-        transition: all 0.3s;
+        font-weight: 400;
+    }
+    
+    /* (2) CSS Nesting للأزرار الأساسية */
+    .button {
+        &.modern-btn {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            font-weight: bold;
+            border-radius: 50px;
+            padding: 10px 30px;
+            transition: background-color 0.3s;
+            &:hover { background-color: #e69a00; }
+        }
+        /* (30) aspect-ratio للزر المربع */
+        &.square { aspect-ratio: 1 / 1; padding: 12px; border-radius: 50%; }
     }
     
     /* (9) تنسيق الاقتباسات (RTL) */
     blockquote { 
         border-right: 5px solid var(--quote-color); 
-        margin: 2rem 0; 
-        padding-right: 1.5rem; 
+        margin: 2rem auto; 
+        max-width: 800px;
+        padding: 1.5rem 2rem 1.5rem 1rem; 
         font-style: italic; 
         color: var(--text-color);
         background-color: color-mix(in srgb, var(--card-bg) 95%, transparent);
-    }
-    
-    /* (1) :has() لتنسيق البطاقة المركبة */
-    .card:has(img) {
-        display: flex; 
-        align-items: center;
-        gap: 1.5rem; 
-        padding: 1rem;
-        border-right: 5px solid var(--accent-color); 
-        background: var(--card-bg);
-        border-radius: 16px;
-    }
-
-    /* (34) أنماط للمحتوى الذي يتم تحميله كسولاً (Skeletons) */
-    .loading-skeleton {
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-        background-size: 200% 100%;
-        animation: skeleton-loading 1.5s infinite;
-        border-radius: 4px;
-    }
-    
-    /* (10) أنماط شريط التقدم */
-    #reading-progress-bar {
-        background: var(--accent-color);
-        transition: width 0.1s linear; /* جعله خطياً لتجنب التأخير المرئي */
-    }
-
-    /* (38) أنماط لميزة details/summary */
-    details {
-        border: 1px solid var(--text-color);
-        border-radius: 8px;
-        padding: 1rem;
-        margin-top: 1rem;
-    }
-    summary {
-        cursor: pointer;
-        font-weight: bold;
-        padding-right: 1.5rem;
+        border-radius: 0 10px 10px 0;
     }
 }
 
@@ -246,151 +204,49 @@
 /* =============================================== */
 @layer layout {
     
-    /* 🛑 شريط الإشعار (لضمان الثبات والظهور) */
-    #telegram-banner {
-        background-color: #0088cc;
-        color: white;
-        padding: 10px 0;
-        text-align: center;
-        position: sticky; 
-        top: 0;
-        z-index: 50; 
-        opacity: 1; 
-        transition: opacity 0.3s ease-out;
-    }
-    
-    .search-section {
-        padding: 40px 20px;
+    .nav-content {
         display: flex;
-        flex-direction: column;
+        justify-content: space-between;
         align-items: center;
-        gap: 15px;
     }
-    .search-box {
-        display: flex; 
-        align-items: center;
-        border: 2px solid var(--primary-color);
-        border-radius: 35px;
-        overflow: hidden; 
-        background: var(--card-bg);
-        width: 100%;
-        max-width: 600px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    }
-    #search-input {
-        flex-grow: 1; 
-        border: none;
-        padding: 15px 25px;
-        font-size: 1em;
-        background: transparent;
-        color: var(--text-color);
-    }
-    
-    /* 🛑 القائمة الجانبية (لضمان ظهورها بشكل سليم) */
-    .side-menu {
-        height: 100%;
-        width: 0; 
-        position: fixed;
-        z-index: 100;
-        top: 0;
-        right: 0;
-        background-color: var(--card-bg);
-        overflow-x: hidden;
-        padding-top: 60px;
-        transition: width 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
-        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
-    }
-    .side-menu.open { width: min(80vw, 300px); } /* (37) استخدام min() لجعلها مرنة */
-    .side-menu a {
-        padding: 15px 25px;
-        color: var(--text-color);
-        display: block;
+
+    /* 🛑 شريط الإشعار (تيليجرام) */
+    #telegram-banner {
+        background-color: #229ED9; /* لون تيليجرام الرسمي */
+        color: white;
     }
     
     /* (36) التخطيط الشبكي التلقائي المرن */
     #books-grid, #latest-books-grid { 
         display: grid; 
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-        gap: 30px; 
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* تصغير البطاقات */
+        gap: 25px; 
         padding: 30px 0; 
     }
     
-    .book-card {
-        background: var(--card-bg);
-        border-radius: 16px;
-        padding: 20px 0; /* تم تعديل التبطين ليكون متناسقاً */
-        text-align: center;
-        box-shadow: var(--card-shadow);
-        transition: all 0.3s ease-out;
-        cursor: pointer;
-        /* (11) تثبيت الترتيب ثلاثي الأبعاد */
-        transform-style: preserve-3d;
-        /* (12) استخدام خاصية contain لتقييد إعادة الرسم */
-        contain: layout size; 
-
-        &:hover {
-            box-shadow: var(--hover-shadow);
-            transform: translateY(-5px); 
-        }
-    }
-    .book-cover { height: 250px; /* ... */ }
-
     /* ====== Footer ====== */
     footer {
         background-color: var(--text-dark);
         color: white;
-        padding: 20px 0;
-        margin-top: 40px;
+        padding: 30px 0;
+        margin-top: 50px;
         text-align: center;
     }
-}
-
-
-/* =============================================== */
-/* V. الرسوم المتحركة (Animation) */
-/* =============================================== */
-@layer animation {
-    
-    /* (15) تأثير نبضي (Pulse Effect) */
-    @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 rgba(100, 181, 246, 0.4); }
-        70% { box-shadow: 0 0 0 10px rgba(100, 181, 246, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(100, 181, 246, 0); }
+    .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
     }
-    .pulse-animation {
-        animation: pulse 2s infinite;
+    .social-links {
+        display: flex;
+        gap: 15px;
+        font-size: 1.5em;
     }
-
-    @keyframes skeleton-loading {
-        0% { background-position: 200% 0; }
-        100% { background-position: -200% 0; }
-    }
-}
-
-/* =============================================== */
-/* VI. التصنيفات (Tags) - تم نقلها هنا لتأكيد الترتيب */
-/* =============================================== */
-.book-tags {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    /* (18) تباعد العناصر المرن */
-    gap: 5px; 
-}
-.tag {
-    background-color: #e0f7fa; 
-    color: #00838f; 
-    font-size: 0.75em;
-    padding: 3px 8px;
-    margin: 0; /* تم إزالة الهامش القديم واستبداله بالـ gap */
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    
-    &:hover {
-        background-color: #b2ebf2; 
-        /* (13) تغيير المؤشر */
-        cursor: zoom-in;
+    /* (2) Nesting for social links */
+    .social-links a {
+        color: var(--accent-color);
+        transition: color 0.3s;
+        &:hover { color: white; }
     }
 }
