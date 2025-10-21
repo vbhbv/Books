@@ -1,6 +1,6 @@
 /*
  * ------------------------------------------------------------------
- * ملف style.css النهائي: إزالة الشريط و Skip Link (v20251033)
+ * ملف style.css النهائي: ربط الوظائف وإضافة 5 تحسينات جمالية (v20251034)
  * ------------------------------------------------------------------
  */
 @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap');
@@ -59,6 +59,30 @@ a { text-decoration: none; color: var(--primary-color); transition: color 0.3s; 
     padding-bottom: 10px;
     border-bottom: 2px solid var(--accent-color);
     display: block;
+    /* 🚀 الإضافة #4: ظل نص (Text Shadow) للعناوين */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+/* 🚀 الإضافة #5: خط فاصل مزخرف بين الأقسام */
+.main-section { 
+    position: relative; 
+    padding-bottom: 20px;
+}
+.main-section:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px; /* طول الخط الفاصل */
+    height: 3px;
+    background: repeating-linear-gradient(
+        45deg,
+        var(--accent-color),
+        var(--accent-color) 10px,
+        var(--primary-color) 10px,
+        var(--primary-color) 20px
+    );
+    border-radius: 2px;
 }
 
 /* =============================================== */
@@ -69,7 +93,7 @@ header {
     top: 0;
     background-color: var(--header-bg);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Z-INDEX عالي لـ Header */
+    z-index: 1000;
 }
 .sticky-nav { padding: 10px 0; }
 .nav-content { display: flex; justify-content: space-between; align-items: center; }
@@ -81,7 +105,7 @@ header {
     background-color: var(--darker-primary); color: white;
     border-radius: 50%; display: inline-flex; justify-content: center;
     align-items: center; font-size: 1.1em; 
-    z-index: 1010; /* Z-INDEX أعلى لضمان عمل الزر */
+    z-index: 1010; 
     position: relative; 
 }
 .nav-btn:hover { background-color: var(--accent-color); color: var(--text-color); }
@@ -97,7 +121,7 @@ header {
     height: 100%;
     width: 280px;
     background-color: var(--card-bg);
-    z-index: 10000; /* Z-INDEX فائق */
+    z-index: 10000;
     padding: 60px 20px 20px;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.4);
     transition: right 0.4s ease-out;
@@ -138,15 +162,28 @@ header {
     display: block; width: 100%; max-width: 300px; margin: 10px auto;
     padding: 10px 20px; background-color: var(--accent-color);
     color: var(--text-color); font-weight: 700; border: none; border-radius: 5px; cursor: pointer;
+    /* 🚀 الإضافة #1: تأثير 3D بسيط على زر 'كتاب عشوائي' */
+    box-shadow: 0 4px var(--darker-primary); 
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
+.main-action-btn:active {
+    transform: translateY(4px); /* يضغط الزر للأسفل */
+    box-shadow: 0 0 var(--darker-primary);
+}
+
 .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px 0; }
 .category-btn {
     background-color: var(--darker-primary); color: white; padding: 15px 10px;
     border-radius: 8px; border: none; cursor: pointer; font-size: 1em;
     font-family: 'Almarai', sans-serif; display: flex; align-items: center;
-    justify-content: center; gap: 8px; transition: background-color 0.3s;
+    justify-content: center; gap: 8px; transition: background-color 0.3s, transform 0.2s;
 }
-.category-btn:hover { background-color: var(--accent-color); color: var(--text-color); }
+.category-btn:hover { 
+    background-color: var(--accent-color); 
+    color: var(--text-color);
+    /* 🚀 الإضافة #3: تأثير تكبير بسيط على أزرار الأقسام */
+    transform: scale(1.05); 
+}
 
 
 /* =============================================== */
@@ -158,6 +195,16 @@ header {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); overflow: hidden;
     display: flex; flex-direction: column; border: 1px solid var(--border-color);
     transition: transform 0.3s, box-shadow 0.3s; cursor: pointer;
+    
+    /* 🛠️ ربط الإضافة المبتكرة #2: حركة Fade-in */
+    opacity: 0; 
+    transform: translateY(20px); /* يبدأ من الأسفل قليلاً */
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out, box-shadow 0.3s;
+}
+
+.book-card.fade-in {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .book-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); }
@@ -210,13 +257,23 @@ footer {
     height: 40px; border-radius: 50%; background-color: var(--primary-color);
     color: white; border: none; cursor: pointer; display: none; 
     z-index: 40; justify-content: center; align-items: center; font-size: 1.2em;
+    /* 🚀 الإضافة #2: تظليل دائري لزر الصعود للأعلى */
+    box-shadow: 0 0 15px rgba(var(--primary-color), 0.7);
 }
 
 /* =============================================== */
-/* VII. Media Queries */
+/* VIII. Media Queries */
 /* =============================================== */
 @media (max-width: 600px) {
     .site-branding a { font-size: 1.2em; }
     .search-box { margin: 20px auto 10px; border-radius: 20px; }
     .side-menu { width: 250px; }
+    .footer-content { justify-content: center; text-align: center; }
+}
+
+/* 🚀 الإضافة #5 (تغييرات إضافية للخط الفاصل) */
+@media (max-width: 800px) {
+    .main-section:not(:last-child)::after {
+        width: 70px; /* تقصير الخط الفاصل على الشاشات الصغيرة */
+    }
 }
