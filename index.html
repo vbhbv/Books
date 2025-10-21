@@ -11,35 +11,18 @@
     <link rel="canonical" href="https://yourwebsite.com/current-page-url">
     
     <meta property="og:title" content="عنوان مقالتك المميز">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="https://yourwebsite.com/current-page-url">
     <meta property="og:image" content="https://yourwebsite.com/images/share-image.jpg">
     <meta property="og:description" content="وصف قصير للمحتوى لتشاركه على فيسبوك/تويتر.">
-    
-    <meta name="theme-color" content="#007bff">
-    <link rel="manifest" href="/manifest.json">
     
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.example.com; style-src 'self' 'unsafe-inline';">
     <meta name="referrer" content="no-referrer-when-downgrade">
     
-    <style>
-        /* إضافة الأنماط اللازمة لـ Above The Fold (مثل :root, body, sticky-nav, hero-title) هنا */
-        :root { --primary-color: #007bff; --text-color: #333; }
-        html { scroll-behavior: smooth; }
-        body { font-family: sans-serif; }
-        .hero-title { font-size: clamp(2rem, 5vw + 1rem, 4rem); text-wrap: balance; }
-        .sticky-nav { position: sticky; top: 0; z-index: 1000; }
-        /* يجب وضع هنا جزء من الـ 40 كود CSS الذي يحتاجه الجزء العلوي من الصفحة */
-    </style>
-
     <link rel="preload" href="app.js" as="script">
+    <link rel="stylesheet" href="style.css"> 
+
     <link rel="preload" href="/fonts/custom-font.woff2" as="font" type="font/woff2" crossorigin>
     
-    <link rel="stylesheet" href="style.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="style.css"></noscript>
-    
     <link rel="preconnect" href="https://api.example.com">
-    <link rel="dns-prefetch" href="https://api.example.com">
 </head>
 <body>
 
@@ -54,9 +37,6 @@
 
                 <button id="voice-search-btn" class="button square pulse-animation" aria-label="البحث الصوتي">🎤</button>
                 <input type="search" id="search-input" placeholder="ابحث هنا..." role="search">
-                
-                <button aria-expanded="false" aria-controls="main-menu" id="menu-toggle">القائمة</button>
-                <ul id="main-menu" hidden>...</ul>
             </div>
         </nav>
         <h1 class="hero-title">مكتبة معرفية بخطوط مرنة</h1>
@@ -68,8 +48,7 @@
 
         <div id="drop-area" role="region" aria-label="منطقة سحب وإفلات الملفات" style="border: 2px dashed #ccc; padding: 20px; text-align: center;">اسحب الملفات هنا</div>
 
-        <section id="posts-container" class="grid-auto" role="region" aria-label="قائمة المقالات">
-            </section>
+        <section id="posts-container" class="grid-auto" role="region" aria-label="قائمة المقالات"></section>
 
         <template id="post-template">
             <div class="card" role="listitem"> 
@@ -117,8 +96,6 @@
                 </form>
             </dialog>
 
-            <data-reader-widget data-article-id="456"></data-reader-widget>
-
             <p>كلمة طويلة جداً قد تنكسر هنا بشكل مناسب: <span class="break-word-demo">تكنولوجيا<wbr>المعلومات<wbr>والاتصالات<wbr>المتقدمة</span>.</p>
 
         </article>
@@ -137,14 +114,6 @@
                 تم الإنشاء في: <time datetime="2024-01-01">يناير 2024</time> | حقوق النشر © <span id="footer-date"></span>
             </p>
             
-            <ul role="list">
-                <li role="listitem"><a href="/about" rel="noopener">عنا</a></li>
-                <li role="listitem"><a href="https://externalsource.com" rel="external noopener">المصدر الخارجي</a></li>
-                <li role="listitem">
-                    <a href="/security.pgp" rel="pgpkey">مفتاح PGP</a>
-                </li>
-            </ul>
-
             <picture>
                 <source srcset="image.avif" type="image/avif">
                 <source srcset="image.webp" type="image/webp">
@@ -155,10 +124,9 @@
                 <h3 slot="header">بطاقة متقدمة</h3>
                 <p slot="content">محتوى البطاقة هنا.</p>
             </custom-card>
-            
         </div>
     </footer>
 
-    <script src="app.js" crossorigin="anonymous"></script> 
+    <script src="app.js"></script> 
 </body>
 </html>
