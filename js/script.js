@@ -1,6 +1,7 @@
 /*
  * ------------------------------------------------------------------
- * ملف app.js النهائي: التزامن الكامل والوظائف المضافة
+ * ملف app.js الكامل والنهائي
+ * مكتبة أرشيف الكتب المجانية - إصلاح شامل لوظائف الأزرار والبحث
  * ------------------------------------------------------------------
  */
 
@@ -26,14 +27,7 @@ let searchTimeout;
 // II. وظائف المساعدة الرئيسية (منطق المكتبة)
 // ===============================================
 
-function displayLatestBooks() {
-    const latestBooksGrid = document.getElementById('latest-books-grid');
-    if (!latestBooksGrid) return;
-    const sortedBooks = [...booksData].sort((a, b) => b.year - a.year);
-    const latestFour = sortedBooks.slice(0, 4); 
-    displayBooks(latestBooksGrid, latestFour);
-}
-
+/** يعرض الكتب في شبكة معينة */
 function displayBooks(gridElement, books, query = '') {
     const resultsStatus = document.getElementById('results-status');
     const template = document.getElementById('post-template');
@@ -56,25 +50,29 @@ function displayBooks(gridElement, books, query = '') {
     const fragment = document.createDocumentFragment();
 
     books.forEach(book => {
+        // التأكد من أن القالب موجود
         const cardClone = template ? document.importNode(template.content, true) : document.createElement('div');
         const card = cardClone.querySelector('.book-card') || cardClone;
 
+        // تحديث محتوى البطاقة
         if (card.querySelector('.book-cover')) card.querySelector('.book-cover').innerHTML = book.cover;
         if (card.querySelector('h3')) card.querySelector('h3').textContent = book.title;
-        // تحديث المؤلف ليناسب هيكل Template:
         const authorSpan = card.querySelector('.card-info p span');
         if(authorSpan) authorSpan.textContent = book.author;
         
+        // رابط التحميل
         const downloadBtn = card.querySelector('.download-btn');
         if (downloadBtn) {
             downloadBtn.onclick = () => window.open(book.pdf_link, '_blank');
             downloadBtn.innerHTML = `تحميل PDF <i class="fas fa-download"></i>`;
         }
         
+        // التصنيفات
         const tagsDiv = card.querySelector('.book-tags');
         if (tagsDiv) tagsDiv.innerHTML = book.tags.map(tag => `<span class="tag" data-tag="${tag}">${tag}</span>`).join('');
 
 
+        // تفاصيل الكتاب عند النقر
         card.addEventListener('click', (e) => {
             if (e.target.classList.contains('download-btn') || e.target.classList.contains('tag')) return; 
             alert(`معلومات عن الكتاب: ${book.title}\nسنة النشر: ${book.year}\nالتصنيفات: ${book.tags.join(', ')}`);
@@ -86,48 +84,60 @@ function displayBooks(gridElement, books, query = '') {
     gridElement.appendChild(fragment);
 }
 
+/** يعرض آخر 4 كتب مضافة */
+function displayLatestBooks() {
+    const latestBooksGrid = document.getElementById('latest-books-grid');
+    if (!latestBooksGrid) return;
+    const sortedBooks = [...booksData].sort((a, b) => b.year - a.year);
+    const latestFour = sortedBooks.slice(0, 4); 
+    displayBooks(latestBooksGrid, latestFour);
+}
+
+
+/** يقوم بمنطق البحث ويخفي/يظهر الأقسام */
 function performSearch(query) {
     const booksGrid = document.getElementById('books-grid');
-    if (!booksGrid || !document.getElementById('latest-books')) return;
+    if (!booksGrid) return;
     
     query = query.trim().toLowerCase();
     
+    // فلترة الكتب
     const filteredBooks = booksData.filter(book =>
         book.title.toLowerCase().includes(query) ||
         book.author.toLowerCase().includes(query) ||
         book.tags.some(tag => tag.toLowerCase().includes(query))
     );
     
-    // إخفاء الأقسام الأخرى عند البحث
-    const latestBooksSection = document.getElementById('latest-books');
-    const authorsSection = document.getElementById('author-section');
-    const categoriesSection = document.getElementById('categories-section');
-    const aboutSection = document.getElementById('about-section');
-
-    if(latestBooksSection) latestBooksSection.style.display = query ? 'none' : 'aside';
-    if(authorsSection) authorsSection.style.display = query ? 'none' : 'block';
-    if(categoriesSection) categoriesSection.style.display = query ? 'none' : 'block';
-    if(aboutSection) aboutSection.style.display = query ? 'none' : 'block';
+    // إخفاء/إظهار الأقسام الأخرى
+    const sectionsToHide = ['latest-books', 'author-section', 'categories-section', 'about-section'];
+    sectionsToHide.forEach(id => {
+        const section = document.getElementById(id);
+        if(section) section.style.display = query ? 'none' : 'block';
+    });
     
     displayBooks(booksGrid, filteredBooks, query);
 }
 
+
 // ===============================================
-// III. دالة DOMContentLoaded الرئيسية (حل نهائي للأزرار)
+// III. دالة DOMContentLoaded الرئيسية (إصلاحات الأزرار والـ Banner)
 // ===============================================
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // 🛑 العناصر الحيوية (الأزرار المعطلة)
-    const themeToggle = document.getElementById('theme-toggle'); // زر التبديل
-    const menuToggle = document.getElementById('menu-toggle');     // زر القائمة
-    const sideMenu = document.getElementById('side-menu');         // القائمة
+    // جلب العناصر الحيوية
+    const themeToggle = document.getElementById('theme-toggle'); 
+    const menuToggle = document.getElementById('menu-toggle');     
+    const sideMenu = document.getElementById('side-menu');         
     const closeMenuBtn = document.getElementById('close-menu-btn');
     const overlay = document.getElementById('overlay');
     const bodyElement = document.body;
     const searchInput = document.getElementById('search-input');
+    const telegramBanner = document.getElementById('telegram-banner');
+    const closeBannerBtn = document.getElementById('close-banner-btn');
+    const scrollTopBtn = document.getElementById('scroll-top-btn');
 
-    // 1. **الوضع الليلي (Dark Mode) - وظيفة التبديل**
+    // 1. **الوضع الليلي (Dark Mode) - إصلاح زر التبديل**
     const currentMode = localStorage.getItem('theme') || 'light-mode';
     document.documentElement.setAttribute('data-theme', currentMode === 'dark-mode' ? 'dark' : 'light'); 
 
@@ -142,54 +152,70 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (themeToggle) {
         const isDarkModeInitial = currentMode === 'dark-mode';
-        updateDarkMode(isDarkModeInitial);
-
+        updateDarkMode(isDarkModeInitial); // ضبط الحالة الأولية
         themeToggle.addEventListener('click', () => {
-            // منطق التبديل الصحيح: إذا كان فاتحاً ('light') يصبح داكناً.
+            // التبديل بناءً على الحالة الحالية
             const isDarkMode = document.documentElement.getAttribute('data-theme') === 'light';
             updateDarkMode(isDarkMode);
         });
     }
 
-    // 2. **القائمة الجانبية (Hamburger Menu) - وظيفة التبديل**
+    // 2. **القائمة الجانبية (Hamburger Menu) - إصلاح زر البرغر و ×**
     const toggleMenu = () => {
          if (!sideMenu || !overlay) return;
          const isMenuOpen = sideMenu.classList.toggle('open');
          overlay.classList.toggle('active');
-         // منع التمرير في الخلفية:
+         // منع التمرير في الخلفية (ميزة UX)
          bodyElement.style.overflow = isMenuOpen ? 'hidden' : 'auto'; 
          if (menuToggle) menuToggle.setAttribute('aria-expanded', isMenuOpen);
     };
     
-    // ربط الأزرار (حل مشكلة عدم العمل)
     if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
     if (closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
     if (overlay) overlay.addEventListener('click', toggleMenu);
     
-    // إغلاق القائمة بالـ Escape
+    // إغلاق بالـ Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && sideMenu?.classList.contains('open') ?? false) {
             toggleMenu();
         }
     });
-    
 
-    // 3. **منطق البحث والعرض**
+    // 3. **شريط إشعار تيليجرام - إصلاح زر ×**
+    if (telegramBanner) {
+        // إظهار البانر إذا لم يتم إخفاؤه مسبقاً
+        if (localStorage.getItem('bannerHidden') !== 'true') {
+            telegramBanner.style.opacity = '1';
+        } else {
+            telegramBanner.style.display = 'none';
+        }
+    }
+    
+    if (closeBannerBtn && telegramBanner) {
+         closeBannerBtn.addEventListener('click', () => {
+             // إخفاء مع انسيابية
+             telegramBanner.style.setProperty('opacity', '0');
+             setTimeout(() => {
+                 telegramBanner.style.setProperty('display', 'none');
+             }, 300);
+             localStorage.setItem('bannerHidden', 'true');
+         });
+    }
+
+    // 4. **منطق البحث والعرض الأولي**
     const booksGrid = document.getElementById('books-grid');
-    const resultsStatus = document.getElementById('results-status');
     const latestBooksGrid = document.getElementById('latest-books-grid');
 
-    if (booksGrid && resultsStatus) {
-        resultsStatus.textContent = "الكتب المتوفرة في الأرشيف (ابدأ البحث)";
-        displayBooks(booksGrid, booksData);
+    if (booksGrid) {
+        // عرض جميع الكتب عند التحميل الأولي
+        performSearch(''); 
     }
     if (latestBooksGrid) {
         displayLatestBooks();
     }
     
-    // ربط البحث وزر عشوائي (تمت إضافتهما من الردود السابقة)
+    // ربط البحث العادي (مع Debouncing)
     if (searchInput) {
-        // Debouncing
         searchInput.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
@@ -204,6 +230,8 @@ document.addEventListener('DOMContentLoaded', () => {
             searchInput.focus();
         });
     }
+    
+    // زر "كتاب عشوائي"
     document.getElementById('random-book-btn')?.addEventListener('click', () => {
          if (booksData.length === 0) return;
          const randomIndex = Math.floor(Math.random() * booksData.length);
@@ -211,8 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
          alert(`كتاب اليوم المختار: ${booksData[randomIndex].title}.`);
     });
 
-
-    // تفعيل البحث الفوري بالنقر على الـ Tag أو زر الأقسام
+    // 5. **تفعيل البحث الفوري (Tags & Categories)**
     document.addEventListener('click', (e) => {
         const target = e.target;
         let tag = null;
@@ -226,6 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tag && searchInput) {
             searchInput.value = tag;
             performSearch(tag);
+            // إغلاق القائمة بعد النقر على تصنيف
             if (sideMenu?.classList.contains('open')) {
                  toggleMenu();
             }
@@ -237,17 +265,74 @@ document.addEventListener('DOMContentLoaded', () => {
                  e.preventDefault();
                  const targetId = target.getAttribute('href').substring(1);
                  document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
-                 toggleMenu();
+                 if (sideMenu?.classList.contains('open')) {
+                     toggleMenu();
+                 }
              }
          }
     });
 
-    // 4. **وظائف إضافية**
-    document.getElementById('scroll-top-btn')?.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    // 6. **ميزة البحث الصوتي (Speech Recognition API) - إصلاح أيقونة الميكروفون**
+    document.getElementById('voice-search-btn')?.addEventListener('click', () => {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+             alert('البحث الصوتي غير مدعوم في متصفحك الحالي أو يتطلب اتصالاً آمناً (HTTPS).');
+             return;
+        }
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        
+        recognition.lang = 'ar-SA'; 
+        const micIcon = document.getElementById('voice-search-btn').querySelector('i');
+        
+        // تغيير أيقونة الميكروفون للإشارة إلى حالة التسجيل
+        if (micIcon) micIcon.className = 'fas fa-microphone-alt-slash';
+        
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            if (searchInput) {
+                searchInput.value = transcript;
+                performSearch(transcript); 
+            }
+        };
+
+        recognition.onend = () => {
+            // إعادة الأيقونة بعد الانتهاء
+            if (micIcon) micIcon.className = 'fas fa-microphone';
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Speech Recognition Error:', event.error);
+            alert(`حدث خطأ أثناء البحث الصوتي: ${event.error}`);
+            if (micIcon) micIcon.className = 'fas fa-microphone';
+        };
+
+        recognition.start();
     });
-    
-    // (24) تسجيل Service Worker (لتحسين الأداء لاحقاً)
+
+    // 7. **زر الصعود للأعلى (Scroll Top Button)**
+    if(scrollTopBtn){
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 200) {
+                scrollTopBtn.style.display = 'flex'; // إظهار الزر
+            } else {
+                scrollTopBtn.style.display = 'none'; // إخفاء الزر
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // 8. **تحديث تاريخ الفوتر (Footer)**
+    const currentYear = new Date().getFullYear();
+    const footerDateSpan = document.getElementById('footer-date');
+    if (footerDateSpan) {
+        footerDateSpan.textContent = currentYear;
+    }
+
+    // 9. **تسجيل Service Worker (لتحسين الأداء لاحقاً)**
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js', { scope: '/' })
             .catch(err => console.error('Service Worker Failed:', err));
