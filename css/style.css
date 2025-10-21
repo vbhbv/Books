@@ -1,6 +1,6 @@
 /*
  * ------------------------------------------------------------------
- * ملف style.css النهائي: إصلاح العنوان وضمان Z-Index فائق
+ * ملف style.css النهائي: إصلاح العنوان وضمان Z-Index فائق (v20251028)
  * ------------------------------------------------------------------
  */
 @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap');
@@ -62,11 +62,9 @@ a { text-decoration: none; color: var(--primary-color); transition: color 0.3s; 
     display: block;
 }
 
-
 /* =============================================== */
 /* II. إصلاح العنوان والأزرار العلوية (Header Fix) */
 /* =============================================== */
-
 header {
     position: sticky;
     top: 0;
@@ -198,6 +196,7 @@ header {
 /* =============================================== */
 /* V. البحث والأقسام */
 /* =============================================== */
+.search-section { padding-top: 20px; }
 .search-box {
     display: grid;
     grid-template-columns: auto 1fr auto; 
@@ -260,6 +259,16 @@ header {
     align-items: center;
     justify-content: center;
     gap: 8px;
+    transition: background-color 0.3s;
+}
+.category-btn:hover { background-color: var(--accent-color); color: var(--text-color); }
+
+.authors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+    text-align: center;
 }
 .author-card {
     display: flex;
@@ -270,6 +279,7 @@ header {
     background-color: var(--card-bg);
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
 }
 .author-card i { color: var(--accent-color); font-size: 2em; margin-bottom: 5px; }
 
@@ -292,6 +302,7 @@ header {
     flex-direction: column;
     border: 1px solid var(--border-color);
     transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
 }
 .book-card:hover {
     transform: translateY(-5px);
@@ -319,6 +330,7 @@ header {
     margin-left: 5px;
     cursor: pointer;
 }
+/* تنسيق رابط التحميل كزر */
 .download-btn {
     width: 100%;
     padding: 10px;
@@ -328,6 +340,15 @@ header {
     border-radius: 5px;
     cursor: pointer;
     font-weight: 700;
+    
+    /* تنسيقات إضافية لوسم <a> لجعله يبدو كزر */
+    display: block; 
+    text-align: center; 
+    text-decoration: none; 
+    transition: background-color 0.3s;
+}
+.download-btn:hover {
+    background-color: var(--darker-primary);
 }
 
 
@@ -369,5 +390,6 @@ footer {
     #search-input { padding: 8px 12px; }
     .banner-content { justify-content: space-between; }
     #telegram-banner p { font-size: 0.9em; }
+    .close-btn { position: static; }
     .side-menu { width: 250px; }
 }
