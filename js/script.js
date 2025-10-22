@@ -38,6 +38,7 @@ function performSearch(query) {
     const booksGrid = document.getElementById('books-grid'); 
     const latestSection = document.getElementById('latest-books');
     const categoriesSection = document.getElementById('categories-section-main'); 
+    const agathaChristieSection = document.getElementById('agatha-christie-books'); // إضافة قسم آجاثا
     const resultsStatus = document.getElementById('results-status');
 
     query = query.trim().toLowerCase();
@@ -53,12 +54,14 @@ function performSearch(query) {
         latestSection.style.display = 'none';
         document.getElementById('stats-section').style.display = 'none';
         if (categoriesSection) categoriesSection.style.display = 'none'; 
+        if (agathaChristieSection) agathaChristieSection.style.display = 'none'; // إخفاء قسم آجاثا
         booksGrid.parentElement.style.display = 'block'; 
         resultsStatus.textContent = `نتائج البحث عن: "${query}" (${filteredBooks.length} كتاب)`;
     } else {
         latestSection.style.display = 'block';
         document.getElementById('stats-section').style.display = 'block';
         if (categoriesSection) categoriesSection.style.display = 'block'; 
+        if (agathaChristieSection) agathaChristieSection.style.display = 'block'; // إظهار قسم آجاثا
         booksGrid.parentElement.style.display = 'none';
     }
 
@@ -76,7 +79,20 @@ function updateLibraryStats() {
     document.getElementById('total-downloads-count').textContent = totalDownloads.toLocaleString('en-US'); 
 }
 
-// 4. تحميل البيانات (تم التعديل لـ CACHE_VERSION)
+// 4. دالة جديدة لعرض كتب آجاثا كريستي (جديد)
+function displayAgathaChristieBooks() {
+    const agathaAuthors = ["آغاثا كريستي", "آجاثا كريستي"]; // جميع الأشكال المستخدمة
+    const agathaBooks = booksData.filter(book => agathaAuthors.includes(book.author));
+    
+    const gridElement = document.getElementById('agatha-christie-grid');
+    if (gridElement) {
+        // نختار أول 6 كتب فقط لعرضها في القسم الرئيسي
+        displayBooks(gridElement, agathaBooks.slice(0, 6)); 
+    }
+}
+
+
+// 5. تحميل البيانات (تم التعديل لـ CACHE_VERSION)
 async function loadBooksData() {
     try {
         // نستخدم رقم الإصدار كمتغير في الرابط. هذا يجبر المتصفح على تجاهل الكاش
@@ -94,6 +110,7 @@ async function loadBooksData() {
         
         updateLibraryStats(); 
         displayBooks(document.getElementById('latest-books-grid'), booksData.slice(0, 4));
+        displayAgathaChristieBooks(); // 👈🏼 استدعاء الدالة الجديدة هنا
         
         const lastQuery = localStorage.getItem('lastSearchQuery') || '';
         document.getElementById('main-search-input').value = lastQuery;
@@ -107,7 +124,7 @@ async function loadBooksData() {
 }
 
 
-// 5. DOMContentLoaded والروابط (تم تعديل منطق النقر على الأقسام)
+// 6. DOMContentLoaded والروابط (تم تعديل منطق النقر على الأقسام)
 document.addEventListener('DOMContentLoaded', () => {
     loadBooksData(); 
 
