@@ -8,7 +8,7 @@ let searchTimeout;
 // 🚨 هذا هو الحل: غيّر قيمة "CACHE_VERSION" في كل مرة ترفع كتاباً جديداً!
 // يجب أن تزيد هذا الرقم (من 6 إلى 7، ثم إلى 8، وهكذا) 
 // مع كل تعديل لملف data/books.json 
-const CACHE_VERSION = 6; 
+const CACHE_VERSION = 7; 
 
 // 1. عرض بطاقات الكتب (لم يتغير)
 function displayBooks(gridElement, books, query = '') {
