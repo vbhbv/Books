@@ -130,5 +130,137 @@
     "telegram_link": "https://t.me/iiollr", 
     "description": "استغرق الأمر بعض الوقت لأصف لكم ما حدث، ولكنه لم يستغرق في الحقيقة سوى لحظة أو اثنتين فقط بينما كنت أحدِّق مذهولًا، ثم استدرت بسرعة لكي أطلب النجدة",
     "downloads": 0
-  }
-]
+    },  
+  {
+    "id":12 ,
+    "title": "الحادث",
+    "author": "آجاثا كريستي",
+    "year": 2006,
+    "tags": [ "آداب" ], 
+    "cover": "img/arshef11.jpg", 
+    "pdf_link": "pdfs/arshef11.pdf", 
+    "telegram_link": "https://t.me/iiollr", 
+    "description": "احد روايات الكاتب اجاثا كريستي الشهيرة",
+    "downloads": 0
+  },
+  {
+    "id":13 ,
+    "title": "اغتيال رئيس الوزراء",
+    "author": "آجاثا كريستي",
+    "year": 2003,
+    "tags": [ "آداب" ], 
+    "cover": "img/arshef12.jpg", 
+    "pdf_link": "pdfs/arshef12.pdf", 
+    "telegram_link": "https://t.me/iiollr", 
+    "description": "احد روايات الكاتب اجاثا كريستي الشهيرة",
+    "downloads": 0
+  },
+  {
+    "id":14 ,
+    "title": "الأربعة الكبار",
+    "author": "آجاثا كريستي",
+    "year": 2003,
+    "tags": [ "آداب" ], 
+    "cover": "img/arshef13.jpg", 
+    "pdf_link": "pdfs/arshef13.pdf", 
+    "telegram_link": "https://t.me/iiollr", 
+    "description": "احد روايات الكاتب اجاثا كريستي الشهيرة",
+    "downloads": 0
+    
+  },
+  {
+    "id":15,
+    "title": "المتهمة البريئة",
+    "author": "آجاثا كريستي",
+    "year": 2003,
+    "tags": [ "آداب" ], 
+    "cover": "img/arshef14.jpg", 
+    "pdf_link": "pdfs/arshef14.pdf", 
+    "telegram_link": "https://t.me/iiollr", 
+    "description": "احد روايات الكاتب اجاثا كريستي الشهيرة",
+    "downloads": 0
+},
+  {
+    "id":16 ,
+    "title": "إعلان عن جريمة",
+    "author": "آجاثا كريستي",
+    "year": 2003,
+    "tags": [ "آداب" ], 
+    "cover": "img/arshef15.jpg", 
+    "pdf_link": "pdfs/arshef15.pdf", 
+    "telegram_link": "https://t.me/iiollr", 
+    "description": "احد روايات الكاتب اجاثا كريستي الشهيرة",
+    "downloads": 0
+},
+  {
+    "id":17,
+    "title": "بصمات الأصابع",
+    "author": "آجاثا كريستي",
+    "year": 2008,
+    "tags": [ "آداب" ], 
+    "cover": "img/arshef16.jpg", 
+    "pdf_link": "pdfs/arshef16.pdf", 
+    "telegram_link": "https://t.me/iiollr", 
+    "description": "احد روايات الكاتب اجاثا كريستي الشهيرة",
+    "downloads": 0
+},
+  {
+    "id":18 ,
+    "title": "ثم لم يبق احد",
+    "author": "آجاثا كريستي",
+    "year": 2003,
+    "tags": [ "آداب" ], 
+    "cover": "img/arshef18.jpg", 
+    "pdf_link": "pdfs/arshef18.pdf", 
+    "telegram_link": "https://t.me/iiollr", 
+    "description": "احد روايات الكاتب اجاثا كريستي الشهيرة",
+    "downloads": 0
+},
+  {
+    "id":19 ,
+    "title": "قطة بين الحمام",
+    "author": "آجاثا كريستي",
+    "year": 1999,
+    "tags": [ "آداب" ], 
+    "cover": "img/arshef19.jpg", 
+    "pdf_link": "pdfs/arshef19.pdf", 
+    "telegram_link": "https://t.me/iiollr", 
+    "description": "احد روايات الكاتب اجاثا كريستي الشهيرة",
+    "downloads": 0
+},
+  {
+    "id":20 ,
+    "title": "جريمة بلا شهود",
+    "author": "آجاثا كريستي",
+    "year": 2003,
+    "tags": [ "آداب" ], 
+    "cover": "img/a20.jpg", 
+    "pdf_link": "pdfs/a20.pdf", 
+    "telegram_link": "https://t.me/iiollr", 
+    "description": "احد روايات الكاتب اجاثا كريستي الشهيرة",
+    "downloads": 0
+},
+  {
+    "id":21 ,
+    "title": "موت السيدة ماغنتي",
+    "author": "اجاثا كريستي",
+    "year": 2003,
+    "tags": [ "آداب" ], 
+    "cover": "img/a21.jpg", 
+    "pdf_link": "pdfs/a21.pdf", 
+    "telegram_link": "https://t.me/iiollr", 
+    "description": "احد روايات الكاتب اجاثا كريستي الشهيرة",
+    "downloads": 0
+},
+  {
+    "id":22 ,
+    "title": "الجريمة المعقدة",
+    "author": "آجاثا كريستي",
+    "year": 2003,
+    "tags": [ "آداب" ], 
+    "cover": "img/a22.jpg", 
+    "pdf_link": "pdfs/a22.pdf", 
+    "telegram_link": "https://t.me/iiollr", 
+    "description": "احد روايات الكاتب اجاثا كريستي الشهيرة",
+    "downloads": 0
+    ]
