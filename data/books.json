@@ -3,20 +3,24 @@
     "id": 1,
     "title": "عقداك النفسية سجنك الأبدي",
     "author": "د. يوسف حسني",
-    "year": 2025,
-    "tags": [ "تنمية ذاتية", "منوعة" ],
+    "year": 2020,
+    "tags": [ "تنمية ذاتية", "علم النفس" ],
     "cover": "img/arsheef_alkutb.jpg", 
     "pdf_link": "pdfs/arsheef_alkutb.pdf",
-    "telegram_link": "https://t.me/iiollr" 
+    "telegram_link": "https://t.me/iiollr",
+    "description": "دراسة متعمقة حول العقد النفسية الشائعة وكيفية تأثيرها على حياة الفرد اليومية، مع تقديم أدوات عملية للتحرر منها وتحقيق السلام الداخلي.",
+    "downloads": 1250 
   },
   {
     "id": 2,
     "title": "500 سؤال حول النبي محمد (ص)",
     "author": "ماجد ناصر الزبيدي",
-    "year": 2025,
-    "tags": [ "كتب إسلامية" ],
+    "year": 2021,
+    "tags": [ "كتب إسلامية", "سيرة" ],
     "cover": "img/arshef1.jpg", 
     "pdf_link": "pdfs/arshef1.pdf",
-    "telegram_link": "https://t.me/iiollr"
+    "telegram_link": "https://t.me/iiollr",
+    "description": "تجميع شامل لأكثر من 500 سؤال وإجابة عن حياة وسيرة النبي محمد صلى الله عليه وسلم، لتوضيح الجوانب المختلفة لرسالته وحياته الشخصية والجهادية.",
+    "downloads": 870
   }
 ]
