@@ -1,9 +1,14 @@
 // ==========================================================
-// script.js: وظائف الصفحة الرئيسية (index.html) - تم التحديث
+// script.js: وظائف الصفحة الرئيسية (index.html) - تم التحديث لـ Caching
 // ==========================================================
 let booksData = []; 
 const DEBOUNCE_DELAY = 300; 
 let searchTimeout;
+
+// 🚨 هذا هو الحل: غيّر قيمة "CACHE_VERSION" في كل مرة ترفع كتاباً جديداً!
+// يجب أن تزيد هذا الرقم (من 6 إلى 7، ثم إلى 8، وهكذا) 
+// مع كل تعديل لملف data/books.json 
+const CACHE_VERSION = 6; 
 
 // 1. عرض بطاقات الكتب (لم يتغير)
 function displayBooks(gridElement, books, query = '') {
@@ -32,7 +37,7 @@ function displayBooks(gridElement, books, query = '') {
 function performSearch(query) {
     const booksGrid = document.getElementById('books-grid'); 
     const latestSection = document.getElementById('latest-books');
-    const categoriesSection = document.getElementById('categories-section-main'); // 🏆 تم تحديث الـ ID
+    const categoriesSection = document.getElementById('categories-section-main'); 
     const resultsStatus = document.getElementById('results-status');
 
     query = query.trim().toLowerCase();
@@ -47,13 +52,13 @@ function performSearch(query) {
     if (query) {
         latestSection.style.display = 'none';
         document.getElementById('stats-section').style.display = 'none';
-        if (categoriesSection) categoriesSection.style.display = 'none'; // 🏆 إخفاء قسم الأقسام
+        if (categoriesSection) categoriesSection.style.display = 'none'; 
         booksGrid.parentElement.style.display = 'block'; 
         resultsStatus.textContent = `نتائج البحث عن: "${query}" (${filteredBooks.length} كتاب)`;
     } else {
         latestSection.style.display = 'block';
         document.getElementById('stats-section').style.display = 'block';
-        if (categoriesSection) categoriesSection.style.display = 'block'; // 🏆 إظهار قسم الأقسام
+        if (categoriesSection) categoriesSection.style.display = 'block'; 
         booksGrid.parentElement.style.display = 'none';
     }
 
@@ -64,18 +69,27 @@ function performSearch(query) {
 function updateLibraryStats() {
     const totalBooks = booksData.length;
     const totalAuthors = new Set(booksData.map(book => book.author)).size;
-    const totalDownloads = booksData.reduce((sum, book) => sum + (book.downloads || 0), 0); // 🏆 إضافة إجمالي التحميلات
+    const totalDownloads = booksData.reduce((sum, book) => sum + (book.downloads || 0), 0); 
 
     document.getElementById('total-books-count').textContent = totalBooks;
     document.getElementById('total-authors-count').textContent = totalAuthors;
-    document.getElementById('total-downloads-count').textContent = totalDownloads.toLocaleString('en-US'); // 🏆 ID جديد
+    document.getElementById('total-downloads-count').textContent = totalDownloads.toLocaleString('en-US'); 
 }
 
-// 4. تحميل البيانات (لم يتغير)
+// 4. تحميل البيانات (تم التعديل لـ CACHE_VERSION)
 async function loadBooksData() {
     try {
-        const response = await fetch('data/books.json'); 
-        if (!response.ok) { throw new Error('Network response was not ok'); } 
+        // نستخدم رقم الإصدار كمتغير في الرابط. هذا يجبر المتصفح على تجاهل الكاش
+        const url = `data/books.json?v=${CACHE_VERSION}`; 
+
+        const response = await fetch(url); 
+        
+        if (!response.ok) { 
+            // رسالة مهذبة تظهر أثناء تأخير النشر من GitHub Pages
+            document.getElementById('latest-books-grid').innerHTML = '<p style="text-align: center; color: #ff9800;">**جاري تحديث المكتبة... يرجى إعادة تحميل الصفحة بعد دقيقة.**</p>';
+            throw new Error('Network response was not ok'); 
+        } 
+        
         booksData = await response.json();
         
         updateLibraryStats(); 
@@ -84,9 +98,11 @@ async function loadBooksData() {
         const lastQuery = localStorage.getItem('lastSearchQuery') || '';
         document.getElementById('main-search-input').value = lastQuery;
         if (lastQuery) performSearch(lastQuery);
+        
     } catch (error) {
         console.error("فشل تحميل بيانات المكتبة:", error);
-        document.getElementById('latest-books-grid').innerHTML = '<p style="color: red;">تعذر تحميل بيانات المكتبة. يرجى التأكد من ملف books.json.</p>';
+        // رسالة الخطأ النهائية إذا استمر الفشل
+        document.getElementById('latest-books-grid').innerHTML = '<p style="text-align: center; color: red;">**تعذر تحميل البيانات. يرجى محاولة إعادة تحميل الصفحة يدوياً.**</p>';
     }
 }
 
@@ -119,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('books-grid-section').scrollIntoView({ behavior: 'smooth' });
     });
 
-    // 🏆 النقر على التاجات و الأقسام الرئيسية
+    // النقر على التاجات و الأقسام الرئيسية
     document.addEventListener('click', (e) => {
         const target = e.target.closest('.tag') || e.target.closest('.category-tag');
         
@@ -134,7 +150,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // تحديث التاريخ في الفوتر السفلي
-    document.getElementById('footer-date-bottom').textContent = new Date().getFullYear(); 
+    const currentYear = new Date().getFullYear();
+    const footerDateBottom = document.getElementById('footer-date-bottom');
+    if (footerDateBottom) footerDateBottom.textContent = currentYear;
+    const footerDate = document.getElementById('footer-date');
+    if (footerDate) footerDate.textContent = currentYear;
 
     // الوضع الليلي (Dark Mode) - تم وضعه هنا ليعمل
     const themeToggle = document.getElementById('theme-toggle'); 
