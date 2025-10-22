@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المكتبة الرقمية - الصفحة الرئيسية</title>
+    <title>مكتبة ارشيف الكتب- الصفحة الرئيسية</title>
     <meta name="description" content="أرشيف احترافي للكتب والمراجع العالمية بصيغة PDF.">
     
     <link rel="stylesheet" href="css/style.css">
@@ -16,9 +16,17 @@
         <nav>
             <a href="#header" class="menu-link"><i class="fas fa-home"></i> الرئيسية</a>
             <a href="#latest-books" class="menu-link"><i class="fas fa-star"></i> أحدث الإضافات</a>
-            <a href="#categories-section" class="menu-link"><i class="fas fa-list"></i> الفئات والمواضيع</a>
+            <a href="#categories-section-main" class="menu-link"><i class="fas fa-list"></i> الفئات والمواضيع</a>
             <a href="javascript:void(0)" id="all-books-link" class="menu-link"><i class="fas fa-book"></i> جميع الكتب</a>
         </nav>
+        
+        <div class="menu-footer">
+            <a href="https://t.me/iiollr" target="_blank" class="telegram-link-footer">
+                <i class="fab fa-telegram-plane"></i> قناتنا على تليجرام
+            </a>
+            <p>&copy; <span id="footer-date"></span> المكتبة الرقمية العالمية</p>
+        </div>
+        
     </div>
     <div id="overlay"></div>
 
@@ -56,8 +64,8 @@
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-cloud-download-alt"></i>
-                    <h3>تحميلات الشهر</h3>
-                    <p><span id="monthly-downloads-count">0</span> عملية تحميل</p>
+                    <h3>إجمالي التحميلات</h3>
+                    <p><span id="total-downloads-count">0</span> عملية تحميل</p>
                 </div>
             </div>
         </section>
@@ -68,6 +76,18 @@
                 </div>
         </section>
         
+        <section id="categories-section-main">
+            <h2 class="section-title">الفئات والمواضيع الرئيسية</h2>
+            <div class="categories-list">
+                <a href="#books-grid-section" class="category-tag" data-tag="تنمية ذاتية"><i class="fas fa-lightbulb"></i> تنمية ذاتية</a>
+                <a href="#books-grid-section" class="category-tag" data-tag="علم النفس"><i class="fas fa-brain"></i> علم النفس</a>
+                <a href="#books-grid-section" class="category-tag" data-tag="كتب إسلامية"><i class="fas fa-mosque"></i> كتب إسلامية</a>
+                <a href="#books-grid-section" class="category-tag" data-tag="سيرة"><i class="fas fa-user-tie"></i> السيرة</a>
+                <a href="#books-grid-section" class="category-tag" data-tag="أدب"><i class="fas fa-pen-nib"></i> الأدب</a>
+                <a href="#books-grid-section" class="category-tag" data-tag="منوعة"><i class="fas fa-book-open"></i> منوعة</a>
+            </div>
+        </section>
+
         <section id="books-grid-section" style="display: none;">
             <h2 id="results-status" class="section-title">نتائج البحث</h2>
             <div id="books-grid" class="books-grid">
@@ -77,7 +97,7 @@
     </main>
     
     <footer>
-        <p>&copy; <span id="footer-date"></span> المكتبة الرقمية العالمية</p>
+        <p>&copy; <span id="footer-date-bottom"></span> المكتبة الرقمية العالمية</p>
     </footer>
 
     <template id="post-template">
