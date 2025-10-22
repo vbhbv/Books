@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">تحميل كتاب - المكتبة الرقمية</title>
+    <meta name="description" content="معلومات مفصلة ورابط تحميل مباشر لكتاب...">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-right"></i> العودة للمكتبة</a>
+            <h1><span id="book-title-header">تحميل الكتاب</span></h1>
+            <button id="theme-toggle" class="theme-toggle" aria-label="تغيير وضع العرض"><i class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main id="book-details-main">
+        <div id="loading-message" class="loading-message">
+            <i class="fas fa-spinner fa-spin"></i> جارٍ تحميل معلومات الكتاب...
+        </div>
+        
+        <div id="book-details-content" class="book-details-content" style="display: none;">
+            
+            <div class="book-header-section">
+                <div class="book-cover-large">
+                    <img id="book-cover-img" alt="غلاف الكتاب">
+                </div>
+                <div class="book-info-summary">
+                    <h2 id="book-title-main">عنوان الكتاب</h2>
+                    <p class="author-name"><i class="fas fa-user"></i> المؤلف: <span id="book-author">غير محدد</span></p>
+                    <div class="book-tags" id="book-tags-list"></div>
+                    <div class="download-stats">
+                        <div class="stat-item"><i class="fas fa-calendar-alt"></i> <span id="book-year">2023</span></div>
+                        <div class="stat-item"><i class="fas fa-download"></i> التحميلات: <span id="download-count">0</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="book-description-section">
+                <h3 class="section-subtitle">نبذة عن الكتاب (معلومات الكتاب)</h3>
+                <p id="book-description">الوصف المفصل للكتاب...</p>
+            </div>
+            
+            <div class="download-section">
+                <h3 class="section-subtitle">روابط التحميل المباشر</h3>
+                <a id="download-direct" href="#" class="download-btn primary-download" download>
+                    <i class="fas fa-download"></i> تحميل مباشر (PDF)
+                </a>
+                <a id="download-telegram" href="#" class="download-btn telegram-download" target="_blank" style="display: none;">
+                    <i class="fab fa-telegram-plane"></i> تحميل عبر تليجرام
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; <span id="footer-date-book"></span> المكتبة الرقمية العالمية</p>
+    </footer>
+    
+    <script src="js/book-page.js"></script>
+    <script>
+        // كود تشغيل الوضع الليلي
+        const themeToggle = document.getElementById('theme-toggle'); 
+        const currentMode = localStorage.getItem('theme') || 'light-mode';
+        const updateDarkMode = (isDark) => {
+             document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+             localStorage.setItem('theme', isDark ? 'dark-mode' : 'light-mode');
+             if (themeToggle) {
+                 const icon = themeToggle.querySelector('i');
+                 if(icon) icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+             }
+        };
+        updateDarkMode(currentMode === 'dark-mode');
+        themeToggle?.addEventListener('click', () => {
+            updateDarkMode(document.documentElement.getAttribute('data-theme') === 'light');
+        });
+        document.getElementById('footer-date-book').textContent = new Date().getFullYear(); 
+    </script>
+</body>
+</html>
