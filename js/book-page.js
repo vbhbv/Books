@@ -7,7 +7,7 @@ async function loadBookDetails() {
     const bookId = urlParams.get('id');
     
     if (!bookId) {
-        document.getElementById('loading-message').textContent = 'لم يتم تحديد معرف الكتاب.';
+        document.getElementById('loading-message').textContent = '1';
         return;
     }
     
