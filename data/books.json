@@ -6,7 +6,8 @@
     "year": 2025,
     "tags": [ "تنمية ذاتية", "منوعة" ],
     "cover": "img/arsheef_alkutb.jpg", 
-    "pdf_link": "pdfs/arsheef_alkutb.pdf"
+    "pdf_link": "pdfs/arsheef_alkutb.pdf",
+    "telegram_link": "https://t.me/iiollr" 
   },
   {
     "id": 2,
@@ -15,6 +16,7 @@
     "year": 2025,
     "tags": [ "كتب إسلامية" ],
     "cover": "img/arshef1.jpg", 
-    "pdf_link": "pdfs/arshef1.pdf"
+    "pdf_link": "pdfs/arshef1.pdf",
+    "telegram_link": "https://t.me/iiollr"
   }
 ]
