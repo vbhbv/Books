@@ -3,104 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أرشيف الكتب المجانية</title>
-    <meta name="description" content="مكتبة رقمية لأرشيف الكتب المجانية والمراجع بصيغة PDF.">
+    <title>المكتبة الرقمية - الصفحة الرئيسية</title>
+    <meta name="description" content="أرشيف احترافي للكتب والمراجع العالمية بصيغة PDF.">
     
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    </head>
+</head>
 <body>
 
     <div id="side-menu" class="side-menu">
         <button id="close-menu-btn" class="close-btn"><i class="fas fa-times"></i></button>
         <nav>
             <a href="#header" class="menu-link"><i class="fas fa-home"></i> الرئيسية</a>
-            <a href="#latest-books" class="menu-link"><i class="fas fa-magic"></i> آخر الإضافات</a>
-            <a href="#books-grid-section" class="menu-link"><i class="fas fa-book"></i> جميع الكتب</a>
-            <a href="#author-section" class="menu-link"><i class="fas fa-users"></i> المؤلفون البارزون</a>
-            <a href="#categories-section" class="menu-link"><i class="fas fa-list"></i> الأقسام الرئيسية</a>
-            </nav>
-        <div class="menu-footer">
-            <p>&copy; <span id="footer-date"></span> أرشيف الكتب المجانية</p>
-        </div>
+            <a href="#latest-books" class="menu-link"><i class="fas fa-star"></i> أحدث الإضافات</a>
+            <a href="#categories-section" class="menu-link"><i class="fas fa-list"></i> الفئات والمواضيع</a>
+            <a href="javascript:void(0)" id="all-books-link" class="menu-link"><i class="fas fa-book"></i> جميع الكتب</a>
+        </nav>
     </div>
     <div id="overlay"></div>
 
     <header id="header">
         <div class="header-content">
             <button id="menu-toggle" class="menu-toggle" aria-label="فتح القائمة"><i class="fas fa-bars"></i></button>
-            <h1>أرشيف الكتب المجانية</h1>
+            <h1>المكتبة الرقمية</h1>
             <button id="theme-toggle" class="theme-toggle" aria-label="تغيير وضع العرض"><i class="fas fa-moon"></i></button>
         </div>
 
         <div class="search-bar">
             <div class="search-box">
-                <input type="text" id="main-search-input" placeholder="اكتب عنوان الكتاب، اسم المؤلف، أو قسم">
+                <input type="text" id="main-search-input" placeholder="ابحث بعنوان الكتاب، اسم المؤلف، أو موضوع">
                 <button class="search-box-btn" id="main-search-button">
                     <i class="fas fa-search"></i>
                 </button>
-                </div>
-            <button id="clear-search-btn" class="clear-search-btn" style="display:none;">
-                <i class="fas fa-times"></i>
-            </button>
+            </div>
         </div>
-
-        <button id="random-book-btn" class="random-btn">
-            <i class="fas fa-random"></i> كتاب عشوائي
-        </button>
     </header>
 
     <main>
         
-        <section id="latest-books">
-            <h2 class="section-title">آخر الإضافات إلى الأرشيف</h2>
-            <div id="latest-books-grid" class="books-grid">
-                </div>
-        </section>
-        
-        <section id="stats-section">
-            <h2 class="section-title">نبذة عن المكتبة</h2>
-            <p class="description">
-                "السير على الدرب" تمنحك مشروع أرشيف الكتب المجانية. نسعى لكي نكون أكبر مجموعة من الكتب والمراجع بصيغة PDF مباشرة لك.
-            </p>
+        <section id="stats-section" class="stats-section">
+            <h2 class="section-title">إحصائيات الأرشيف</h2>
             <div class="stats-cards">
                 <div class="stat-card">
+                    <i class="fas fa-book-reader"></i>
                     <h3>إجمالي الكتب</h3>
                     <p><span id="total-books-count">0</span> كتاب</p>
                 </div>
                 <div class="stat-card">
-                    <h3>عدد المؤلفين</h3>
+                    <i class="fas fa-users"></i>
+                    <h3>المؤلفون</h3>
                     <p><span id="total-authors-count">0</span> مؤلف</p>
                 </div>
-            </div>
-        </section>
-
-        <section id="author-section">
-            <h2 class="section-title">قائمة المؤلفين البارزين</h2>
-            <div class="author-list">
-                <div class="author-item"><i class="fas fa-user-circle"></i> أحمد شوقي <span>5 كتب</span></div>
-                <div class="author-item"><i class="fas fa-user-circle"></i> نورة القحطاني <span>3 كتب</span></div>
-                <div class="author-item"><i class="fas fa-user-circle"></i> خالد الزهراني <span>2 كتاب</span></div>
+                <div class="stat-card">
+                    <i class="fas fa-cloud-download-alt"></i>
+                    <h3>تحميلات الشهر</h3>
+                    <p><span id="monthly-downloads-count">0</span> عملية تحميل</p>
                 </div>
+            </div>
         </section>
 
-        <section id="categories-section">
-            <h2 class="section-title">أقسام المكتبة الرئيسية</h2>
-            <div class="categories-list">
-                <a href="#" class="category-tag" data-tag="تنمية ذاتية"><i class="fas fa-lightbulb"></i> تنمية ذاتية</a>
-                <a href="#" class="category-tag" data-tag="أدب"><i class="fas fa-pen-nib"></i> الأدب</a>
-                <a href="#" class="category-tag" data-tag="برمجة"><i class="fas fa-code"></i> البرمجة</a>
-                <a href="#" class="category-tag" data-tag="علوم"><i class="fas fa-flask"></i> العلوم</a>
-                <a href="#" class="category-tag" data-tag="فلسفة"><i class="fas fa-brain"></i> الفلسفة</a>
-                <a href="#" class="category-tag" data-tag="كتب إسلامية"><i class="fas fa-mosque"></i> كتب إسلامية</a>
-                <a href="#" class="category-tag" data-tag="تاريخ"><i class="fas fa-history"></i> التاريخ</a>
-                <a href="#" class="category-tag" data-tag="منوعة"><i class="fas fa-book-open"></i> كتب أخرى (منوعة)</a>
-            </div>
+        <section id="latest-books">
+            <h2 class="section-title">أحدث الإضافات</h2>
+            <div id="latest-books-grid" class="books-grid">
+                </div>
         </section>
         
         <section id="books-grid-section" style="display: none;">
-            <h2 id="results-status" class="section-title"></h2>
+            <h2 id="results-status" class="section-title">نتائج البحث</h2>
             <div id="books-grid" class="books-grid">
                 </div>
         </section>
@@ -108,26 +77,19 @@
     </main>
     
     <footer>
-        <p>مصمم بواسطة أرشيف الكتب المجانية &copy; <span id="footer-date"></span></p>
+        <p>&copy; <span id="footer-date"></span> المكتبة الرقمية العالمية</p>
     </footer>
 
-    <button id="scroll-top-btn" class="scroll-top-btn" aria-label="الصعود للأعلى" style="display: none;">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-    
     <template id="post-template">
-        <div class="book-card fade-in">
-            <div class="book-cover">
-                </div>
+        <div class="book-card">
+            <div class="book-cover-container">
+                <img class="book-cover" alt="غلاف الكتاب">
+            </div>
             <div class="card-info">
-                <h3>عنوان الكتاب</h3>
-                <p>المؤلف: <span>اسم المؤلف</span></p>
-                <div class="book-tags">
-                    </div>
-                <p class="book-snippet">اقتباس أو نبذة عن الكتاب...</p>
-                
-                <div class="download-links">
-                    </div>
+                <h3 class="book-title">عنوان الكتاب</h3>
+                <p class="book-author"><i class="fas fa-user"></i> المؤلف: <span>اسم المؤلف</span></p>
+                <div class="book-tags"></div>
+                <a href="#" class="details-link"><i class="fas fa-info-circle"></i> عرض التفاصيل</a>
             </div>
         </div>
     </template>
