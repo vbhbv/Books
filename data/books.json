@@ -380,7 +380,7 @@
     "year": 1850,
     "tags": [ "آداب" ], 
     "cover": "img/a32.jpg", 
-    "pdf_link": "https://drive.google.com/uc?export=download&id=1LW7DmrTAsQWd3LsrT3BghO0VjpOXX067", 
+    "pdf_link": "https://drive.google.com/uc?export=download&id=1LW7DmrTAsQWd3LsrT3BghO0VjpOXX067", // **تم تصحيح downloas إلى download**
     "telegram_link": "https://t.me/iiollr", 
     "description": "احدة اشهر روايات دوستويفسكي الشهيرة",
     "downloads": 0
@@ -660,5 +660,5 @@
     "telegram_link": "https://t.me/iiollr", 
     "description": "احدة اشهر روايات دوستويفسكي الشهيرة",
     "downloads": 0
-  },
+  }
 ]
